@@ -1,23 +1,41 @@
-import connectDB from "../../middlewares/mongodb";
-import Category from "../../models/category";
+import connectDB from "../../middlewares/mongodb.js";
+import Category from "../../models/category.js";
 
-const handler = async (req, res) => {
-    if (req.method === "GET") {
-        const categories = await Category.find();
-
-        res.json(categories);
-    } else {
-        if (req.method === "POST") {
-            const data = new Category(JSON.parse(req.body));
-            data.save(err => {
-                if (err) res.status(400).send("unable to save to database");
-            })
-            res.status(200).send("ok");
-        } else {
+const handler = (req, res) => {
+    return new Promise(resolve => {
+        switch (req.method) {
+            case "GET": {
+                Category.find(err => {
+                    if (err) {
+                        res.status(400).send("server error");
+                        return resolve();
+                    }
+                })
+                .then(categories => {
+                    res.json(categories);
+                    return resolve();
+                })
+                break;
+            }
+            case "POST": {
+                const category = new Category(JSON.parse(req.body));
+                category.save(err => {
+                    if (err) {
+                        res.status(400).send("unable to save to database");
+                    } else {
+                        res.send("ok");
+                    }
+                    return resolve();
+                })
+                break;
+            }
+            default: {
                 //unsupported method
                 res.status(422).send("req_method_not_supported");
+                return resolve();
+            }
         }
-    }
-}
+    });
+};
 
 export default connectDB(handler);
