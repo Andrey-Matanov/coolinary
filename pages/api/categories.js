@@ -7,8 +7,17 @@ const handler = async (req, res) => {
 
         res.json(categories);
     } else {
-        res.status(422).send("req_method_not_supported");
+        if (req.method === "POST") {
+            const data = new Category(JSON.parse(req.body));
+            data.save(err => {
+                if (err) res.status(400).send("unable to save to database");
+            })
+            res.status(200).send("ok");
+        } else {
+                //unsupported method
+                res.status(422).send("req_method_not_supported");
+        }
     }
-};
+}
 
 export default connectDB(handler);
