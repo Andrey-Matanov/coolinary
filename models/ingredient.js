@@ -21,7 +21,7 @@ const ingredient = new mongoose.Schema({
         type: Number,
         required: true,
     },
-    callories: {
+    calories: {
         type: Number,
         required: true,
     },
