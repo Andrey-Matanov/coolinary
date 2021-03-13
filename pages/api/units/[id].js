@@ -1,26 +1,40 @@
-import connectDB from "../../../middlewares/mongodb.js";
-import Ingredient from "../../../models/ingredient.js";
+import connectDB from "../../../middlewares/mongodb.js"
+import Unit from "../../../models/unit.js"
 
 const handler = (req, res) => {
     return new Promise (resolve => {
         switch (req.method) {
             case "GET": {
                 const { id } = req.query;
-                Ingredient.findById(id, undefined, err => {
+                Unit.findById(id, undefined, undefined, err => {
                     if (err) {
-                        res.status(400).send("No such ingredient");
+                        res.status(400).send("unable to find unit");
                         return resolve();
                     }
                 })
-                .then(ingredient => {
-                    res.json(ingredient);
+                .then(unit => {
+                    res.json(unit);
+                    return resolve;
+                })
+                break;   
+            }
+            case "PUT": {
+                const { id } = req.query;
+                Unit.findByIdAndUpdate(id, JSON.parse(req.body), undefined, err => {
+                    if (err) {
+                        res.status(400).send("unable to update");
+                        return resolve();
+                    }
+                })
+                .then(() => {
+                    res.send("ok");
                     return resolve();
                 })
                 break;
             }
             case "DELETE": {
                 const { id } = req.query;
-                Ingredient.findByIdAndDelete(id, undefined, err => {
+                Unit.findByIdAndDelete(id, undefined, err => {
                     if (err) {
                         res.status(400).send("unable to delete");
                         return resolve();
