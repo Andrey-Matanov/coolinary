@@ -1,11 +1,12 @@
-import connectDB from "../../middlewares/mongodb";
+import connectDB from "../../middleware/mongodb";
 import User from "../../models/user";
 
 const handler = async (req, res) => {
     if (req.method === "GET") {
-        const users = await User.find();
+        const token = req.headers.authorization.split("Bearer ")[1];
+        const user = await User.find({ token: token });
 
-        res.json(users);
+        res.send(user[0]);
     } else {
         res.status(422).send("req_method_not_supported");
     }

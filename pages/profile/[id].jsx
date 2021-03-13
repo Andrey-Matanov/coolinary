@@ -1,17 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useParams, useHistory } from "react-router-dom";
-
 import {
     fetchUserRecipes,
     changeUserName,
     changeEmail,
     deleteUser,
     fetchUserData,
-} from "../actions/profileActions";
-import ChangePasswordForm from "../components/Forms/ChangePasswordForm.jsx";
-import DeleteDialog from "../components/PagesComponents/ProfilePage/DeleteDialog.jsx";
-
+} from "../../redux/actions/profileActions";
+import ChangePasswordForm from "../../components/Forms/ChangePasswordForm.jsx";
+import DeleteDialog from "../../components/PagesComponents/ProfilePage/DeleteDialog.jsx";
 import {
     Container,
     Grid,
@@ -25,35 +22,33 @@ import {
     Avatar,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
-
 import EditIcon from "@material-ui/icons/Edit";
 import CheckIcon from "@material-ui/icons/Check";
 import ClearIcon from "@material-ui/icons/Clear";
-import { userLogout } from "../actions/authorizationActions";
-import RequestError from "../components/Common/RequestError.jsx";
+import { userLogout } from "../../redux/actions/authorizationActions";
+import RequestError from "../../components/Common/RequestError.jsx";
+import { deleteRecipe } from "../../redux/actions/recipesListActions";
+import { useRouter } from "next/router";
+import Link from "next/link";
 
 const useStyles = makeStyles((theme) => ({
     avatar: {
-        width: theme.spacing(7),
-        height: theme.spacing(7),
+        // width: theme.spacing(7),
+        // height: theme.spacing(7),
+        width: "50px",
+        height: "50px",
     },
 }));
 
-import { deleteRecipe } from "../actions/recipesListActions";
-import { fetchRecipe } from "../actions/recipeActions";
+// import { fetchRecipe } from "../actions/recipeActions";
 
 const Profile = () => {
     const dispatch = useDispatch();
-    const history = useHistory();
+    const router = useRouter();
+    const { id } = router.query;
     const classes = useStyles();
-    const { userName, userEmail, userRecipes, status } = useSelector(
-        (state) => state.profile
-    );
-
+    const { userName, userEmail, userRecipes, status } = useSelector((state) => state.profile);
     const { userId } = useSelector((state) => state.authorization);
-
-    const params = useParams();
-    const id = parseInt(params.id);
 
     const [openPassword, setOpenPassword] = useState(false);
     const [openDeleteUser, setOpenDeleteUser] = useState(false);
@@ -64,7 +59,7 @@ const Profile = () => {
 
     const fetchData = (id) => {
         dispatch(fetchUserData(id));
-        dispatch(fetchUserRecipes(id));
+        // dispatch(fetchUserRecipes(id));
     };
 
     useEffect(() => {
@@ -106,7 +101,7 @@ const Profile = () => {
                                             textDecoration: "none",
                                             color: "inherit",
                                         }}
-                                        to={`/recipes/${recipe.id}`}
+                                        href={`/recipes/${recipe.id}`}
                                     >
                                         {recipe.name}
                                     </Link>
@@ -120,7 +115,7 @@ const Profile = () => {
                                                 textDecoration: "none",
                                                 color: "inherit",
                                             }}
-                                            to={`/edit_recipe/${recipe.id}`}
+                                            href={`/edit_recipe/${recipe.id}`}
                                         >
                                             Изменить рецепт
                                         </Link>
@@ -130,14 +125,8 @@ const Profile = () => {
                                         size="small"
                                         onClick={() => {
                                             dispatch(deleteRecipe(recipe.id))
-                                                .then(() =>
-                                                    dispatch(
-                                                        fetchUserRecipes(userId)
-                                                    )
-                                                )
-                                                .catch((err) =>
-                                                    console.error(err)
-                                                );
+                                                .then(() => dispatch(fetchUserRecipes(userId)))
+                                                .catch((err) => console.error(err));
                                         }}
                                     >
                                         Удалить рецепт
@@ -154,13 +143,9 @@ const Profile = () => {
     ) : (
         <Grid item xs={12}>
             {id === userId ? (
-                <Typography variant="body2">
-                    Добавьте свой первый рецепт
-                </Typography>
+                <Typography variant="body2">Добавьте свой первый рецепт</Typography>
             ) : (
-                <Typography variant="body2">
-                    Пользователь еще не добавлял рецепты
-                </Typography>
+                <Typography variant="body2">Пользователь еще не добавлял рецепты</Typography>
             )}
         </Grid>
     );
@@ -173,15 +158,9 @@ const Profile = () => {
                         <Box minHeight="32px">
                             <TextField
                                 placeholder="Новый email"
-                                onInput={(e) =>
-                                    setNewEmailValue(e.target.value)
-                                }
+                                onInput={(e) => setNewEmailValue(e.target.value)}
                             />
-                            <IconButton
-                                variant="contained"
-                                size="small"
-                                onClick={applyEditEmail}
-                            >
+                            <IconButton variant="contained" size="small" onClick={applyEditEmail}>
                                 <CheckIcon />
                             </IconButton>
                             <IconButton
@@ -203,9 +182,7 @@ const Profile = () => {
                             </Grid>
                             <Grid item>
                                 <Box pr={1}>
-                                    <Typography variant="body1">
-                                        {userEmail}{" "}
-                                    </Typography>
+                                    <Typography variant="body1">{userEmail} </Typography>
                                 </Box>
                             </Grid>
                             <Grid item>
@@ -276,11 +253,7 @@ const Profile = () => {
                                 placeholder="Новое имя"
                                 onInput={(e) => setNewNameValue(e.target.value)}
                             />
-                            <IconButton
-                                variant="contained"
-                                size="small"
-                                onClick={applyEditName}
-                            >
+                            <IconButton variant="contained" size="small" onClick={applyEditName}>
                                 <CheckIcon />
                             </IconButton>
                             <IconButton
@@ -295,9 +268,7 @@ const Profile = () => {
                         <Grid item container xs={8}>
                             <Grid item>
                                 <Box pr={1} minHeight="32px" lineHeight="32px">
-                                    <Typography variant="body1">
-                                        {userName}{" "}
-                                    </Typography>
+                                    <Typography variant="body1">{userName} </Typography>
                                 </Box>
                             </Grid>
                             <Grid item>
@@ -315,9 +286,7 @@ const Profile = () => {
                     ) : (
                         <Grid item>
                             <Box pr={1}>
-                                <Typography variant="body1">
-                                    {userName}{" "}
-                                </Typography>
+                                <Typography variant="body1">{userName} </Typography>
                             </Box>
                         </Grid>
                     )}
@@ -332,10 +301,7 @@ const Profile = () => {
                 {id === userId ? (
                     <Grid item xs={12}>
                         <Box py={1}>
-                            <Link
-                                style={{ textDecoration: "none" }}
-                                to="/add_recipe"
-                            >
+                            <Link style={{ textDecoration: "none" }} href="/add_recipe">
                                 <Button variant="contained" size="small">
                                     Добавить рецепт
                                 </Button>
@@ -347,10 +313,7 @@ const Profile = () => {
                 )}
                 {id === userId ? (
                     <Grid item xs={12}>
-                        <Button
-                            size="small"
-                            onClick={() => setOpenDeleteUser(true)}
-                        >
+                        <Button size="small" onClick={() => setOpenDeleteUser(true)}>
                             Удалить профиль
                         </Button>
                     </Grid>
@@ -376,10 +339,7 @@ const Profile = () => {
                 aria-labelledby="simple-modal-title"
                 aria-describedby="simple-modal-description"
             >
-                <ChangePasswordForm
-                    userId={userId}
-                    handleClose={() => setOpenPassword(false)}
-                />
+                <ChangePasswordForm userId={userId} handleClose={() => setOpenPassword(false)} />
             </Dialog>
             <Dialog
                 open={openDeleteUser}

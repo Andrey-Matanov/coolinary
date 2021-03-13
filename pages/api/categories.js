@@ -1,4 +1,4 @@
-import connectDB from "../../middlewares/mongodb";
+import connectDB from "../../middleware/mongodb";
 import Category from "../../models/category";
 
 const handler = async (req, res) => {

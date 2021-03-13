@@ -1,4 +1,7 @@
 import React from "react";
+import Link from "next/link";
+import styled from "styled-components";
+import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
@@ -7,9 +10,6 @@ import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import { makeStyles } from "@material-ui/core/styles";
-import styled from "styled-components";
-import { Link } from "react-router-dom";
 
 const Error = styled.div`
     color: red;
@@ -51,15 +51,7 @@ const Register = ({ values, errors, handleChange, handleSubmit }) => {
         <Grid container component="main" className={classes.root}>
             <CssBaseline />
             <Grid item xs={false} sm={4} md={7} className={classes.image} />
-            <Grid
-                item
-                xs={12}
-                sm={8}
-                md={5}
-                component={Paper}
-                elevation={6}
-                square
-            >
+            <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
                 <div className={classes.paper}>
                     <Avatar className={classes.avatar}>
                         <LockOutlinedIcon />
@@ -109,9 +101,7 @@ const Register = ({ values, errors, handleChange, handleSubmit }) => {
                             value={values.password}
                             onChange={handleChange}
                         />
-                        {errors.password ? (
-                            <Error>{errors.password}</Error>
-                        ) : null}
+                        {errors.password ? <Error>{errors.password}</Error> : null}
                         <Button
                             type="submit"
                             fullWidth
@@ -123,7 +113,7 @@ const Register = ({ values, errors, handleChange, handleSubmit }) => {
                         </Button>
                         <Grid container>
                             <Grid item xs>
-                                <Link to="/login" variant="body2">
+                                <Link href="/login" variant="body2">
                                     Вернуться на страницу авторизации
                                 </Link>
                             </Grid>

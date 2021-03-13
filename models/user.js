@@ -1,6 +1,17 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
-const user = new mongoose.Schema({
+const userRecipe = new mongoose.Schema({
+    _id: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+    },
+    userName: {
+        type: String,
+        required: true,
+    },
+});
+
+const userSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
@@ -9,22 +20,23 @@ const user = new mongoose.Schema({
         type: String,
         required: true,
     },
-    password: {
+    token: {
         type: String,
         required: true,
     },
     role: {
         type: Number,
-        required: true,
+        default: 2,
     },
     avatar: {
         type: String,
-        required: true,
+        default:
+            "https://thumbs.dreamstime.com/z/default-avatar-placeholder-profile-icon-male-eps-file-easy-to-edit-default-avatar-placeholder-profile-icon-male-139556753.jpg",
+    },
+    userRecipes: {
+        type: [userRecipe],
+        default: [],
     },
 });
 
-mongoose.models = {};
-
-const User = mongoose.model("users", user);
-
-export default User;
+module.exports = mongoose.model("User", userSchema, "users");

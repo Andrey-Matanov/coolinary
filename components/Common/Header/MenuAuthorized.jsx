@@ -1,13 +1,14 @@
 import React from "react";
 import styled from "styled-components";
+import Link from "next/link";
 import { makeStyles } from "@material-ui/core/styles";
-import { useDispatch, useSelector } from "react-redux";
-import { userLogout } from "../../../actions/authorizationActions";
 import HomeIcon from "@material-ui/icons/Home";
 import PeopleIcon from "@material-ui/icons/People";
 import AccountBoxIcon from "@material-ui/icons/AccountBox";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import RecipeIcon from "../../Icons/RecipeIcon";
+import firebaseApp from "../../../utils/firebaseConfig";
+import { useSelector } from "react-redux";
 
 const LinkDiv = styled.div`
     display: flex;
@@ -15,7 +16,7 @@ const LinkDiv = styled.div`
 `;
 
 const Heading = styled.p`
-    color: green;
+    color: white;
 `;
 
 const useStyles = makeStyles((theme) => ({
@@ -48,73 +49,55 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Menu = () => {
-    const dispatch = useDispatch();
-    const history = useHistory();
-    const currentUserId = useSelector((state) => state.authorization.userId);
     const classes = useStyles();
+    const id = useSelector((state) => state.authorization.userId);
 
     return (
         <div className={classes.menu}>
-            {/* <NavLink
-                exact
+            {/* <Link
                 to="/"
                 className={classes.link}
                 activeClassName={classes.selected_link}
             >
                 <LinkDiv>
-                    <HomeIcon color="secondary" />
+                    <HomeIcon color="action" />
                     <Heading>Главная</Heading>
                 </LinkDiv>
-            </NavLink> */}
-            <NavLink
-                to="/recipes"
-                className={classes.link}
-                activeClassName={classes.selected_link}
-            >
+            </Link> */}
+            <Link href="/recipes" className={classes.link} activeClassName={classes.selected_link}>
                 <LinkDiv>
-                    <RecipeIcon color="secondary" />
+                    <RecipeIcon color="action" />
                     <Heading>Рецепты</Heading>
                 </LinkDiv>
-            </NavLink>
-            <NavLink
-                to="/authors"
-                className={classes.link}
-                activeClassName={classes.selected_link}
-            >
+            </Link>
+            <Link href="/authors" className={classes.link} activeClassName={classes.selected_link}>
                 <LinkDiv>
-                    <PeopleIcon color="secondary" />
+                    <PeopleIcon color="action" />
                     <Heading>Рейтинг авторов</Heading>
                 </LinkDiv>
-            </NavLink>
-            {/* <NavLink
+            </Link>
+            {/* <Link
                 exact
-                to="/articles" className={classes.link}
+                href="/articles" className={classes.link}
                 activeClassName={classes.selected_link}
             >
                 <LinkDiv>
-                    <HomeIcon color="secondary" />
+                    <HomeIcon color="action" />
                     <Heading>Все статьи</Heading>
                 </LinkDiv>
-            </NavLink> */}
-            <NavLink
-                to={`/profile/${currentUserId}`}
+            </Link> */}
+            <Link
+                href={`/profile/${id}`}
                 className={classes.link}
                 activeClassName={classes.selected_link}
             >
                 <LinkDiv>
-                    <AccountBoxIcon color="secondary" />
+                    <AccountBoxIcon color="action" />
                     <Heading>Личный кабинет</Heading>
                 </LinkDiv>
-            </NavLink>
-            <button
-                onClick={() => {
-                    window.localStorage.removeItem("currentUserToken");
-                    dispatch(userLogout());
-                    history.push("/");
-                }}
-                className={classes.button}
-            >
-                <ExitToAppIcon color="secondary" />
+            </Link>
+            <button onClick={() => firebaseApp.auth().signOut()} className={classes.button}>
+                <ExitToAppIcon color="action" />
                 <Heading>Выход</Heading>
             </button>
         </div>

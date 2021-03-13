@@ -1,4 +1,4 @@
-import connectDB from "../../middlewares/mongodb";
+import connectDB from "../../middleware/mongodb";
 import Ingredient from "../../models/ingredient";
 
 const handler = async (req, res) => {

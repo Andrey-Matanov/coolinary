@@ -1,5 +1,6 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import Link from "next/link";
+import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
@@ -8,8 +9,6 @@ import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import { makeStyles } from "@material-ui/core/styles";
-import { baseURL } from "../../../utils";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -40,28 +39,14 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const Login = ({
-    onSigninSubmit,
-    email,
-    onEmailChange,
-    password,
-    onPasswordChahge,
-}) => {
+const Login = ({ onSigninSubmit, email, onEmailChange, password, onPasswordChahge }) => {
     const classes = useStyles();
 
     return (
         <Grid container component="main" className={classes.root}>
             <CssBaseline />
             <Grid item xs={false} sm={4} md={7} className={classes.image} />
-            <Grid
-                item
-                xs={12}
-                sm={8}
-                md={5}
-                component={Paper}
-                elevation={6}
-                square
-            >
+            <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
                 <div className={classes.paper}>
                     <Avatar className={classes.avatar}>
                         <LockOutlinedIcon />
@@ -69,11 +54,7 @@ const Login = ({
                     <Typography component="h1" variant="h5">
                         Заходите на сайт, всегда Вам рады!
                     </Typography>
-                    <form
-                        className={classes.form}
-                        onSubmit={onSigninSubmit}
-                        noValidate
-                    >
+                    <form className={classes.form} onSubmit={onSigninSubmit} noValidate>
                         <TextField
                             variant="outlined"
                             margin="normal"
@@ -111,12 +92,12 @@ const Login = ({
                         </Button>
                         <Grid container>
                             <Grid item xs>
-                                <Link to="#" variant="body2">
+                                <Link href="#" variant="body2">
                                     Забыли пароль?
                                 </Link>
                             </Grid>
                             <Grid item>
-                                <Link to="/register" variant="body2">
+                                <Link href="/register" variant="body2">
                                     Нет учетной записи? Регистрация
                                 </Link>
                             </Grid>

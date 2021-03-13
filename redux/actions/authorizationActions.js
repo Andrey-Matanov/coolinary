@@ -7,7 +7,7 @@ export const USER_LOGOUT = "@@authorization/USER_LOGOUT";
 
 export const getUserIdByToken = () => async (dispatch) => {
     const token = window.localStorage.getItem("currentUserToken");
-    const response = await axios.get(`${baseURL}/api/get-user`, {
+    const response = await axios.get(`${baseURL}/api/userdata`, {
         headers: {
             Authorization: `Bearer ${token}`,
         },
@@ -16,7 +16,7 @@ export const getUserIdByToken = () => async (dispatch) => {
     dispatch({
         type: GET_USER_ID_BY_TOKEN,
         payload: {
-            userId: response.data.user.id,
+            userId: response.data._id,
         },
     });
 };

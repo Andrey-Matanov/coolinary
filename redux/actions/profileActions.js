@@ -11,26 +11,28 @@ export const FETCH_ERROR = "@@profile/FETCH_ERROR";
 export const fetchUserData = (id) => async (dispatch) => {
     try {
         const response = await axios.get(`${baseURL}/api/users/${id}`);
+
+        console.log(response);
+
         dispatch({
             type: FETCH_USER_DATA,
             payload: {
                 userData: {
-                    userId: response.data.data.id,
-                    userName: response.data.data.name,
-                    userEmail: response.data.data.email,
+                    userId: response.data.id,
+                    userName: response.data.name,
+                    userEmail: response.data.email,
                 },
             },
         });
     } catch (err) {
+        console.log(err);
         dispatch({ type: FETCH_ERROR });
     }
 };
 
 export const fetchUserRecipes = (authorId) => async (dispatch) => {
     try {
-        const response = await fetch(
-            `${baseURL}/api/recipes?author_id=${authorId}`
-        );
+        const response = await fetch(`${baseURL}/api/recipes?author_id=${authorId}`);
         const json = await response.json();
         dispatch({
             type: FETCH_USER_RECIPES,

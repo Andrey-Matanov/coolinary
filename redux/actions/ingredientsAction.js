@@ -6,10 +6,12 @@ export const fetchIngredients = () => async (dispatch) => {
     const response = await fetch(`${baseURL}/api/ingredients`);
     const json = await response.json();
 
+    console.log(json);
+
     dispatch({
         type: FETCH_INGREDIENTS,
         payload: {
-            ingredients: json.data,
+            ingredients: json,
         },
     });
 };

@@ -1,6 +1,7 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import styled from "styled-components";
+import Link from "next/link";
 import HomeIcon from "@material-ui/icons/Home";
 import PeopleIcon from "@material-ui/icons/People";
 import AccountBoxIcon from "@material-ui/icons/AccountBox";
@@ -12,7 +13,7 @@ const LinkDiv = styled.div`
 `;
 
 const Heading = styled.p`
-    color: green;
+    color: white;
 `;
 
 const useStyles = makeStyles((theme) => ({
@@ -31,6 +32,7 @@ const useStyles = makeStyles((theme) => ({
         color: "#999",
     },
     link: {
+        cursor: "pointer",
         marginLeft: "5px",
     },
 }));
@@ -47,43 +49,31 @@ const Menu = () => {
                 activeClassName={classes.selected_link}
             >
                 <LinkDiv>
-                    <HomeIcon color="secondary" />
+                    <HomeIcon color="action" />
                     <Heading>Главная</Heading>
                 </LinkDiv>
             </NavLink> */}
-            <Link
-                to="/recipes"
-                className={classes.link}
-                activeClassName={classes.selected_link}
-            >
+            <Link href="/recipes" className={classes.link} activeClassName={classes.selected_link}>
                 <LinkDiv>
-                    <RecipeIcon color="secondary" />
+                    <RecipeIcon color="action" />
                     <Heading>Рецепты</Heading>
                 </LinkDiv>
             </Link>
-            <Link
-                to="/authors"
-                className={classes.link}
-                activeClassName={classes.selected_link}
-            >
+            <Link href="/authors" className={classes.link} activeClassName={classes.selected_link}>
                 <LinkDiv>
-                    <PeopleIcon color="secondary" />
+                    <PeopleIcon color="action" />
                     <Heading>Рейтинг авторов</Heading>
                 </LinkDiv>
             </Link>
-            {/* <Link to="/articles" className={classes.link} activeClassName={classes.selected_link}>
+            {/* <Link href="/articles" className={classes.link} activeClassName={classes.selected_link}>
                 <LinkDiv>
-                    <HomeIcon color="secondary" />
+                    <HomeIcon color="action" />
                     <Heading>Все статьи</Heading>
                 </LinkDiv>
             </Link> */}
-            <Link
-                to="/login"
-                className={classes.link}
-                activeClassName={classes.selected_link}
-            >
+            <Link href="/login" className={classes.link} activeClassName={classes.selected_link}>
                 <LinkDiv>
-                    <AccountBoxIcon color="secondary" />
+                    <AccountBoxIcon color="action" />
                     <Heading>Вход в личный кабинет</Heading>
                 </LinkDiv>
             </Link>

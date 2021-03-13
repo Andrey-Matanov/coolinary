@@ -6,6 +6,8 @@ export const fetchCategories = () => async (dispatch) => {
     const response = await fetch(`${baseURL}/api/categories`);
     const json = await response.json();
 
+    console.log("categories: ", json);
+
     dispatch({
         type: FETCH_CATEGORIES,
         payload: {

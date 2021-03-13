@@ -1,23 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Formik, Form, Field } from "formik";
+import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import styled from "styled-components";
-import {
-    addRecipe,
-    editRecipe,
-    deleteRecipe,
-} from "../../../actions/recipesListActions";
+import { addRecipe, editRecipe, deleteRecipe } from "../../../redux/actions/recipesListActions";
 import AddRecipeFormStep from "./AddRecipeFormStep";
 import AddRecipeFormIngredient from "./AddRecipeFormIngredient";
-import FormTextarea from "../../Inputs/FormTextArea";
-import FormInput from "../../Inputs/FormInput";
 import {
     fetchUserData,
     fetchUserRecipes,
     getUserDataByToken,
-} from "../../../actions/profileActions";
-import { useHistory } from "react-router-dom";
+} from "../../../redux/actions/profileActions";
 import { baseURL } from "../../../utils";
 import AddImageField from "./AddImageField";
 import {
@@ -35,11 +28,8 @@ import { makeStyles } from "@material-ui/styles";
 import AddRecipeImage from "./AddRecipeImage";
 import Nutrition from "../../PagesComponents/RecipePage/Nutrition";
 import AddRecipeNutrition from "./AddRecipeNutrition";
+import createRequestHeaders from "../../../services/createRequestHeaders";
 // import AddRecipeNutrition from "./AddRecipeNutrition";
-
-const AddRecipeForm = styled.form`
-    width: 500px;
-`;
 
 const Error = styled.div`
     color: red;
@@ -65,8 +55,9 @@ const AddRecipeFormik = ({
     additionalInfo,
 }) => {
     const dispatch = useDispatch();
-    const history = useHistory();
-    const currentUserId = useSelector((state) => state.authorization.userId);
+    // const history = useHistory();
+    // const currentUserId = useSelector((state) => state.authorization.userId);
+    const currentUserId = 1;
 
     const [recipeNutrition, setRecipeNutrition] = useState({
         calories: 0,
@@ -78,10 +69,7 @@ const AddRecipeFormik = ({
     console.log(recipeNutrition);
 
     useEffect(() => {
-        if (
-            formInitialValues.ingredients.length > 0 &&
-            ingredients.length > 0
-        ) {
+        if (formInitialValues.ingredients.length > 0 && ingredients.length > 0) {
             const newRecipeNutrition = {
                 calories: 0,
                 proteins: 0,
@@ -175,7 +163,7 @@ const AddRecipeFormik = ({
                 }
 
                 dispatch(fetchUserRecipes(currentUserId));
-                history.push(`/profile/${currentUserId}`);
+                // history.push(`/profile/${currentUserId}`);
             }}
         >
             {({
@@ -192,12 +180,7 @@ const AddRecipeFormik = ({
                     const ingredients = values.ingredients;
 
                     while (true) {
-                        if (
-                            ingredients.find(
-                                (ingredient) =>
-                                    ingredient.id === newIngredientId
-                            )
-                        ) {
+                        if (ingredients.find((ingredient) => ingredient.id === newIngredientId)) {
                             newIngredientId += 1;
                         } else {
                             break;
@@ -222,26 +205,16 @@ const AddRecipeFormik = ({
                         />
 
                         <FormControl>
-                            <InputLabel id="category-label">
-                                Категория
-                            </InputLabel>
+                            <InputLabel id="category-label">Категория</InputLabel>
                             <Select
                                 labelId="category-label"
                                 id="category"
                                 value={values.category_id}
                                 name="category_id"
-                                onChange={(e) =>
-                                    setFieldValue(
-                                        `category_id`,
-                                        +e.target.value
-                                    )
-                                }
+                                onChange={(e) => setFieldValue(`category_id`, +e.target.value)}
                             >
                                 {categories.map((category) => (
-                                    <MenuItem
-                                        key={category.id}
-                                        value={category.id}
-                                    >
+                                    <MenuItem key={category.id} value={category.id}>
                                         {category.name}
                                     </MenuItem>
                                 ))}
@@ -266,17 +239,13 @@ const AddRecipeFormik = ({
                         />
 
                         <FormControl>
-                            <InputLabel id="difficulty-label">
-                                Сложность приготовления
-                            </InputLabel>
+                            <InputLabel id="difficulty-label">Сложность приготовления</InputLabel>
                             <Select
                                 labelId="difficulty-label"
                                 id="difficulty"
                                 value={values.difficulty}
                                 name="difficulty"
-                                onChange={(e) =>
-                                    setFieldValue(`difficulty`, +e.target.value)
-                                }
+                                onChange={(e) => setFieldValue(`difficulty`, +e.target.value)}
                             >
                                 <MenuItem value="1">1</MenuItem>
                                 <MenuItem value="2">2</MenuItem>
@@ -292,10 +261,7 @@ const AddRecipeFormik = ({
                         </FormControl>
 
                         <Card variant="outlined" style={{ padding: "0 10px" }}>
-                            <CardHeader
-                                title="Состав рецепта"
-                                style={{ textAlign: "center" }}
-                            />
+                            <CardHeader title="Состав рецепта" style={{ textAlign: "center" }} />
                             {ingredients.length ? (
                                 values.ingredients.map((ingredient, i) => {
                                     return (
@@ -305,9 +271,7 @@ const AddRecipeFormik = ({
                                             currentId={ingredient.id}
                                             currentName={
                                                 ingredients.find(
-                                                    (item) =>
-                                                        item.id ===
-                                                        ingredient.id
+                                                    (item) => item.id === ingredient.id
                                                 ).name
                                             }
                                             currentAmount={ingredient.amount}
@@ -320,9 +284,7 @@ const AddRecipeFormik = ({
                                             handleBlur={handleBlur}
                                             setFieldValue={setFieldValue}
                                             recipeNutrition={recipeNutrition}
-                                            setRecipeNutrition={
-                                                setRecipeNutrition
-                                            }
+                                            setRecipeNutrition={setRecipeNutrition}
                                         />
                                     );
                                 })
@@ -344,17 +306,12 @@ const AddRecipeFormik = ({
                                         (ingredient) => ingredient.id === newId
                                     );
                                     const calories =
-                                        recipeNutrition.calories +
-                                        ingredient.calorie / 100;
+                                        recipeNutrition.calories + ingredient.calorie / 100;
                                     const proteins =
-                                        recipeNutrition.proteins +
-                                        ingredient.product_protein / 100;
-                                    const fat =
-                                        recipeNutrition.fat +
-                                        ingredient.product_fat / 100;
+                                        recipeNutrition.proteins + ingredient.product_protein / 100;
+                                    const fat = recipeNutrition.fat + ingredient.product_fat / 100;
                                     const carbs =
-                                        recipeNutrition.carbs +
-                                        ingredient.product_carb / 100;
+                                        recipeNutrition.carbs + ingredient.product_carb / 100;
 
                                     setFieldValue("ingredients", [
                                         ...values.ingredients,
@@ -394,23 +351,15 @@ const AddRecipeFormik = ({
                             value={values.description}
                             onChange={handleChange}
                             onBlur={handleBlur}
-                            error={
-                                touched.description &&
-                                Boolean(errors.description)
-                            }
-                            helperText={
-                                touched.description && errors.description
-                            }
+                            error={touched.description && Boolean(errors.description)}
+                            helperText={touched.description && errors.description}
                         />
 
                         <Card
                             variant="outlined"
                             style={{ padding: "0 10px", marginBottom: "10px" }}
                         >
-                            <CardHeader
-                                title="Ход приготовления"
-                                style={{ textAlign: "center" }}
-                            />
+                            <CardHeader title="Ход приготовления" style={{ textAlign: "center" }} />
                             {values.steps.map((step, i) => (
                                 <AddRecipeFormStep
                                     key={i}
@@ -426,17 +375,13 @@ const AddRecipeFormik = ({
                                     removeCurrentStep={() => {
                                         setFieldValue(
                                             "steps",
-                                            [...values.steps].filter(
-                                                (step, j) => j !== i
-                                            )
+                                            [...values.steps].filter((step, j) => j !== i)
                                         );
                                     }}
                                 />
                             ))}
 
-                            {errors.steps &&
-                            touched.steps &&
-                            typeof errors.steps === "string" ? (
+                            {errors.steps && touched.steps && typeof errors.steps === "string" ? (
                                 <Error>{errors.steps}</Error>
                             ) : null}
                             <Button

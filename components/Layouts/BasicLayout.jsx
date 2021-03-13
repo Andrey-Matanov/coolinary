@@ -1,16 +1,12 @@
 import React from "react";
-// import RootRouter from "../../pages/RootRouter";
+import Header from "../../components/Common/Header/Header";
 import Footer from "../../components/Common/Footer";
-// import Header from "../../components/Common/Header/Header";
 
 const BasicLayout = ({ children }) => {
     return (
         <>
             <main>
-                {/* <Header /> */}
-                {/* <div className="wrapper">
-                    <RootRouter />
-                </div> */}
+                <Header />
                 {children}
             </main>
             <Footer />

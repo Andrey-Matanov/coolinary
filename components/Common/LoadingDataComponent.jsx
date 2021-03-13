@@ -1,5 +1,5 @@
-import { Box, CircularProgress, Grid, Typography } from "@material-ui/core";
 import React from "react";
+import { Box, CircularProgress, Grid, Typography } from "@material-ui/core";
 
 const LoadingDataComponent = () => {
     return (

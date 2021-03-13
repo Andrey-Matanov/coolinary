@@ -9,7 +9,7 @@ export const fetchUnits = () => async (dispatch) => {
     dispatch({
         type: FETCH_UNITS,
         payload: {
-            units: json.data,
+            units: json,
         },
     });
 };
