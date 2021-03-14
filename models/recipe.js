@@ -25,6 +25,14 @@ const recipe = new mongoose.Schema({
         type: String,
         required: true
     },
+    authorId: {
+        type: ObjectId,
+        required: true
+    },
+    rating: {
+        type: Number,
+        required: true
+    },
     ingredients: [{
         id: {
             type: String,

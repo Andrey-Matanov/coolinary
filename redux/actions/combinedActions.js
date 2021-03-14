@@ -50,7 +50,8 @@ export const fetchRecipesAndCategories = (
         !getState().categories.length
     ) {
         const recipesResponse = await fetch(
-            `${baseURL}/api/recipes/?amount=10&last=${currentLastId}&category=${category}`
+            `${baseURL}/api/recipes/`
+            // `${baseURL}/api/recipes/?amount=10&last=${currentLastId}&category=${category}`
         );
         const recipesJson = await recipesResponse.json();
         const categoriesResponse = await fetch(`${baseURL}/api/categories`);

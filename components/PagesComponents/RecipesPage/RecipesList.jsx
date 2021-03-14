@@ -69,14 +69,14 @@ const RecipesList = ({ recipesList, loadRecipes, isLast }) => {
         if (recipesList || recipesList.length === 0) {
             return recipesList.map((item) => {
                 return (
-                    <Grid item xs={12} key={item.id}>
+                    <Grid item xs={12} key={item._id}>
                         <RecipeItem
-                            id={item.id}
+                            _id={item._id}
                             name={item.name}
                             author={item.author}
-                            authorId={item.author_id}
+                            authorId={item.authorId}
                             time={item.time}
-                            complexity={item.complexity}
+                            difficulty={item.difficulty}
                             rating={item.rating}
                             description={item.description}
                             image={item.image}

@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import { Box, Paper, Typography, Grid } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import AccessTimeIcon from "@material-ui/icons/AccessTime";
@@ -29,12 +29,12 @@ const RecipeItem = (props) => {
     const classes = useStyles();
 
     const {
-        id,
+        _id,
         name,
         author,
         authorId,
         time,
-        complexity,
+        difficulty,
         rating,
         description,
         image,
@@ -81,17 +81,18 @@ const RecipeItem = (props) => {
                         >
                             <Grid item>
                                 <Link
-                                    to={`/recipes/${id}`}
+                                    href={`/recipes/${_id}`}
                                     className={classes.link}
                                 >
-                                    <Typography variant="h5">{name}</Typography>
+                                    <a><Typography variant="h5">{name}</Typography></a>
                                 </Link>
                             </Grid>
                             <Grid item>
                                 <Typography variant="body1">
                                     Автор:{" "}
-                                    <Link to={`/profile/${authorId}`}>
-                                        {author}
+                                    <Link href={`/profile/${authorId}`}>
+                                        {/* Temporary */}
+                                        <a>{'author'}</a>
                                     </Link>
                                 </Typography>
                             </Grid>
@@ -115,7 +116,7 @@ const RecipeItem = (props) => {
                                 <Typography variant="body1">
                                     Сложность:
                                 </Typography>
-                                <DifficultyBar diff={complexity} />
+                                <DifficultyBar diff={difficulty} />
                             </Grid>
                             <Grid item>
                                 <Typography variant="body1">

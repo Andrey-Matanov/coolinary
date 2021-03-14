@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import RecipesList from "../components/PagesComponents/RecipesPage/RecipesList.jsx";
 import RequestError from "../components/Common/RequestError.jsx";
-import { fetchRecipes, switchCategory } from "../actions/recipesListActions.js";
-import { fetchRecipesAndCategories } from "../actions/combinedActions.js";
+import { fetchRecipes, switchCategory } from "../redux/actions/recipesListActions.js";
+import { fetchRecipesAndCategories } from "../redux/actions/combinedActions.js";
 
 import {
     Container,
