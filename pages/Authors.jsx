@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
-import { fetchRating } from "../actions/ratingActions";
+import Link from "next/link";
+import { fetchRating } from "../redux/actions/ratingActions.js";
 
 const Authors = () => {
     const dispatch = useDispatch();
@@ -25,8 +25,8 @@ const Authors = () => {
                         }}
                     >
                         <p>№{i + 1}.</p>
-                        <Link style={{ color: "blue" }} to={`/profile/${id}`}>
-                            {name}
+                        <Link style={{ color: "blue" }} href={`/profile/${id}`}>
+                            <a>{name}</a>
                         </Link>
                         <p>Количество рецептов пользователя: {count}</p>
                         <p>Средний рейтинг всех рецептов: {avg}</p>

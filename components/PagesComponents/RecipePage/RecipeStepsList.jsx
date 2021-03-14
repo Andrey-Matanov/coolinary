@@ -1,7 +1,7 @@
 import React from "react";
 import Ingredients from "./Ingredients";
 import { makeStyles } from "@material-ui/core/styles";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import { Paper, Grid, Box, Typography } from "@material-ui/core";
 
 import ReviewsBlock from "../../../components/PagesComponents/RecipePage/ReviewsBlock.jsx";
@@ -150,9 +150,9 @@ const RecipeStepsList = ({ ingredients, recipe, reviews, steps }) => {
                                     Автор:{" "}
                                     <Link
                                         className="author-link"
-                                        to={`/profile/${recipe.user_id}`}
+                                        href={`/profile/${recipe.user_id}`}
                                     >
-                                        {user_name}
+                                        <a>{user_name}</a>
                                     </Link>
                                 </p>
                             </Box>

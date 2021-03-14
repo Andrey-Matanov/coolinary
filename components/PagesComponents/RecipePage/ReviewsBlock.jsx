@@ -12,8 +12,8 @@ import {
 } from "@material-ui/core"
 import Button from '@material-ui/core/Button'
 import DeleteIcon from '@material-ui/icons/Delete'
-import {deleteCommentary} from "../../../actions/recipesListActions"
-import {fetchRecipe} from "../../../actions/recipeActions"
+import {deleteCommentary} from "../../../redux/actions/recipesListActions.js"
+import {fetchRecipe} from "../../../redux/actions/recipeActions.js"
 
 
 const useStyles = makeStyles((theme) => ({

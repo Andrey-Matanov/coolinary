@@ -1,9 +1,9 @@
 import React from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { useFormik } from "formik"
-import { addCommentary } from "../../actions/recipesListActions"
+import { addCommentary } from "../../redux/actions/recipesListActions.js"
 import { Box, Grid, Typography, TextField, Button } from '@material-ui/core'
-import {fetchRecipe} from "../../actions/recipeActions"
+import {fetchRecipe} from "../../redux/actions/recipeActions.js"
 
 const AddCommentaryForm = () => {
     const dispatch = useDispatch();

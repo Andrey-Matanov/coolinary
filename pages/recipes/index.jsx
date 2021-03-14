@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import RecipesList from "../components/PagesComponents/RecipesPage/RecipesList.jsx";
-import RequestError from "../components/Common/RequestError.jsx";
-import { fetchRecipes, switchCategory } from "../redux/actions/recipesListActions.js";
-import { fetchRecipesAndCategories } from "../redux/actions/combinedActions.js";
+import RecipesList from "../../components/PagesComponents/RecipesPage/RecipesList.jsx";
+import RequestError from "../../components/Common/RequestError.jsx";
+import { fetchRecipes, switchCategory } from "../../redux/actions/recipesListActions.js";
+import { fetchRecipesAndCategories } from "../../redux/actions/combinedActions.js";
 
 import {
     Container,
@@ -15,7 +15,7 @@ import {
     CircularProgress,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
-import LoadingDataComponent from "../components/Common/LoadingDataComponent.jsx";
+import LoadingDataComponent from "../../components/Common/LoadingDataComponent.jsx";
 
 const useStyles = makeStyles((theme) => ({
     formControl: {
