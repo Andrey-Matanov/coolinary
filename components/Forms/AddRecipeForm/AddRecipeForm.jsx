@@ -29,6 +29,7 @@ import AddRecipeImage from "./AddRecipeImage";
 import Nutrition from "../../PagesComponents/RecipePage/Nutrition";
 import AddRecipeNutrition from "./AddRecipeNutrition";
 import createRequestHeaders from "../../../services/createRequestHeaders";
+import { Router } from "next/dist/client/router";
 // import AddRecipeNutrition from "./AddRecipeNutrition";
 
 const Error = styled.div`
@@ -55,9 +56,6 @@ const AddRecipeFormik = ({
     additionalInfo,
 }) => {
     const dispatch = useDispatch();
-    // const history = useHistory();
-    // const currentUserId = useSelector((state) => state.authorization.userId);
-    const currentUserId = 1;
 
     const [recipeNutrition, setRecipeNutrition] = useState({
         calories: 0,
@@ -144,7 +142,7 @@ const AddRecipeFormik = ({
 
     return (
         <Formik
-            initialValues={{ ...formInitialValues, authorId: currentUserId }}
+            initialValues={{ ...formInitialValues }}
             validationSchema={validationSchema}
             onSubmit={(values) => {
                 switch (additionalInfo.type) {
@@ -162,8 +160,8 @@ const AddRecipeFormik = ({
                     }
                 }
 
-                dispatch(fetchUserRecipes(currentUserId));
-                // history.push(`/profile/${currentUserId}`);
+                dispatch(fetchUserRecipes(formInitialValues.authorId));
+                Router.push(`/profile/${formInitialValues.authorId}`);
             }}
         >
             {({
@@ -176,18 +174,26 @@ const AddRecipeFormik = ({
                 setFieldValue,
             }) => {
                 const getNewIngredientId = () => {
-                    let newIngredientId = 1;
-                    const ingredients = values.ingredients;
+                    const usedIngredients = values.ingredients;
+                    console.log(ingredients);
+                    console.log(usedIngredients);
 
-                    while (true) {
-                        if (ingredients.find((ingredient) => ingredient.id === newIngredientId)) {
-                            newIngredientId += 1;
-                        } else {
-                            break;
+                    if (usedIngredients.length === 0) {
+                        return ingredients[0]._id;
+                    } else {
+                        for (let i = 0; i < ingredients.length; i++) {
+                            const newIngredientId = ingredients[i]._id;
+                            const usedIngredient = usedIngredients.some(
+                                (ingredient) => ingredient.id === newIngredientId
+                            );
+
+                            console.log("usedIngredient: ", usedIngredient);
+
+                            if (usedIngredient === false) {
+                                return newIngredientId;
+                            }
                         }
                     }
-
-                    return newIngredientId;
                 };
 
                 return (
@@ -214,7 +220,7 @@ const AddRecipeFormik = ({
                                 onChange={(e) => setFieldValue(`category_id`, +e.target.value)}
                             >
                                 {categories.map((category) => (
-                                    <MenuItem key={category.id} value={category.id}>
+                                    <MenuItem key={category._id} value={category._id}>
                                         {category.name}
                                     </MenuItem>
                                 ))}
@@ -262,8 +268,9 @@ const AddRecipeFormik = ({
 
                         <Card variant="outlined" style={{ padding: "0 10px" }}>
                             <CardHeader title="Состав рецепта" style={{ textAlign: "center" }} />
-                            {ingredients.length ? (
+                            {ingredients.length > 0 ? (
                                 values.ingredients.map((ingredient, i) => {
+                                    console.log("ingredient: ", ingredient);
                                     return (
                                         <AddRecipeFormIngredient
                                             key={i}
@@ -271,16 +278,16 @@ const AddRecipeFormik = ({
                                             currentId={ingredient.id}
                                             currentName={
                                                 ingredients.find(
-                                                    (item) => item.id === ingredient.id
+                                                    (item) => item._id === ingredient.id
                                                 ).name
                                             }
                                             currentAmount={ingredient.amount}
                                             ingredients={ingredients}
+                                            units={units}
                                             errors={errors.ingredients}
                                             touched={touched.ingredients}
                                             usedIngredients={values.ingredients}
                                             unitId={ingredient.unit_id}
-                                            handleChange={handleChange}
                                             handleBlur={handleBlur}
                                             setFieldValue={setFieldValue}
                                             recipeNutrition={recipeNutrition}
@@ -297,21 +304,26 @@ const AddRecipeFormik = ({
                                 <Error>{errors.ingredients}</Error>
                             ) : null}
                             <Button
+                                disabled={
+                                    values.ingredients.length === ingredients.length
+                                        ? "disabled"
+                                        : ""
+                                }
                                 color="primary"
                                 variant="contained"
                                 fullWidth={true}
                                 onClick={() => {
                                     const newId = getNewIngredientId();
+                                    console.log(newId);
                                     const ingredient = ingredients.find(
-                                        (ingredient) => ingredient.id === newId
+                                        (ingredient) => ingredient._id === newId
                                     );
                                     const calories =
-                                        recipeNutrition.calories + ingredient.calorie / 100;
+                                        recipeNutrition.calories + ingredient.calories / 100;
                                     const proteins =
-                                        recipeNutrition.proteins + ingredient.product_protein / 100;
-                                    const fat = recipeNutrition.fat + ingredient.product_fat / 100;
-                                    const carbs =
-                                        recipeNutrition.carbs + ingredient.product_carb / 100;
+                                        recipeNutrition.proteins + ingredient.protein / 100;
+                                    const fat = recipeNutrition.fat + ingredient.fat / 100;
+                                    const carbs = recipeNutrition.carbs + ingredient.carb / 100;
 
                                     setFieldValue("ingredients", [
                                         ...values.ingredients,
@@ -403,6 +415,15 @@ const AddRecipeFormik = ({
                                 Добавить новый шаг
                             </Button>
                         </Card>
+
+                        <Button
+                            color="primary"
+                            variant="contained"
+                            onClick={() => console.log(values)}
+                            type="button"
+                        >
+                            Show Values
+                        </Button>
 
                         <Button
                             color="primary"

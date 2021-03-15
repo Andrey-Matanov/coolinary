@@ -4,7 +4,7 @@ import { recipeIngredient } from "./recipeIngredient";
 import { recipeStep } from "./recipeStep";
 
 const recipe = new mongoose.Schema({
-    _id: {
+    authorId: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
     },
@@ -18,7 +18,7 @@ const recipe = new mongoose.Schema({
     },
     image: {
         type: String,
-        required: true,
+        default: "https://via.placeholder.com/150x150",
     },
     time: {
         type: Number,
@@ -31,6 +31,10 @@ const recipe = new mongoose.Schema({
     description: {
         type: String,
         required: true,
+    },
+    rating: {
+        type: Number,
+        default: 0,
     },
     ingredients: [recipeIngredient],
     steps: [recipeStep],

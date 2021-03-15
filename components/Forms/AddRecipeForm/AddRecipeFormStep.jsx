@@ -68,7 +68,7 @@ const AddRecipeFormStep = ({
                         helperText={
                             typeof touched === "object" &&
                             touched[index]?.description &&
-                            errors?[index]?.description
+                            errors?.[index]?.description
                         }
                     />
                 </div>

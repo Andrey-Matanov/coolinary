@@ -10,6 +10,6 @@ const config = {
     appId: process.env.appId,
 };
 
-const firebaseApp = firebase.apps?.length > 0 ? firebase.app[0] : firebase.initializeApp(config);
+const firebaseApp = firebase.apps?.length > 0 ? firebase.apps[0] : firebase.initializeApp(config);
 
 export default firebaseApp;

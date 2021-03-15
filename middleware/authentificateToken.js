@@ -1,15 +1,4 @@
-const admin = require("firebase-admin");
-const serviceAccount = require("../utils/serviceAccount");
-
-const adminFirebaseApp =
-    admin.apps?.length > 0
-        ? admin.apps[0]
-        : admin.initializeApp(
-              {
-                  credential: admin.credential.cert(serviceAccount),
-              },
-              "admin"
-          );
+import adminFirebaseApp from "../utils/adminFirebaseConfig";
 
 const decodeIDToken = (handler) => async (req, res) => {
     const header = req.headers?.authorization;

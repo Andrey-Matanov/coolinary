@@ -1,3 +1,5 @@
+const admin = require("firebase-admin");
+
 const serviceAccount = {
     type: "service_account",
     project_id: process.env.projectId,
@@ -11,4 +13,11 @@ const serviceAccount = {
     client_x509_cert_url: process.client_x509_cert_url,
 };
 
-export default serviceAccount;
+const config = {
+    credential: admin.credential.cert(serviceAccount),
+};
+
+const adminFirebaseApp =
+    admin.apps?.length > 0 ? admin.app() : admin.initializeApp(config, "admin");
+
+export default adminFirebaseApp;

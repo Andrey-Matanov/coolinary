@@ -43,17 +43,12 @@ const Menu = () => {
 
     return (
         <div className={classes.menu}>
-            {/* <NavLink
-                exact
-                to="/"
-                className={classes.link}
-                activeClassName={classes.selected_link}
-            >
+            <Link href="/" className={classes.link} activeClassName={classes.selected_link}>
                 <LinkDiv>
                     <HomeIcon color="action" />
                     <Heading>Главная</Heading>
                 </LinkDiv>
-            </NavLink> */}
+            </Link>
             <Link href="/recipes" className={classes.link} activeClassName={classes.selected_link}>
                 <LinkDiv>
                     <RecipeIcon color="action" />

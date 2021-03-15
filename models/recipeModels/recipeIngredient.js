@@ -9,4 +9,8 @@ export const recipeIngredient = new mongoose.Schema({
         type: Number,
         required: true,
     },
+    unit_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        default: 1,
+    },
 });

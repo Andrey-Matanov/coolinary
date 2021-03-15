@@ -45,9 +45,7 @@ export const deleteCommentary = (reviewId) => async (dispatch) => {
     });
 };
 
-export const fetchRecipes = (currentLastId, category = "") => async (
-    dispatch
-) => {
+export const fetchRecipes = (currentLastId, category = "") => async (dispatch) => {
     try {
         const response = await fetch(
             `${baseURL}/api/recipes/?amount=10&last=${currentLastId}&category=${category}`
@@ -86,11 +84,6 @@ export const addRecipe = (recipe) => async (dispatch) => {
     const response = await fetch(`${baseURL}/api/recipes`, {
         method: "POST",
         body: JSON.stringify(recipe),
-        headers: {
-            Authorization: `Bearer ${window.localStorage.getItem(
-                "currentUserToken"
-            )}`,
-        },
     });
 
     dispatch({ type: "SUCCESS" });
@@ -101,9 +94,7 @@ export const editRecipe = (recipe, recipeId) => async (dispatch) => {
         method: "PUT",
         body: JSON.stringify(recipe),
         headers: {
-            Authorization: `Bearer ${window.localStorage.getItem(
-                "currentUserToken"
-            )}`,
+            Authorization: `Bearer ${window.localStorage.getItem("currentUserToken")}`,
         },
     });
 
@@ -114,9 +105,7 @@ export const deleteRecipe = (recipeId) => async (dispatch) => {
     await fetch(`${baseURL}/api/recipes/${recipeId}`, {
         method: "DELETE",
         headers: {
-            Authorization: `Bearer ${window.localStorage.getItem(
-                "currentUserToken"
-            )}`,
+            Authorization: `Bearer ${window.localStorage.getItem("currentUserToken")}`,
         },
     });
     dispatch({ type: "DELETE_RECIPE" });

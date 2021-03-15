@@ -1,17 +1,17 @@
 import connectDB from "../../../middleware/mongodb";
-import User from "../../../models/user";
+import Recipe from "../../../models/recipeModels/recipe";
 
 const handler = async (req, res) => {
     const { id } = req.query;
 
     if (req.method === "GET") {
         try {
-            const user = await User.findById(id);
+            const recipe = await Recipe.findById(id);
 
-            if (user) {
-                res.send(user);
+            if (recipe) {
+                res.send(recipe);
             } else {
-                res.status(400).send(`User doesn't exist`);
+                res.status(400).send(`Recipe doesn't exist`);
             }
         } catch (error) {
             console.log(error);
@@ -19,7 +19,7 @@ const handler = async (req, res) => {
         }
     } else if (req.method === "DELETE") {
         try {
-            await User.findByIdAndRemove(id);
+            await Recipe.findByIdAndRemove(id);
             res.send("removed succesfully");
         } catch (error) {
             console.log(error);

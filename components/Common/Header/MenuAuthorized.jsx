@@ -8,7 +8,9 @@ import AccountBoxIcon from "@material-ui/icons/AccountBox";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import RecipeIcon from "../../Icons/RecipeIcon";
 import firebaseApp from "../../../utils/firebaseConfig";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { userLogout } from "../../../redux/actions/authorizationActions";
+import Router from "next/router";
 
 const LinkDiv = styled.a`
     display: flex;
@@ -50,21 +52,18 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Menu = () => {
+    const dispatch = useDispatch();
     const classes = useStyles();
     const id = useSelector((state) => state.authorization.userId);
 
     return (
         <div className={classes.menu}>
-            {/* <Link
-                to="/"
-                className={classes.link}
-                activeClassName={classes.selected_link}
-            >
+            <Link href="/" className={classes.link} activeClassName={classes.selected_link}>
                 <LinkDiv>
                     <HomeIcon color="action" />
                     <Heading>Главная</Heading>
                 </LinkDiv>
-            </Link> */}
+            </Link>
             <Link href="/recipes" className={classes.link} activeClassName={classes.selected_link}>
                 <LinkDiv>
                     <RecipeIcon color="action" />
@@ -97,7 +96,15 @@ const Menu = () => {
                     <Heading>Личный кабинет</Heading>
                 </LinkDiv>
             </Link>
-            <button onClick={() => firebaseApp.auth().signOut()} className={classes.button}>
+            <button
+                onClick={() => {
+                    firebaseApp.auth().signOut();
+                    window.localStorage.removeItem("currentUserUID");
+                    dispatch(userLogout());
+                    Router.push("/login");
+                }}
+                className={classes.button}
+            >
                 <ExitToAppIcon color="action" />
                 <Heading>Выход</Heading>
             </button>

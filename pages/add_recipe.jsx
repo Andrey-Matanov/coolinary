@@ -1,5 +1,5 @@
-import React, { useContext, useEffect } from "react";
-import { connect, useDispatch } from "react-redux";
+import React, { useContext, useEffect, useState } from "react";
+import { connect, useDispatch, useSelector } from "react-redux";
 import Router from "next/router";
 import styled from "styled-components";
 import { AuthContext } from "../components/Common/Authentication";
@@ -14,35 +14,53 @@ const Wrapper = styled.div`
 `;
 
 const AddRecipe = ({ ingredients, categories, units }) => {
-    const dispatch = useDispatch();
     const { isUserLoggedIn } = useContext(AuthContext);
 
     if (!isUserLoggedIn) {
         Router.push("/login");
     }
 
-    useEffect(() => {
-        if (isUserLoggedIn && !ingredients.length) {
-            dispatch(fetchIngredients());
-        }
-        if (isUserLoggedIn && !categories.length) {
-            dispatch(fetchCategories());
-        }
-        if (isUserLoggedIn && !units.length) {
-            dispatch(fetchUnits());
-        }
-    }, []);
-
-    const initialValues = {
+    const nullValues = {
+        authorId: "",
         name: "",
         image: "",
-        category_id: 1,
+        category_id: "",
         time: 0,
         difficulty: "1",
         ingredients: [],
         description: "",
         steps: [],
     };
+
+    const currentUserId = useSelector((state) => state.authorization.userId);
+    const [initialValues, setInitialValues] = useState(nullValues);
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        setInitialValues({ ...initialValues, authorId: currentUserId });
+    }, [currentUserId]);
+
+    useEffect(() => {
+        if (categories.length > 0) {
+            setInitialValues({ ...initialValues, category_id: categories[0]._id });
+        }
+    }, [categories]);
+
+    useEffect(() => {
+        if (!ingredients.length) {
+            dispatch(fetchIngredients());
+        }
+        if (!categories.length) {
+            dispatch(fetchCategories());
+        }
+        if (!units.length) {
+            dispatch(fetchUnits());
+        }
+    }, []);
+
+    useEffect(() => {
+        console.log(initialValues);
+    });
 
     if (isUserLoggedIn) {
         return (
