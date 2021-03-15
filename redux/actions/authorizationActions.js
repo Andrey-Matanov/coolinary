@@ -1,20 +1,24 @@
 import axios from "axios";
 import { baseURL } from "../../utils";
 
-export const GET_USER_ID_BY_TOKEN = "@@authorization/GET_USER_ID_BY_TOKEN";
+export const GET_USER_ID_BY_UID = "@@authorization/GET_USER_ID_BY_UID";
 export const USER_LOGIN = "@@authorization/USER_LOGIN";
 export const USER_LOGOUT = "@@authorization/USER_LOGOUT";
 
-export const getUserIdByToken = () => async (dispatch) => {
-    const token = window.localStorage.getItem("currentUserToken");
+export const getUserIdByUID = () => async (dispatch) => {
+    const uid = window.localStorage.getItem("currentUserUID");
+    console.log("uid: ", uid);
+
     const response = await axios.get(`${baseURL}/api/userdata`, {
         headers: {
-            Authorization: `Bearer ${token}`,
+            uid: uid,
         },
     });
 
+    console.log(response);
+
     dispatch({
-        type: GET_USER_ID_BY_TOKEN,
+        type: GET_USER_ID_BY_UID,
         payload: {
             userId: response.data._id,
         },

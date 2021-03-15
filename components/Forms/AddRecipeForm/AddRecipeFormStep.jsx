@@ -1,11 +1,5 @@
 import React, { useState } from "react";
-import {
-    Button,
-    Card,
-    CardContent,
-    CardHeader,
-    TextField,
-} from "@material-ui/core";
+import { Button, Card, CardContent, CardHeader, TextField } from "@material-ui/core";
 import styled from "styled-components";
 import FormInput from "../../Inputs/FormInput";
 import FormTextarea from "../../Inputs/FormTextArea";
@@ -44,19 +38,14 @@ const AddRecipeFormStep = ({
                         onBlur={handleBlur}
                         error={
                             typeof touched === "object" &&
-                            touched[index] &&
-                            touched[index].name &&
+                            touched[index]?.name &&
                             typeof errors === "object" &&
-                            Boolean(errors[index]) &&
-                            Boolean(errors[index].name)
+                            Boolean(errors[index]?.name)
                         }
                         helperText={
                             typeof touched === "object" &&
-                            touched[index] &&
-                            touched[index].name &&
-                            errors &&
-                            errors[index] &&
-                            errors[index].name
+                            touched[index]?.name &&
+                            errors?.[index]?.name
                         }
                     />
                 </div>
@@ -72,19 +61,14 @@ const AddRecipeFormStep = ({
                         onBlur={handleBlur}
                         error={
                             typeof touched === "object" &&
-                            touched[index] &&
-                            touched[index].description &&
+                            touched[index]?.description &&
                             typeof errors === "object" &&
-                            Boolean(errors[index]) &&
-                            Boolean(errors[index].description)
+                            Boolean(errors[index]?.description)
                         }
                         helperText={
                             typeof touched === "object" &&
-                            touched[index] &&
-                            touched[index].description &&
-                            errors &&
-                            errors[index] &&
-                            errors[index].description
+                            touched[index]?.description &&
+                            errors?[index]?.description
                         }
                     />
                 </div>

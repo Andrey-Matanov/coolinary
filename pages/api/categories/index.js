@@ -29,7 +29,6 @@ const handler = (req, res) => {
                 break;
             }
             default: {
-                //unsupported method
                 res.status(422).send("req_method_not_supported");
                 return resolve();
             }

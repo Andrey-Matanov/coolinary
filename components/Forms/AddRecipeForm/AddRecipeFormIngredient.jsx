@@ -57,9 +57,7 @@ const AddRecipeFormIngredient = ({
 }) => {
     const classes = useStyles();
 
-    const [searchedIngredientsArray, setSearchedIngredientsArray] = useState(
-        []
-    );
+    const [searchedIngredientsArray, setSearchedIngredientsArray] = useState([]);
     const [searchedIngredient, setSearchedIngredient] = useState("");
     const [lastNumberAmount, setLastNumberAmount] = useState(null);
 
@@ -72,26 +70,20 @@ const AddRecipeFormIngredient = ({
     }, [ingredients]);
 
     useEffect(() => {
-        const regex = new RegExp(
-            `[а-яА-Я]*${searchedIngredient.toLowerCase()}[а-яА-Я]*`
-        );
+        const regex = new RegExp(`[а-яА-Я]*${searchedIngredient.toLowerCase()}[а-яА-Я]*`);
 
         setSearchedIngredientsArray(
-            ingredients.filter((ingredient) =>
-                regex.test(ingredient.name.toLowerCase())
-            )
+            ingredients.filter((ingredient) => regex.test(ingredient.name.toLowerCase()))
         );
     }, [searchedIngredient]);
 
-    const getUnitName = (unitId) =>
-        ["граммы", "миллилитры", "штуки", "ч.л.", "ст.л."][unitId - 1];
+    const getUnitName = (unitId) => ["граммы", "миллилитры", "штуки", "ч.л.", "ст.л."][unitId - 1];
 
     const Ingredient = ({ index, style }) => {
         const isCurrent = searchedIngredientsArray[index].id === currentId;
         const isDisabled =
             usedIngredients.some(
-                (ingredient) =>
-                    ingredient.id === searchedIngredientsArray[index].id
+                (ingredient) => ingredient.id === searchedIngredientsArray[index].id
             ) && searchedIngredientsArray[index].id !== currentId;
 
         return (
@@ -102,24 +94,19 @@ const AddRecipeFormIngredient = ({
                         (ingredient) => ingredient.id === currentId
                     );
                     const newIngredient = ingredients.find(
-                        (ingredient) =>
-                            ingredient.id === searchedIngredientsArray[index].id
+                        (ingredient) => ingredient.id === searchedIngredientsArray[index].id
                     );
                     const calories = Number(
                         (
                             recipeNutrition.calories +
-                            (currentAmount *
-                                (newIngredient.calorie -
-                                    oldIngredient.calorie)) /
-                                100
+                            (currentAmount * (newIngredient.calorie - oldIngredient.calorie)) / 100
                         ).toFixed(2)
                     );
                     const proteins = Number(
                         (
                             recipeNutrition.proteins +
                             (currentAmount *
-                                (newIngredient.product_protein -
-                                    oldIngredient.product_protein)) /
+                                (newIngredient.product_protein - oldIngredient.product_protein)) /
                                 100
                         ).toFixed(2)
                     );
@@ -127,8 +114,7 @@ const AddRecipeFormIngredient = ({
                         (
                             recipeNutrition.fat +
                             (currentAmount *
-                                (newIngredient.product_fat -
-                                    oldIngredient.product_fat)) /
+                                (newIngredient.product_fat - oldIngredient.product_fat)) /
                                 100
                         ).toFixed(2)
                     );
@@ -136,8 +122,7 @@ const AddRecipeFormIngredient = ({
                         (
                             recipeNutrition.carbs +
                             (currentAmount *
-                                (newIngredient.product_carb -
-                                    oldIngredient.product_carb)) /
+                                (newIngredient.product_carb - oldIngredient.product_carb)) /
                                 100
                         ).toFixed(2)
                     );
@@ -157,11 +142,7 @@ const AddRecipeFormIngredient = ({
                 type="button"
                 style={{
                     ...style,
-                    color: isCurrent
-                        ? "green"
-                        : isDisabled
-                        ? "lightray"
-                        : "black",
+                    color: isCurrent ? "green" : isDisabled ? "lightray" : "black",
                 }}
             >
                 {searchedIngredientsArray[index].name}
@@ -172,11 +153,7 @@ const AddRecipeFormIngredient = ({
     return (
         <Card variant="outlined" style={{ marginBottom: "10px" }}>
             <CardContent>
-                <Typography
-                    variant="body1"
-                    color="primary"
-                    style={{ marginBottom: "10px" }}
-                >
+                <Typography variant="body1" color="primary" style={{ marginBottom: "10px" }}>
                     Выбранный ингредиент: {currentName}
                 </Typography>
 
@@ -224,8 +201,7 @@ const AddRecipeFormIngredient = ({
                                 const calories = Number(
                                     (
                                         recipeNutrition.calories +
-                                        ((e.target.value - lastNumberAmount) *
-                                            ingredient.calorie) /
+                                        ((e.target.value - lastNumberAmount) * ingredient.calorie) /
                                             100
                                     ).toFixed(2)
                                 );
@@ -264,27 +240,19 @@ const AddRecipeFormIngredient = ({
                                 });
                             }
 
-                            setFieldValue(
-                                `ingredients[${currentNumber}].amount`,
-                                value
-                            );
+                            setFieldValue(`ingredients[${currentNumber}].amount`, value);
                         }}
                         onBlur={handleBlur}
                         error={
                             typeof touched === "object" &&
-                            touched[currentNumber] &&
-                            touched[currentNumber].amount &&
+                            touched[currentNumber]?.amount &&
                             typeof errors === "object" &&
-                            Boolean(errors[currentNumber]) &&
-                            Boolean(errors[currentNumber].amount)
+                            Boolean(errors[currentNumber]?.amount)
                         }
                         helperText={
                             typeof touched === "object" &&
-                            touched[currentNumber] &&
-                            touched[currentNumber].amount &&
-                            errors &&
-                            errors[currentNumber] &&
-                            errors[currentNumber].amount
+                            touched[currentNumber]?.amount &&
+                            errors?.[currentNumber]?.amount
                         }
                     />
                 </div>
@@ -305,8 +273,7 @@ const AddRecipeFormIngredient = ({
                         const proteins = Number(
                             (
                                 recipeNutrition.proteins -
-                                (currentAmount * ingredient.product_protein) /
-                                    100
+                                (currentAmount * ingredient.product_protein) / 100
                             ).toFixed(2)
                         );
                         const fat = Number(
@@ -331,9 +298,7 @@ const AddRecipeFormIngredient = ({
 
                         setFieldValue(
                             "ingredients",
-                            [...usedIngredients].filter(
-                                (ingredient) => ingredient.id !== currentId
-                            )
+                            [...usedIngredients].filter((ingredient) => ingredient.id !== currentId)
                         );
                     }}
                 >

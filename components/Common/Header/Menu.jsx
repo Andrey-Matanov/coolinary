@@ -7,9 +7,10 @@ import PeopleIcon from "@material-ui/icons/People";
 import AccountBoxIcon from "@material-ui/icons/AccountBox";
 import RecipeIcon from "../../Icons/RecipeIcon";
 
-const LinkDiv = styled.div`
+const LinkDiv = styled.a`
     display: flex;
     align-items: center;
+    cursor: pointer;
 `;
 
 const Heading = styled.p`

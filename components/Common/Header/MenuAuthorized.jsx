@@ -10,9 +10,10 @@ import RecipeIcon from "../../Icons/RecipeIcon";
 import firebaseApp from "../../../utils/firebaseConfig";
 import { useSelector } from "react-redux";
 
-const LinkDiv = styled.div`
+const LinkDiv = styled.a`
     display: flex;
     align-items: center;
+    cursor: pointer;
 `;
 
 const Heading = styled.p`

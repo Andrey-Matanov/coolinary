@@ -1,5 +1,5 @@
 const admin = require("firebase-admin");
-const serviceAccount = require("../utils/serviceAccount.json");
+const serviceAccount = require("../utils/serviceAccount");
 
 const adminFirebaseApp =
     admin.apps?.length > 0

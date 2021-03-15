@@ -6,8 +6,11 @@ import firebaseApp from "../utils/firebaseConfig";
 import Register from "../components/PagesComponents/RegisterPage/Register";
 import { AuthContext } from "../components/Common/Authentication";
 import axios from "axios";
+import { getUserIdByUID } from "../redux/actions/authorizationActions";
+import { useDispatch } from "react-redux";
 
 const register = () => {
+    const dispatch = useDispatch();
     const { isUserLoggedIn } = useContext(AuthContext);
 
     if (isUserLoggedIn) {
@@ -33,15 +36,17 @@ const register = () => {
                 const newFirebaseUser = await firebaseApp
                     .auth()
                     .createUserWithEmailAndPassword(values.email, values.password);
-                const token = newFirebaseUser.user.za;
+                const uid = newFirebaseUser.user.uid;
+                console.log(uid);
 
                 const newUserData = {
                     name: values.name,
                     email: values.email,
-                    token: token,
+                    uid: uid,
                 };
 
                 await axios.post("/api/users", newUserData);
+                dispatch(getUserIdByUID());
             } catch (error) {
                 console.log("error: ", error);
             }

@@ -3,8 +3,8 @@ import User from "../../models/user";
 
 const handler = async (req, res) => {
     if (req.method === "GET") {
-        const token = req.headers.authorization.split("Bearer ")[1];
-        const user = await User.find({ token: token });
+        const uid = req.headers.uid;
+        const user = await User.find({ uid: uid });
 
         res.send(user[0]);
     } else {

@@ -7,10 +7,12 @@ const handler = async (req, res) => {
 
         res.json(users);
     } else if (req.method === "POST") {
+        console.log("body: ", req.body);
+
         const newUser = new User({
             name: req.body.name,
             email: req.body.email,
-            token: req.body.token,
+            uid: req.body.uid,
         });
 
         await newUser.save();
