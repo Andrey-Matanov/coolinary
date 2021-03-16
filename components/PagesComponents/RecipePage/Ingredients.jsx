@@ -9,23 +9,21 @@ import {
 } from "@material-ui/core";
 import { Fragment } from "react";
 
-const Ingredients = (props) => {
-    const { ingredients } = props;
-
-    const renderIngredientsList = (ingredients) => {
+const Ingredients = ({ ingredients, ingredientsData }) => {
+    const renderIngredientsList = (ingredients, ingredientsData) => {
         if (ingredients) {
-            return ingredients.map((item) => (
+            return ingredients.map((item) => 
                 <Fragment key={item.id}>
                     <ListItem>
                         <Grid container justify="space-between">
                             <Grid item>
                                 <Typography variant="body1">
-                                    {item.name}:
+                                    {ingredientsData.find(itemFind => itemFind._id === item.id).name}:
                                 </Typography>
                             </Grid>
                             <Grid item>
                                 <Typography variant="body1">
-                                    {item.amount} {item.unit_name}
+                                    {item.amount} {'item.unit_name'}
                                 </Typography>
                             </Grid>
                         </Grid>
@@ -33,7 +31,7 @@ const Ingredients = (props) => {
                     </ListItem>
                     <Divider />
                 </Fragment>
-            ));
+            );
         } else {
             return [];
         }
@@ -44,7 +42,7 @@ const Ingredients = (props) => {
             <Box>
                 <Typography variant="h5">Ингредиенты</Typography>
             </Box>
-            <List>{renderIngredientsList(ingredients)}</List>
+            <List>{renderIngredientsList(ingredients, ingredientsData)}</List>
         </div>
     );
 };

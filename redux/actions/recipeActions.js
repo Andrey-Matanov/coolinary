@@ -15,12 +15,7 @@ export const fetchRecipe = (id) => async (dispatch) => {
     } else {
         dispatch({
             type: FETCH_RECIPE,
-            payload: {
-                recipe: json.recipe,
-                ingredients: json.ingredients,
-                steps: json.steps,
-                reviews: json.reviews,
-            },
+            payload: json,
         });
     }
 };

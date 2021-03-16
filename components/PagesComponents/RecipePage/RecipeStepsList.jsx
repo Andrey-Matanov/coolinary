@@ -116,18 +116,21 @@ const renderSteps = (steps) => {
     }
 };
 
-const RecipeStepsList = ({ ingredients, recipe, reviews, steps }) => {
+const RecipeStepsList = ({ recipe, ingredientsData, author}) => {
     const classes = useStyles();
     const {
         name,
-        user_name,
-        complexity,
+        authorId,
+        difficulty,
         image,
         description,
         time,
         rating,
+        ingredients,
+        reviews,
+        steps 
     } = recipe;
-
+console.log(recipe)
     return (
         <Box mt={"45px"}>
             <div style={{ marginTop: "20px" }}></div>
@@ -150,14 +153,14 @@ const RecipeStepsList = ({ ingredients, recipe, reviews, steps }) => {
                                     Автор:{" "}
                                     <Link
                                         className="author-link"
-                                        href={`/profile/${recipe.user_id}`}
+                                        href={`/profile/${authorId}`}
                                     >
-                                        <a>{user_name}</a>
+                                        <a>{author}</a>
                                     </Link>
                                 </p>
                             </Box>
                             <Box my={3}>Рейтинг:</Box>
-                            <DifficultyBar diff={complexity} />
+                            <DifficultyBar diff={difficulty} />
                             <Box my={3}>
                                 Время приготовления: {formatTime(time)}
                             </Box>
@@ -170,14 +173,20 @@ const RecipeStepsList = ({ ingredients, recipe, reviews, steps }) => {
                 <Grid item xs={12}>
                     <Paper elevation={3} square={true}>
                         <Box p={2}>
-                            <Ingredients ingredients={ingredients} />
+                            <Ingredients
+                                ingredients={ingredients}
+                                ingredientsData={ingredientsData}
+                            />
                         </Box>
                     </Paper>
                 </Grid>
                 <Grid item xs={12}>
                     <Paper elevation={3} square={true}>
                         <Box p={2}>
-                            <Nutrition ingredients={ingredients} />
+                            <Nutrition 
+                                ingredients={ingredients}
+                                ingredientsData={ingredientsData}
+                            />
                         </Box>
                     </Paper>
                 </Grid>

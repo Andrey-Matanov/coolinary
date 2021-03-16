@@ -7,9 +7,6 @@ import {
 const recipeObject = {
     status: "loading",
     recipe: {},
-    ingredients: [],
-    reviews: [],
-    steps: [],
 };
 
 export const recipeReducer = (recipe = recipeObject, action) => {
@@ -20,10 +17,7 @@ export const recipeReducer = (recipe = recipeObject, action) => {
         case FETCH_RECIPE: {
             return {
                 status: "ok",
-                recipe: action.payload.recipe[0],
-                ingredients: action.payload.ingredients,
-                reviews: action.payload.reviews,
-                steps: action.payload.steps,
+                recipe: action.payload,
             };
         }
         case FETCH_RECIPE_ERROR: {

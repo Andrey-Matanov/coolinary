@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import RecipeStepsList from "../../components/PagesComponents/RecipePage/RecipeStepsList";
 import { Container, Box, CircularProgress } from "@material-ui/core";
-import { fetchRecipe } from "../../redux/actions/recipeActions.js";
+import { fetchRecipeIngredientsAuthor } from "../../redux/actions/combinedActions.js";
 import { useRouter } from "next/router";
 
 const Recipe = () => {
@@ -11,31 +11,34 @@ const Recipe = () => {
     const { id } = router.query;
 
     useEffect(() => {
-        dispatch(fetchRecipe(id));
+        dispatch(fetchRecipeIngredientsAuthor(id));
     }, []);
 
-    const { status, recipe, ingredients, reviewsList, steps } = useSelector((state) => state.recipe)
+    const { status, recipe } = useSelector((state) => state.recipe)
+    const ingredients = useSelector((state) => state.ingredients)
+    const { userName } = useSelector((state) => state.profile)
 
     switch (status) {
         case "loading": {
-            <Box justifyContent="center" display="flex">
+            console.log('Now loading')
+            return <Box justifyContent="center" display="flex">
                 <CircularProgress color="primary" />
             </Box>
         }
         case "ok": {
+            console.log('Now ok')
             return (
                 <Container maxWidth="md">
                     <RecipeStepsList
-                        recipe={recipe}
-                        ingredients={ingredients}
-                        reviews={reviewsList}
-                        steps={steps}
+                        recipe={recipe.recipe}
+                        ingredientsData={ingredients}
+                        author = {userName}
                     />
                 </Container>
             );
         }
         case "failed": {
-            return <RequestError retryFunction={() => dispatch(fetchRecipe(id))} />;
+            return <RequestError retryFunction={() => dispatch(fetchRecipeIngredientsAuthor(id))} />;
         }
     }
 };

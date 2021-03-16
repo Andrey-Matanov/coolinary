@@ -7,22 +7,25 @@ import CheeseIcon from "../../Icons/CheeseIcon";
 import CandyCaneIcon from "../../Icons/CandyCaneIcon";
 import BoltIcon from "../../Icons/BoltIcon";
 
-const Nutrition = ({ ingredients }) => {
+const Nutrition = ({ ingredients, ingredientsData }) => {
     const theme = useTheme();
 
     let nutritionValues = {
-        calorie: 0,
+        calories: 0,
         protein: 0,
         fat: 0,
         carb: 0,
     };
 
-    ingredients.map((item) => {
-        nutritionValues.calorie += item.calorie * item.amount;
-        nutritionValues.protein += item.protein * item.amount;
-        nutritionValues.fat += item.fat * item.amount;
-        nutritionValues.carb += item.carb * item.amount;
-    });
+    if(ingredients) {
+        ingredients.map((item) => {
+            const referencedIngredient = ingredientsData.find(itemFind => itemFind._id === item.id)
+            nutritionValues.calories += referencedIngredient.calories * item.amount;
+            nutritionValues.protein += referencedIngredient.protein * item.amount;
+            nutritionValues.fat += referencedIngredient.fat * item.amount;
+            nutritionValues.carb += referencedIngredient.carb * item.amount;
+        });
+    }
 
     nutritionValues
         ? Object.keys(nutritionValues).forEach((item) => {
@@ -52,7 +55,7 @@ const Nutrition = ({ ingredients }) => {
                         </Grid>
                         <Grid item>
                             <Typography variant="body1">
-                                {nutritionValues.calorie / 100} ккал
+                                {nutritionValues.calories / 100} ккал
                             </Typography>
                         </Grid>
                     </Grid>
