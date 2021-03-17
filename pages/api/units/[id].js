@@ -1,4 +1,4 @@
-import connectDB from "../../../middlewares/mongodb.js";
+import connectDB from "../../../middleware/mongodb.js";
 import Unit from "../../../models/unit.js";
 
 const handler = (req, res) => {

@@ -1,17 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import Router from "next/router";
+import { useDispatch } from "react-redux";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import styled from "styled-components";
-import { addRecipe, editRecipe, deleteRecipe } from "../../../redux/actions/recipesListActions";
+import { addRecipe, editRecipe } from "../../../redux/actions/recipesListActions";
 import AddRecipeFormStep from "./AddRecipeFormStep";
 import AddRecipeFormIngredient from "./AddRecipeFormIngredient";
-import {
-    fetchUserData,
-    fetchUserRecipes,
-    getUserDataByToken,
-} from "../../../redux/actions/profileActions";
-import { baseURL } from "../../../utils";
 import AddImageField from "./AddImageField";
 import {
     Button,
@@ -24,13 +19,8 @@ import {
     Select,
     TextField,
 } from "@material-ui/core";
-import { makeStyles } from "@material-ui/styles";
 import AddRecipeImage from "./AddRecipeImage";
-import Nutrition from "../../PagesComponents/RecipePage/Nutrition";
 import AddRecipeNutrition from "./AddRecipeNutrition";
-import createRequestHeaders from "../../../services/createRequestHeaders";
-import { Router } from "next/dist/client/router";
-// import AddRecipeNutrition from "./AddRecipeNutrition";
 
 const Error = styled.div`
     color: red;
@@ -52,6 +42,7 @@ const AddRecipeFormik = ({
     categories,
     units,
     formInitialValues,
+    authorId,
     submitButtonLabel,
     additionalInfo,
 }) => {
@@ -108,7 +99,7 @@ const AddRecipeFormik = ({
 
     const validationSchema = Yup.object().shape({
         name: Yup.string().required("Название не может быть пустым"),
-        category_id: Yup.number().required(),
+        category_id: Yup.string().required(),
         time: Yup.number()
             .positive("Время приготовления не может быть меньше одной минуты")
             .required("Введите оценочное время приготовления рецепта"),
@@ -145,23 +136,21 @@ const AddRecipeFormik = ({
             initialValues={{ ...formInitialValues }}
             validationSchema={validationSchema}
             onSubmit={(values) => {
+                console.log("submit");
+                const recipe = { ...values };
+
                 switch (additionalInfo.type) {
                     case "edit": {
-                        dispatch(editRecipe(values, additionalInfo.recipeId));
+                        dispatch(editRecipe(recipe, authorId, additionalInfo.recipeId));
                         break;
                     }
                     case "add": {
-                        dispatch(addRecipe(values));
-                        break;
-                    }
-                    case "delete": {
-                        dispatch(deleteRecipe(additionalInfo.recipeId));
+                        dispatch(addRecipe(recipe, authorId));
                         break;
                     }
                 }
 
-                dispatch(fetchUserRecipes(formInitialValues.authorId));
-                Router.push(`/profile/${formInitialValues.authorId}`);
+                Router.push(`/profile/${authorId}`);
             }}
         >
             {({
@@ -173,6 +162,12 @@ const AddRecipeFormik = ({
                 handleSubmit,
                 setFieldValue,
             }) => {
+                useEffect(() => {
+                    if (categories.length > 0) {
+                        setFieldValue("category_id", categories[0]._id);
+                    }
+                }, [categories]);
+
                 const getNewIngredientId = () => {
                     const usedIngredients = values.ingredients;
                     console.log(ingredients);
@@ -419,7 +414,7 @@ const AddRecipeFormik = ({
                         <Button
                             color="primary"
                             variant="contained"
-                            onClick={() => console.log(values)}
+                            onClick={() => console.log({ ...values, authorId: authorId })}
                             type="button"
                         >
                             Show Values

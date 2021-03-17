@@ -80,10 +80,10 @@ export const fetchCategories = () => async (dispatch) => {
     }
 };
 
-export const addRecipe = (recipe) => async (dispatch) => {
+export const addRecipe = (recipe, authorId) => async (dispatch) => {
     const response = await fetch(`${baseURL}/api/recipes`, {
         method: "POST",
-        body: JSON.stringify(recipe),
+        body: JSON.stringify({ ...recipe, authorId }),
     });
 
     dispatch({ type: "SUCCESS" });

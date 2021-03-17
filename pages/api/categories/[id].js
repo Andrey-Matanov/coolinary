@@ -1,4 +1,4 @@
-import connectDB from "../../../middlewares/mongodb.js";
+import connectDB from "../../../middleware/mongodb.js";
 import Category from "../../../models/category.js";
 import Recipe from "../../../models/recipe.js";
 

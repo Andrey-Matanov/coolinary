@@ -24,13 +24,13 @@ function MyApp({ Component, pageProps }) {
             <Head>
                 <title>Coolinary Website</title>
             </Head>
-            <AuthProvider>
-                <ThemeProvider theme={theme}>
+            <ThemeProvider theme={theme}>
+                <AuthProvider>
                     <BasicLayout>
                         <Component {...pageProps} />
                     </BasicLayout>
-                </ThemeProvider>
-            </AuthProvider>
+                </AuthProvider>
+            </ThemeProvider>
         </>
     );
 }

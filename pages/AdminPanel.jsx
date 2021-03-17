@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchIngredients } from "../actions/ingredientsAction";
-import { fetchRecipes } from "../actions/recipesListActions";
-import { fetchUnits } from "../actions/unitsActions";
-import { clearUsers, fetchUsers } from "../actions/usersActions";
-import { fetchCategories } from "../actions/categoriesActions";
+import { fetchIngredients } from "../redux/actions/ingredientsAction";
+import { fetchRecipes } from "../redux/actions/recipesListActions";
+import { fetchUnits } from "../redux/actions/unitsActions";
+import { clearUsers, fetchUsers } from "../redux/actions/usersActions";
+import { fetchCategories } from "../redux/actions/categoriesActions";
 import AdminPanelPageList from "../components/PagesComponents/AdminPanelPage/AdminPanelPageList";
 
 const AdminPanel = () => {
@@ -43,25 +43,15 @@ const AdminPanel = () => {
                 <div style={{ display: "flex", marginBottom: "20px" }}>
                     <p>Выбрать список:</p>
                     <div>
-                        <button onClick={() => setActiveComponent("users")}>
-                            Пользователи
-                        </button>
-                        <button onClick={() => setActiveComponent("recipes")}>
-                            Рецепты
-                        </button>
-                        <button
-                            onClick={() => setActiveComponent("ingredients")}
-                        >
+                        <button onClick={() => setActiveComponent("users")}>Пользователи</button>
+                        <button onClick={() => setActiveComponent("recipes")}>Рецепты</button>
+                        <button onClick={() => setActiveComponent("ingredients")}>
                             Ингредиенты
                         </button>
                         <button onClick={() => setActiveComponent("units")}>
                             Единицы измерения
                         </button>
-                        <button
-                            onClick={() => setActiveComponent("categories")}
-                        >
-                            Категории
-                        </button>
+                        <button onClick={() => setActiveComponent("categories")}>Категории</button>
                     </div>
                 </div>
             </div>

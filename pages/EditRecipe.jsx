@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
+import { useRouter } from "next/router";
 import { connect, useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
 import styled from "styled-components";
-import { fetchIngredientsAndRecipes } from "../actions/combinedActions";
-import { fetchRecipe } from "../actions/recipeActions";
-import { fetchUnits } from "../actions/unitsActions";
+import { fetchIngredientsAndRecipes } from "../redux/actions/combinedActions";
+import { fetchRecipe } from "../redux/actions/recipeActions";
+import { fetchUnits } from "../redux/actions/unitsActions";
 import LoadingDataComponent from "../components/Common/LoadingDataComponent";
 import AddRecipeForm from "../components/Forms/AddRecipeForm/AddRecipeForm";
 
@@ -13,7 +13,8 @@ const Wrapper = styled.div`
 `;
 
 const EditRecipe = ({ ingredients, categories }) => {
-    const { id } = useParams();
+    const router = useRouter();
+    const { id } = router.query;
     const dispatch = useDispatch();
     const recipeStatus = useSelector((state) => state.recipe.status);
     const recipeInfo = useSelector((state) => state.recipe.recipe);
@@ -61,12 +62,7 @@ const EditRecipe = ({ ingredients, categories }) => {
         }
     }, []);
 
-    if (
-        ingredients.length &&
-        categories.length &&
-        units.length &&
-        initialValues
-    ) {
+    if (ingredients.length && categories.length && units.length && initialValues) {
         switch (recipeStatus) {
             case "loading": {
                 return <LoadingDataComponent />;

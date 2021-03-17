@@ -18,6 +18,6 @@ const config = {
 };
 
 const adminFirebaseApp =
-    admin.apps?.length > 0 ? admin.app() : admin.initializeApp(config, "admin");
+    admin.apps?.length > 0 ? admin.apps[0] : admin.initializeApp(config, "admin");
 
 export default adminFirebaseApp;
