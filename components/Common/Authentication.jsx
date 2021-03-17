@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { getUserIdByUID } from "../../redux/actions/authorizationActions";
 import firebaseApp from "../../utils/firebaseConfig";
+import BasicLayout from "../Layouts/BasicLayout";
 import LoadingDataComponent from "./LoadingDataComponent";
 
 export const AuthContext = React.createContext();
@@ -36,8 +37,19 @@ export const AuthProvider = ({ children }) => {
     }, [isUserLoggedIn]);
 
     if (isLoading) {
-        return <LoadingDataComponent />;
+        return (
+            // <AuthContext.Provider value={{ isUserLoggedIn, isLoading }}>
+            //     <BasicLayout>
+            //         <LoadingDataComponent />
+            //     </BasicLayout>
+            // </AuthContext.Provider>
+            <LoadingDataComponent />
+        );
     } else {
-        return <AuthContext.Provider value={{ isUserLoggedIn }}>{children}</AuthContext.Provider>;
+        return (
+            <AuthContext.Provider value={{ isUserLoggedIn, isLoading }}>
+                {children}
+            </AuthContext.Provider>
+        );
     }
 };

@@ -1,12 +1,12 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { connect, useDispatch, useSelector } from "react-redux";
 import Router from "next/router";
 import styled from "styled-components";
 import { AuthContext } from "../components/Common/Authentication";
-import AddRecipeForm from "../components/Forms/AddRecipeForm/AddRecipeForm";
 import { fetchIngredients } from "../redux/actions/ingredientsAction";
 import { fetchCategories } from "../redux/actions/categoriesActions";
 import { fetchUnits } from "../redux/actions/unitsActions";
+import ReactHookForm from "../components/Forms/AddRecipeForm/ReactHookForm";
 import LoadingDataComponent from "../components/Common/LoadingDataComponent";
 
 const Wrapper = styled.div`
@@ -14,13 +14,14 @@ const Wrapper = styled.div`
 `;
 
 const AddRecipe = ({ ingredients, categories, units }) => {
-    const { isUserLoggedIn } = useContext(AuthContext);
+    const { isUserLoggedIn, isLoading } = useContext(AuthContext);
 
     if (!isUserLoggedIn) {
         Router.push("/login");
     }
 
-    const initialValues = {
+    const nullValues = {
+        authorId: "",
         name: "",
         image: "",
         category_id: "",
@@ -32,7 +33,18 @@ const AddRecipe = ({ ingredients, categories, units }) => {
     };
 
     const currentUserId = useSelector((state) => state.authorization.userId);
+    const [initialValues, setInitialValues] = useState(nullValues);
     const dispatch = useDispatch();
+
+    useEffect(() => {
+        setInitialValues({ ...initialValues, authorId: currentUserId });
+    }, [currentUserId]);
+
+    useEffect(() => {
+        if (categories.length > 0) {
+            setInitialValues({ ...initialValues, category_id: categories[0]._id });
+        }
+    }, [categories]);
 
     useEffect(() => {
         if (!ingredients.length) {
@@ -46,12 +58,11 @@ const AddRecipe = ({ ingredients, categories, units }) => {
         }
     }, []);
 
-    if (isUserLoggedIn) {
+    if (!isLoading) {
         return (
             <Wrapper>
                 <h1>Добавить рецепт</h1>
-                <AddRecipeForm
-                    authorId={currentUserId}
+                <ReactHookForm
                     ingredients={ingredients}
                     categories={categories}
                     units={units}
