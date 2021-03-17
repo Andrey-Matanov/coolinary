@@ -84,13 +84,13 @@ export const fetchCategories = () => async (dispatch) => {
 export const addRecipe = (recipe, authorId) => async (dispatch) => {
     await axios.post(`${baseURL}/api/recipes`, { ...recipe, authorId });
 
-    // await fetch(`${baseURL}/api/recipes`, {
-    //     method: "POST",
-    //     body: JSON.stringify({ ...recipe, authorId }),
-    //     headers: {
-    //         "content-type": "application/json",
-    //     },
-    // });
+    await fetch(`${baseURL}/api/recipes`, {
+        method: "POST",
+        body: JSON.stringify({ ...recipe, authorId }),
+        headers: {
+            "content-type": "application/json",
+        },
+    });
 
     dispatch({ type: "SUCCESS" });
 };
