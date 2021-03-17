@@ -23,7 +23,7 @@ const AddRecipe = ({ ingredients, categories, units }) => {
     const initialValues = {
         name: "",
         image: "",
-        category_id: "",
+        categoryId: "",
         time: 0,
         difficulty: "1",
         ingredients: [],

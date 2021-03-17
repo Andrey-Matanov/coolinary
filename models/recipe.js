@@ -1,4 +1,4 @@
-import mongoose, { ObjectId } from "mongoose";
+import mongoose from "mongoose";
 
 const recipe = new mongoose.Schema({
     name: {
@@ -6,7 +6,7 @@ const recipe = new mongoose.Schema({
         required: true,
     },
     categoryId: {
-        type: ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         required: true,
     },
     image: {
@@ -26,17 +26,17 @@ const recipe = new mongoose.Schema({
         required: true,
     },
     authorId: {
-        type: ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         required: true,
     },
     rating: {
         type: Number,
-        required: true,
+        default: 0,
     },
     ingredients: [
         {
             id: {
-                type: String,
+                type: mongoose.Schema.Types.ObjectId,
                 required: true,
             },
             amount: {
@@ -44,7 +44,7 @@ const recipe = new mongoose.Schema({
                 required: true,
             },
             unit_id: {
-                type: Number,
+                type: mongoose.Schema.Types.ObjectId,
                 required: true,
             },
         },
@@ -68,11 +68,11 @@ const recipe = new mongoose.Schema({
     commentaries: [
         {
             id: {
-                type: ObjectId,
+                type: mongoose.Schema.Types.ObjectId,
                 required: true,
             },
             authorId: {
-                type: ObjectId,
+                type: mongoose.Schema.Types.ObjectId,
                 required: true,
             },
             content: {

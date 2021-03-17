@@ -99,7 +99,7 @@ const AddRecipeFormik = ({
 
     const validationSchema = Yup.object().shape({
         name: Yup.string().required("Название не может быть пустым"),
-        category_id: Yup.string().required(),
+        categoryId: Yup.string().required("Выберите категорию"),
         time: Yup.number()
             .positive("Время приготовления не может быть меньше одной минуты")
             .required("Введите оценочное время приготовления рецепта"),
@@ -107,11 +107,11 @@ const AddRecipeFormik = ({
         ingredients: Yup.array()
             .of(
                 Yup.object().shape({
-                    id: Yup.number().required(),
+                    id: Yup.string().required(),
                     amount: Yup.number()
                         .min(1, "Количество не может быть меньше 1")
                         .required("Введите количество"),
-                    unit_id: Yup.number().required(),
+                    unit_id: Yup.string().required(),
                 })
             )
             .min(1, "Добавьте как минимум один ингредиент"),
@@ -150,7 +150,7 @@ const AddRecipeFormik = ({
                     }
                 }
 
-                Router.push(`/profile/${authorId}`);
+                // Router.push(`/profile/${authorId}`);
             }}
         >
             {({
@@ -164,7 +164,7 @@ const AddRecipeFormik = ({
             }) => {
                 useEffect(() => {
                     if (categories.length > 0) {
-                        setFieldValue("category_id", categories[0]._id);
+                        setFieldValue("categoryId", categories[0]._id);
                     }
                 }, [categories]);
 
@@ -210,9 +210,9 @@ const AddRecipeFormik = ({
                             <Select
                                 labelId="category-label"
                                 id="category"
-                                value={values.category_id}
-                                name="category_id"
-                                onChange={(e) => setFieldValue(`category_id`, +e.target.value)}
+                                value={values.categoryId}
+                                name="categoryId"
+                                onChange={(e) => setFieldValue(`categoryId`, e.target.value)}
                             >
                                 {categories.map((category) => (
                                     <MenuItem key={category._id} value={category._id}>
@@ -220,6 +220,7 @@ const AddRecipeFormik = ({
                                     </MenuItem>
                                 ))}
                             </Select>
+                            <Error>{errors.categoryId}</Error>
                         </FormControl>
 
                         <FormItem>
@@ -325,7 +326,7 @@ const AddRecipeFormik = ({
                                         {
                                             id: newId,
                                             amount: 1,
-                                            unit_id: 1,
+                                            unit_id: "604a4826a7b04705003a8247",
                                         },
                                     ]);
 
@@ -414,10 +415,42 @@ const AddRecipeFormik = ({
                         <Button
                             color="primary"
                             variant="contained"
-                            onClick={() => console.log({ ...values, authorId: authorId })}
+                            onClick={() => {
+                                console.log("values: ", { ...values, authorId: authorId });
+                                console.log("errors: ", errors);
+                            }}
                             type="button"
                         >
                             Show Values
+                        </Button>
+
+                        <Button
+                            color="primary"
+                            variant="contained"
+                            onClick={() => {
+                                setFieldValue("name", "name");
+                                setFieldValue("image", "https://via.placeholder.com/150x150");
+                                setFieldValue("description", "description");
+                                setFieldValue("ingredients", [
+                                    {
+                                        amount: 10,
+                                        id: "604a4b00a7b04705003e3dcf",
+                                        unit_id: "604a4826a7b04705003a8247",
+                                    },
+                                ]);
+                                setFieldValue("steps", [
+                                    {
+                                        image:
+                                            "https://imgholder.ru/600x300/8493a8/adb9ca&text=IMAGE+HOLDER&font=kelson",
+                                        name: "Step1",
+                                        description: "test",
+                                    },
+                                ]);
+                                setFieldValue("time", 20);
+                            }}
+                            type="button"
+                        >
+                            Fill Values
                         </Button>
 
                         <Button

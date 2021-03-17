@@ -1,3 +1,4 @@
+import axios from "axios";
 import { baseURL } from "../../utils";
 import { DELETE_USER } from "./profileActions";
 
@@ -81,10 +82,15 @@ export const fetchCategories = () => async (dispatch) => {
 };
 
 export const addRecipe = (recipe, authorId) => async (dispatch) => {
-    const response = await fetch(`${baseURL}/api/recipes`, {
-        method: "POST",
-        body: JSON.stringify({ ...recipe, authorId }),
-    });
+    await axios.post(`${baseURL}/api/recipes`, { ...recipe, authorId });
+
+    // await fetch(`${baseURL}/api/recipes`, {
+    //     method: "POST",
+    //     body: JSON.stringify({ ...recipe, authorId }),
+    //     headers: {
+    //         "content-type": "application/json",
+    //     },
+    // });
 
     dispatch({ type: "SUCCESS" });
 };

@@ -1,5 +1,5 @@
 import connectDB from "../../../middleware/mongodb";
-import Recipe from "../../../models/recipeModels/recipe";
+import Recipe from "../../../models/recipe";
 
 const handler = async (req, res) => {
     const { id } = req.query;
