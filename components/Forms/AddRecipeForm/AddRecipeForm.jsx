@@ -47,6 +47,7 @@ const AddRecipeFormik = ({
     additionalInfo,
 }) => {
     const dispatch = useDispatch();
+    console.log("formInitialValues: ", formInitialValues);
 
     const [recipeNutrition, setRecipeNutrition] = useState({
         calories: 0,
@@ -54,8 +55,6 @@ const AddRecipeFormik = ({
         fat: 0,
         carbs: 0,
     });
-
-    console.log(recipeNutrition);
 
     useEffect(() => {
         if (formInitialValues.ingredients.length > 0 && ingredients.length > 0) {
@@ -68,30 +67,30 @@ const AddRecipeFormik = ({
 
             formInitialValues.ingredients.forEach((ingredient) => {
                 const ingredientValues = ingredients.find(
-                    (ingredientsItem) => ingredientsItem.id === ingredient.id
+                    (ingredientsItem) => ingredientsItem.id === ingredient._id
                 );
 
                 newRecipeNutrition.calories += +(
-                    (ingredient.amount * ingredientValues.calorie) /
+                    (ingredient.amount * ingredientValues.calories) /
                     100
                 ).toFixed(2);
                 newRecipeNutrition.proteins += +(
-                    (ingredient.amount * ingredientValues.product_protein) /
+                    (ingredient.amount * ingredientValues.protein) /
                     100
                 ).toFixed(2);
                 newRecipeNutrition.fat += +(
-                    (ingredient.amount * ingredientValues.product_fat) /
+                    (ingredient.amount * ingredientValues.fat) /
                     100
                 ).toFixed(2);
                 newRecipeNutrition.carbs += +(
-                    (ingredient.amount * ingredientValues.product_carb) /
+                    (ingredient.amount * ingredientValues.carb) /
                     100
                 ).toFixed(2);
             });
 
             setRecipeNutrition(newRecipeNutrition);
         }
-    }, [ingredients.length]);
+    }, [ingredients, formInitialValues]);
 
     useEffect(() => {
         console.log("addRecipeForm rerender");
@@ -150,7 +149,7 @@ const AddRecipeFormik = ({
                     }
                 }
 
-                // Router.push(`/profile/${authorId}`);
+                Router.push(`/profile/${authorId}`);
             }}
         >
             {({

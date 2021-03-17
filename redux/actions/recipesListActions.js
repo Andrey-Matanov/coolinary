@@ -84,25 +84,11 @@ export const fetchCategories = () => async (dispatch) => {
 export const addRecipe = (recipe, authorId) => async (dispatch) => {
     await axios.post(`${baseURL}/api/recipes`, { ...recipe, authorId });
 
-    await fetch(`${baseURL}/api/recipes`, {
-        method: "POST",
-        body: JSON.stringify({ ...recipe, authorId }),
-        headers: {
-            "content-type": "application/json",
-        },
-    });
-
     dispatch({ type: "SUCCESS" });
 };
 
-export const editRecipe = (recipe, recipeId) => async (dispatch) => {
-    const response = await fetch(`${baseURL}/api/recipes/${recipeId}`, {
-        method: "PUT",
-        body: JSON.stringify(recipe),
-        headers: {
-            Authorization: `Bearer ${window.localStorage.getItem("currentUserToken")}`,
-        },
-    });
+export const editRecipe = (recipe, authorId, recipeId) => async (dispatch) => {
+    await axios.patch(`${baseURL}/api/recipes/${recipeId}`, { ...recipe, authorId });
 
     dispatch({ type: "SUCCESS" });
 };

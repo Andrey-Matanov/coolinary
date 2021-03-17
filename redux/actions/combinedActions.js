@@ -5,18 +5,13 @@ import { fetchIngredients, FETCH_INGREDIENTS } from "./ingredientsAction";
 import { fetchCategories, FETCH_CATEGORIES } from "./categoriesActions";
 import { fetchRecipes, FETCH_RECIPES } from "./recipesListActions";
 import { fetchRecipe, FETCH_RECIPE } from "./recipeActions";
-import { fetchUserData, FETCH_USER_DATA } from "./profileActions.js"
+import { fetchUserData, FETCH_USER_DATA } from "./profileActions.js";
 
-export const FETCH_INGREDIENTS_AND_RECIPES =
-    "@@combined/FETCH_INGREDIENTS_AND_RECIPES";
-export const FETCH_RECIPES_AND_CATEGORIES =
-    "@@combined/FETCH_RECIPES_AND_CATEGORIES";
+export const FETCH_INGREDIENTS_AND_RECIPES = "@@combined/FETCH_INGREDIENTS_AND_RECIPES";
+export const FETCH_RECIPES_AND_CATEGORIES = "@@combined/FETCH_RECIPES_AND_CATEGORIES";
 
 export const fetchIngredientsAndRecipes = () => async (dispatch, getState) => {
-    if (
-        !getState().ingredients.length &&
-        !getState().recipesObject.recipes.length
-    ) {
+    if (!getState().ingredients.length && !getState().recipesObject.recipes.length) {
         const ingredientsResponse = await fetch(`${baseURL}/api/ingredients`);
         const ingredientsJson = await ingredientsResponse.json();
         const categoriesResponse = await fetch(`${baseURL}/api/categories`);
@@ -26,7 +21,7 @@ export const fetchIngredientsAndRecipes = () => async (dispatch, getState) => {
             dispatch({
                 type: FETCH_INGREDIENTS,
                 payload: {
-                    ingredients: ingredientsJson.data,
+                    ingredients: ingredientsJson,
                 },
             });
             dispatch({
@@ -43,15 +38,12 @@ export const fetchIngredientsAndRecipes = () => async (dispatch, getState) => {
     }
 };
 
-export const fetchRecipesAndCategories = (
-    currentLastId,
-    category = ""
-) => async (dispatch, getState) => {
+export const fetchRecipesAndCategories = (currentLastId, category = "") => async (
+    dispatch,
+    getState
+) => {
     console.log(getState());
-    if (
-        !getState().recipesObject.recipes.length &&
-        !getState().categories.length
-    ) {
+    if (!getState().recipesObject.recipes.length && !getState().categories.length) {
         const recipesResponse = await fetch(
             `${baseURL}/api/recipes/?amount=10&last=${currentLastId}&category=${category}`
         );
@@ -87,41 +79,40 @@ export const fetchRecipeIngredientsAuthor = (_id) => async (dispatch, getState) 
     //     !getState().recipe.length &&
     //     !getState().profile.length
     // ) {
-        const recipeResponse = await fetch(`${baseURL}/api/recipes/${_id}`);
-        const recipeJson = await recipeResponse.json();
-        const ingredientsList = recipeJson.ingredients.map(item => item.id)
-        const ingredientsResponse = await fetch(`${baseURL}/api/ingredients/find`, {
-            method: "POST",
-            body: JSON.stringify({ids: ingredientsList}),
+    const recipeResponse = await fetch(`${baseURL}/api/recipes/${_id}`);
+    const recipeJson = await recipeResponse.json();
+    const ingredientsList = recipeJson.ingredients.map((item) => item.id);
+    const ingredientsResponse = await fetch(`${baseURL}/api/ingredients/find`, {
+        method: "POST",
+        body: JSON.stringify({ ids: ingredientsList }),
+    });
+    const ingredientsJson = await ingredientsResponse.json();
+    const profileResponse = await fetch(`${baseURL}/api/users/${recipeJson.authorId}`);
+    const profileJson = await profileResponse.json();
+    batch(() => {
+        dispatch({
+            type: FETCH_INGREDIENTS,
+            payload: {
+                ingredients: ingredientsJson,
+            },
         });
-        const ingredientsJson = await ingredientsResponse.json();
-        const profileResponse = await fetch(`${baseURL}/api/users/${recipeJson.authorId}`);
-        const profileJson = await profileResponse.json();
-        batch(() => {
-            dispatch({
-                type: FETCH_INGREDIENTS,
-                payload: {
-                    ingredients: ingredientsJson,
-                },
-            });
-            dispatch({
-                type: FETCH_RECIPE,
-                payload: {
-                    recipe: recipeJson,
-                },
-            });
-            dispatch({
-                type: FETCH_USER_DATA,
-                payload: {
-                    userData: {
-                        userId: profileJson._id,
-                        userName: profileJson.name,
-                        userEmail: profileJson.email,
-                    },
-                },
-            });
-
+        dispatch({
+            type: FETCH_RECIPE,
+            payload: {
+                recipe: recipeJson,
+            },
         });
+        dispatch({
+            type: FETCH_USER_DATA,
+            payload: {
+                userData: {
+                    userId: profileJson._id,
+                    userName: profileJson.name,
+                    userEmail: profileJson.email,
+                },
+            },
+        });
+    });
     // } else if (!getState().ingredients.length) {
     //     dispatch(fetchIngredients());
     // } else if (!getState().profile.length) {

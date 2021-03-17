@@ -25,6 +25,23 @@ const handler = async (req, res) => {
             console.log(error);
             res.status(400).send(error);
         }
+    } else if (req.method === "PATCH") {
+        const newValues = req.body;
+
+        try {
+            await Recipe.findByIdAndUpdate(id, newValues, (error, docs) => {
+                if (error) {
+                    console.log(error);
+                    res.status(400).send(error);
+                } else {
+                    console.log("Updated Recipe : ", docs);
+                    res.send("updated succesfully");
+                }
+            });
+        } catch (error) {
+            console.log(error);
+            res.status(400).send(error);
+        }
     } else {
         res.status(422).send("req_method_not_supported");
     }

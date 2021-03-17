@@ -6,7 +6,7 @@ const ingredient = new mongoose.Schema({
         required: true,
     },
     unitId: {
-        type: Number,
+        type: mongoose.Schema.Types.ObjectId,
         required: true,
     },
     fat: {
