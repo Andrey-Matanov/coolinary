@@ -9,7 +9,7 @@ import Nutrition from "./Nutrition.jsx";
 // import AddCommentaryForm from '../components/Forms/AddCommentaryForm';
 import DifficultyBar from "../../Common/DifficultyBar";
 import RatingBar from "../../Common/RatingBar.jsx";
-import RecipeImage from "./RecipeImage";
+import CloudinaryImage from "../../Common/CloudinaryImage";
 
 const useStyles = makeStyles((theme) => ({
     scrolling: {
@@ -42,8 +42,7 @@ let formatTime = (sourceTime) => {
     if (sourceTime <= 60) {
         retVal = sourceTime + " мин.";
     } else {
-        retVal =
-            Math.floor(sourceTime / 60) + " ч. " + (sourceTime % 60) + " мин.";
+        retVal = Math.floor(sourceTime / 60) + " ч. " + (sourceTime % 60) + " мин.";
     }
     return retVal;
 };
@@ -60,10 +59,7 @@ const renderReviews = (reviews, users) => {
                 }}
                 key={review.id}
             >
-                <p>
-                    Автор:{" "}
-                    {users.find((user) => user.id === review.authorId).name}
-                </p>
+                <p>Автор: {users.find((user) => user.id === review.authorId).name}</p>
                 <p>{review.text}</p>
             </div>
         ));
@@ -83,29 +79,19 @@ const renderSteps = (steps) => {
                             <Grid container alignItems="center">
                                 <Grid item>
                                     <Box pr={2}>
-                                        <Typography variant="h2">
-                                            {step.step}
-                                        </Typography>
+                                        <Typography variant="h2">{step.step}</Typography>
                                     </Box>
                                 </Grid>
                                 <Grid item>
-                                    <Typography variant="h5">
-                                        {step.name}
-                                    </Typography>
+                                    <Typography variant="h5">{step.name}</Typography>
                                 </Grid>
                             </Grid>
                         </Box>
                         <Box py={2} textAlign="center">
-                            <RecipeImage
-                                image={step.image}
-                                alt={step.name}
-                                className={classes.image}
-                            />
+                            <CloudinaryImage image={step.image} />
                         </Box>
                         <Box py={2}>
-                            <Typography variant="body1">
-                                {step.description}
-                            </Typography>
+                            <Typography variant="body1">{step.description}</Typography>
                         </Box>
                     </Box>
                 </Paper>
@@ -116,7 +102,7 @@ const renderSteps = (steps) => {
     }
 };
 
-const RecipeStepsList = ({ recipe, ingredientsData, author}) => {
+const RecipeStepsList = ({ recipe, ingredientsData, author }) => {
     const classes = useStyles();
     const {
         name,
@@ -128,9 +114,9 @@ const RecipeStepsList = ({ recipe, ingredientsData, author}) => {
         rating,
         ingredients,
         reviews,
-        steps 
+        steps,
     } = recipe;
-console.log(recipe)
+    console.log(recipe);
     return (
         <Box mt={"45px"}>
             <div style={{ marginTop: "20px" }}></div>
@@ -142,28 +128,19 @@ console.log(recipe)
                                 <Typography variant="h4">{name}</Typography>
                             </Box>
                             <Box my={3} textAlign="center">
-                                <RecipeImage
-                                    image={image}
-                                    alt={name}
-                                    className={classes.image}
-                                />
+                                <CloudinaryImage image={image} />
                             </Box>
                             <Box my={3}>
                                 <p>
                                     Автор:{" "}
-                                    <Link
-                                        className="author-link"
-                                        href={`/profile/${authorId}`}
-                                    >
+                                    <Link className="author-link" href={`/profile/${authorId}`}>
                                         <a>{author}</a>
                                     </Link>
                                 </p>
                             </Box>
                             <Box my={3}>Рейтинг:</Box>
                             <DifficultyBar diff={difficulty} />
-                            <Box my={3}>
-                                Время приготовления: {formatTime(time)}
-                            </Box>
+                            <Box my={3}>Время приготовления: {formatTime(time)}</Box>
                             <Box my={3}>
                                 <RatingBar rating={rating} />
                             </Box>
@@ -183,7 +160,7 @@ console.log(recipe)
                 <Grid item xs={12}>
                     <Paper elevation={3} square={true}>
                         <Box p={2}>
-                            <Nutrition 
+                            <Nutrition
                                 ingredients={ingredients}
                                 ingredientsData={ingredientsData}
                             />

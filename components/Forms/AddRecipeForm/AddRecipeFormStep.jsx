@@ -1,18 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 import { Button, Card, CardContent, CardHeader, TextField } from "@material-ui/core";
-import styled from "styled-components";
-import FormInput from "../../Inputs/FormInput";
-import FormTextarea from "../../Inputs/FormTextArea";
 import AddImageField from "./AddImageField";
-
-const Error = styled.div`
-    color: red;
-`;
 
 const AddRecipeFormStep = ({
     index,
     name,
     description,
+    image,
     errors,
     touched,
     handleChange,
@@ -20,8 +14,6 @@ const AddRecipeFormStep = ({
     setFieldValue,
     removeCurrentStep,
 }) => {
-    const [imageString, setImageString] = useState("");
-
     return (
         <Card variant="outlined" style={{ marginBottom: "10px" }}>
             <CardContent>
@@ -74,11 +66,9 @@ const AddRecipeFormStep = ({
                 </div>
                 <div style={{ marginBottom: "10px" }}>
                     <AddImageField
-                        label="Изображение шага"
-                        formFieldName={`steps[${index}].image`}
+                        image={image}
+                        fieldName={`steps[${index}].image`}
                         setFieldValue={setFieldValue}
-                        imageString={imageString}
-                        setImageString={setImageString}
                     />
                 </div>
                 <Button

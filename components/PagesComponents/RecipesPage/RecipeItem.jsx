@@ -5,7 +5,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import AccessTimeIcon from "@material-ui/icons/AccessTime";
 import DifficultyBar from "../../Common/DifficultyBar.jsx";
 import RatingBar from "../../Common/RatingBar.jsx";
-import RecipeImage from "../RecipePage/RecipeImage.jsx";
+import CloudinaryImage from "../../Common/CloudinaryImage.jsx";
 
 const useStyles = makeStyles((theme) => ({
     image: {
@@ -28,28 +28,14 @@ const useStyles = makeStyles((theme) => ({
 const RecipeItem = (props) => {
     const classes = useStyles();
 
-    const {
-        _id,
-        name,
-        author,
-        authorId,
-        time,
-        difficulty,
-        rating,
-        description,
-        image,
-    } = props;
+    const { _id, name, author, authorId, time, difficulty, rating, description, image } = props;
 
     const formatTime = (sourceTime) => {
         let retVal;
         if (sourceTime <= 60) {
             retVal = sourceTime + " мин.";
         } else {
-            retVal =
-                Math.floor(sourceTime / 60) +
-                " ч. " +
-                (sourceTime % 60) +
-                " мин.";
+            retVal = Math.floor(sourceTime / 60) + " ч. " + (sourceTime % 60) + " мин.";
         }
         return retVal;
     };
@@ -58,18 +44,9 @@ const RecipeItem = (props) => {
         <Box my={0}>
             <Paper elevation={3} square={true}>
                 <Box p={4}>
-                    <Grid
-                        container
-                        direction="row"
-                        alignItems="center"
-                        spacing={2}
-                    >
+                    <Grid container direction="row" alignItems="center" spacing={2}>
                         <Grid item className={classes.image}>
-                            <RecipeImage
-                                className={classes.img}
-                                name="recipe"
-                                image={image}
-                            />
+                            <CloudinaryImage image={image} />
                         </Grid>
                         <Grid
                             container
@@ -80,11 +57,10 @@ const RecipeItem = (props) => {
                             spacing={1}
                         >
                             <Grid item>
-                                <Link
-                                    href={`/recipes/${_id}`}
-                                    className={classes.link}
-                                >
-                                    <a><Typography variant="h5">{name}</Typography></a>
+                                <Link href={`/recipes/${_id}`} className={classes.link}>
+                                    <a>
+                                        <Typography variant="h5">{name}</Typography>
+                                    </a>
                                 </Link>
                             </Grid>
                             <Grid item>
@@ -92,42 +68,28 @@ const RecipeItem = (props) => {
                                     Автор:{" "}
                                     <Link href={`/profile/${authorId}`}>
                                         {/* Temporary */}
-                                        <a>{'author'}</a>
+                                        <a>{"author"}</a>
                                     </Link>
                                 </Typography>
                             </Grid>
-                            <Grid
-                                item
-                                container
-                                xs
-                                alignItems="center"
-                                spacing={2}
-                            >
+                            <Grid item container xs alignItems="center" spacing={2}>
                                 <Grid item>
                                     <AccessTimeIcon />
                                 </Grid>
                                 <Grid item>
-                                    <Typography variant="body1">
-                                        {formatTime(time)}
-                                    </Typography>
+                                    <Typography variant="body1">{formatTime(time)}</Typography>
                                 </Grid>
                             </Grid>
                             <Grid item>
-                                <Typography variant="body1">
-                                    Сложность:
-                                </Typography>
+                                <Typography variant="body1">Сложность:</Typography>
                                 <DifficultyBar diff={difficulty} />
                             </Grid>
                             <Grid item>
-                                <Typography variant="body1">
-                                    Рейтинг:
-                                </Typography>
+                                <Typography variant="body1">Рейтинг:</Typography>
                                 <RatingBar rating={rating} />
                             </Grid>
                             <Grid item>
-                                <Typography variant="body2">
-                                    {description}
-                                </Typography>
+                                <Typography variant="body2">{description}</Typography>
                             </Grid>
                         </Grid>
                     </Grid>
