@@ -6,12 +6,9 @@ import { fetchCategories, FETCH_CATEGORIES } from "./categoriesActions";
 import { fetchRecipes, FETCH_RECIPES } from "./recipesListActions";
 import { fetchRecipe, FETCH_RECIPE } from "./recipeActions";
 import { fetchUserData, FETCH_USER_DATA } from "./profileActions.js";
-import { FETCH_UNITS } from "./unitsActions.js"
+import { FETCH_UNITS } from "./unitsActions.js";
 
-export const FETCH_INGREDIENTS_AND_RECIPES = "@@combined/FETCH_INGREDIENTS_AND_RECIPES";
-export const FETCH_RECIPES_AND_CATEGORIES = "@@combined/FETCH_RECIPES_AND_CATEGORIES";
-
-export const fetchIngredientsAndRecipes = () => async (dispatch, getState) => {
+export const fetchIngredientsAndCategories = () => async (dispatch, getState) => {
     if (!getState().ingredients.length && !getState().recipesObject.recipes.length) {
         const ingredientsResponse = await axios.get(`${baseURL}/api/ingredients`);
         const ingredientsJson = await ingredientsResponse.data;
@@ -35,7 +32,7 @@ export const fetchIngredientsAndRecipes = () => async (dispatch, getState) => {
     } else if (!getState().ingredients.length) {
         dispatch(fetchIngredients());
     } else {
-        dispatch(fetchRecipes());
+        dispatch(fetchCategories());
     }
 };
 
@@ -115,8 +112,8 @@ export const fetchRecipeWithInfo = (_id) => async (dispatch, getState) => {
             type: FETCH_UNITS,
             payload: {
                 units: unitsJson,
-            }
-        })
+            },
+        });
     });
     // } else if (!getState().ingredients.length) {
     //     dispatch(fetchIngredients());
