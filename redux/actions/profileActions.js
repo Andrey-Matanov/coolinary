@@ -32,8 +32,8 @@ export const fetchUserData = (id) => async (dispatch) => {
 
 export const fetchUserRecipes = (authorId) => async (dispatch) => {
     try {
-        const response = await fetch(`${baseURL}/api/recipes?author_id=${authorId}`);
-        const json = await response.json();
+        const response = await axios.get(`${baseURL}/api/recipes?author_id=${authorId}`);
+        const json = await response.data;
         dispatch({
             type: FETCH_USER_RECIPES,
             payload: {

@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { connect, useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-import { fetchIngredientsAndRecipes } from "../../redux/actions/combinedActions";
+import { fetchIngredientsAndCategories } from "../../redux/actions/combinedActions";
 import { fetchRecipe } from "../../redux/actions/recipeActions";
 import { fetchUnits } from "../../redux/actions/unitsActions";
 import LoadingDataComponent from "../../components/Common/LoadingDataComponent";
@@ -33,7 +33,7 @@ const EditRecipe = ({ ingredients, categories, units, userId }) => {
         }
 
         if (!ingredients.length && !categories.length) {
-            dispatch(fetchIngredientsAndRecipes());
+            dispatch(fetchIngredientsAndCategories());
         }
     }, []);
 

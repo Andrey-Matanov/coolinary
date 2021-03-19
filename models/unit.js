@@ -1,10 +1,7 @@
 import mongoose from "mongoose";
 
 const unit = new mongoose.Schema({
-    name: {
-        type: String,
-        required: true,
-    },
+    name: [ String ]
 });
 
 mongoose.models = {};

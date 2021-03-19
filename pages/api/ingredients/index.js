@@ -1,19 +1,41 @@
-import connectDB from "../../../middleware/mongodb";
-import Ingredient from "../../../models/ingredient";
+import connectDB from "../../../middleware/mongodb.js";
+import Ingredient from "../../../models/ingredient.js";
+import Recipe from "../../../models/recipe.js"
 
 const handler = (req, res) => {
     return new Promise((resolve) => {
         switch (req.method) {
             case "GET": {
-                Ingredient.find((err) => {
-                    if (err) {
-                        res.status(400).send("server error");
+                const { recipeId } = req.query;
+                if (recipeId) {
+                    Recipe.findById(recipeId, undefined, undefined, err => {
+                        if (err) {
+                            res.status(400).send("server error");
+                            return resolve();
+                        }
+                    }).then(recipe => {
+                        const ids = recipe.ingredients.map(ingredient => ingredient.id)
+                        Ingredient.find({"_id": { $in: ids }}, undefined, undefined, err => {
+                            if (err) {
+                                res.status(400).send("unable to find in database");
+                                return resolve();
+                            }
+                        }).then(ingredients => {
+                            res.json(ingredients);
+                            return resolve();}
+                        )
+                    })
+                } else {
+                    Ingredient.find((err) => {
+                        if (err) {
+                            res.status(400).send("server error");
+                            return resolve();
+                        }
+                    }).then((ingredients) => {
+                        res.json(ingredients);
                         return resolve();
-                    }
-                }).then((ingredients) => {
-                    res.json(ingredients);
-                    return resolve();
-                });
+                    });
+                } 
                 break;
             }
             case "POST": {

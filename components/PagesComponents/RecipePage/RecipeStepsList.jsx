@@ -102,7 +102,7 @@ const renderSteps = (steps) => {
     }
 };
 
-const RecipeStepsList = ({ recipe, ingredientsData, author }) => {
+const RecipeStepsList = ({ recipe, ingredientsData, author, unitsData }) => {
     const classes = useStyles();
     const {
         name,
@@ -116,19 +116,18 @@ const RecipeStepsList = ({ recipe, ingredientsData, author }) => {
         reviews,
         steps,
     } = recipe;
-    console.log(recipe);
     return (
         <Box mt={"45px"}>
             <div style={{ marginTop: "20px" }}></div>
-            <Grid container className={classes.scrolling} spacing={5}>
+            <Grid container className={ classes.scrolling } spacing={5}>
                 <Grid item xs={12}>
                     <Paper elevation={3} square={true}>
                         <Box p={2}>
                             <Box mt={3}>
-                                <Typography variant="h4">{name}</Typography>
+                                <Typography variant="h4">{ name }</Typography>
                             </Box>
                             <Box my={3} textAlign="center">
-                                <CloudinaryImage image={image} />
+                                <CloudinaryImage image={ image } />
                             </Box>
                             <Box my={3}>
                                 <p>
@@ -139,30 +138,31 @@ const RecipeStepsList = ({ recipe, ingredientsData, author }) => {
                                 </p>
                             </Box>
                             <Box my={3}>Рейтинг:</Box>
-                            <DifficultyBar diff={difficulty} />
-                            <Box my={3}>Время приготовления: {formatTime(time)}</Box>
+                            <DifficultyBar diff={ difficulty } />
+                            <Box my={3}>Время приготовления: { formatTime(time) }</Box>
                             <Box my={3}>
-                                <RatingBar rating={rating} />
+                                <RatingBar rating={ rating } />
                             </Box>
                         </Box>
                     </Paper>
                 </Grid>
                 <Grid item xs={12}>
-                    <Paper elevation={3} square={true}>
+                    <Paper elevation={3} square={ true }>
                         <Box p={2}>
                             <Ingredients
-                                ingredients={ingredients}
-                                ingredientsData={ingredientsData}
+                                ingredients = { ingredients }
+                                ingredientsData = { ingredientsData }
+                                unitsData = { unitsData }
                             />
                         </Box>
                     </Paper>
                 </Grid>
                 <Grid item xs={12}>
-                    <Paper elevation={3} square={true}>
+                    <Paper elevation={3} square={ true }>
                         <Box p={2}>
                             <Nutrition
-                                ingredients={ingredients}
-                                ingredientsData={ingredientsData}
+                                ingredients = { ingredients }
+                                ingredientsData = { ingredientsData }
                             />
                         </Box>
                     </Paper>
@@ -170,13 +170,13 @@ const RecipeStepsList = ({ recipe, ingredientsData, author }) => {
                 <Grid item xs={12}>
                     <Paper elevation={3} square={true}>
                         <Box p={2}>
-                            <p>Описание: {description}</p>
+                            <p>Описание: { description }</p>
                         </Box>
                     </Paper>
                 </Grid>
                 {renderSteps(steps)}
                 <Grid item>
-                    <ReviewsBlock reviews={reviews} />
+                    <ReviewsBlock reviews={ reviews } />
                     {/* <div
                         style={{
                             border: "1px solid black",
