@@ -1,16 +1,5 @@
 const mongoose = require("mongoose");
 
-const userRecipe = new mongoose.Schema({
-    _id: {
-        type: mongoose.Schema.Types.ObjectId,
-        required: true,
-    },
-    userName: {
-        type: String,
-        required: true,
-    },
-});
-
 const userSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -34,7 +23,19 @@ const userSchema = new mongoose.Schema({
             "https://thumbs.dreamstime.com/z/default-avatar-placeholder-profile-icon-male-eps-file-easy-to-edit-default-avatar-placeholder-profile-icon-male-139556753.jpg",
     },
     userRecipes: {
-        type: [userRecipe],
+        type: [
+            {
+                id: {
+                    type: String,
+                    required: true,
+                },
+                name: {
+                    type: String,
+                    required: true,
+                },
+                _id: false,
+            },
+        ],
         default: [],
     },
 });

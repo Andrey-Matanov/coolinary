@@ -1,6 +1,6 @@
 import axios from "axios";
 import { baseURL } from "../../utils";
-import { DELETE_USER } from "./profileActions";
+import { updateUserRecipesAfterDelete } from "./profileActions";
 
 export const ADD_RECIPE = "@@recipesList/ADD_RECIPE";
 export const EDIT_RECIPE = "@@recipesList/EDIT_RECIPE";
@@ -94,13 +94,9 @@ export const editRecipe = (recipe, authorId, recipeId) => async (dispatch) => {
 };
 
 export const deleteRecipe = (recipeId) => async (dispatch) => {
-    await fetch(`${baseURL}/api/recipes/${recipeId}`, {
-        method: "DELETE",
-        headers: {
-            Authorization: `Bearer ${window.localStorage.getItem("currentUserToken")}`,
-        },
-    });
-    dispatch({ type: "DELETE_RECIPE" });
+    axios.delete(`${baseURL}/api/recipes/${recipeId}`);
+
+    dispatch(updateUserRecipesAfterDelete(recipeId));
 };
 
 export const switchCategory = (newCategory) => async (dispatch) => {

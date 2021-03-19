@@ -1,5 +1,6 @@
 import connectDB from "../../../middleware/mongodb";
 import Recipe from "../../../models/recipe";
+import User from "../../../models/user";
 
 const handler = async (req, res) => {
     if (req.method === "GET") {
@@ -14,12 +15,25 @@ const handler = async (req, res) => {
         });
     } else if (req.method === "POST") {
         const recipeValues = req.body;
-        console.log(recipeValues);
 
         try {
-            const newRecipe = new Recipe(recipeValues);
-            await newRecipe.save();
-            res.status(200).send("ok");
+            const authorId = recipeValues.authorId;
+            const userValues = await User.findById(authorId);
+
+            if (userValues) {
+                const newRecipe = new Recipe(recipeValues);
+                const result = await newRecipe.save();
+
+                const userRecipes = userValues.userRecipes;
+                const newUserRecipe = { id: result._id, name: recipeValues.name };
+                await User.findByIdAndUpdate(authorId, {
+                    userRecipes: [...userRecipes, newUserRecipe],
+                });
+
+                res.status(200).send("ok");
+            } else {
+                res.status(400).send("no user with this id");
+            }
         } catch (error) {
             console.log(error);
             res.status(400).send("Error");

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-    fetchUserRecipes,
     changeUserName,
     changeEmail,
     deleteUser,
@@ -59,7 +58,6 @@ const Profile = () => {
 
     const fetchData = (id) => {
         dispatch(fetchUserData(id));
-        // dispatch(fetchUserRecipes(id));
     };
 
     useEffect(() => {
@@ -88,7 +86,7 @@ const Profile = () => {
         history.push("/");
     };
 
-    const renderedRecipes = userRecipes.length ? (
+    const renderedRecipes = userRecipes?.length ? (
         userRecipes.map((recipe) => (
             <Grid item key={recipe.id} xs={12}>
                 <Box py={1}>
@@ -124,9 +122,7 @@ const Profile = () => {
                                         variant="contained"
                                         size="small"
                                         onClick={() => {
-                                            dispatch(deleteRecipe(recipe.id))
-                                                .then(() => dispatch(fetchUserRecipes(userId)))
-                                                .catch((err) => console.error(err));
+                                            dispatch(deleteRecipe(recipe.id));
                                         }}
                                     >
                                         Удалить рецепт

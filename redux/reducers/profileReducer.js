@@ -1,6 +1,6 @@
 import {
     FETCH_USER_DATA,
-    FETCH_USER_RECIPES,
+    UPDATE_USER_RECIPES_AFTER_DELETE,
     USERNAME_CHANGE,
     EMAIL_CHANGE,
     DELETE_USER,
@@ -24,14 +24,16 @@ export const profileReducer = (
                 userId: action.payload.userData.userId,
                 userName: action.payload.userData.userName,
                 userEmail: action.payload.userData.userEmail,
+                userRecipes: action.payload.userData.userRecipes,
                 status: "ok",
             };
         }
-        case FETCH_USER_RECIPES: {
+        case UPDATE_USER_RECIPES_AFTER_DELETE: {
             return {
                 ...profile,
-                userRecipes: action.payload.userRecipes,
-                status: "ok",
+                userRecipes: profile.userRecipes.filter(
+                    (recipe) => recipe.id !== action.payload.recipeId
+                ),
             };
         }
         case USERNAME_CHANGE: {
@@ -54,11 +56,11 @@ export const profileReducer = (
                 userName: null,
                 userEmail: null,
                 userRecipes: [],
-                status: "ok"
+                status: "ok",
             };
         }
         case FETCH_ERROR: {
-            return { ...profile, status: "failed"}
+            return { ...profile, status: "failed" };
         }
         default: {
             return profile;

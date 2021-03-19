@@ -47,6 +47,7 @@ const recipe = new mongoose.Schema({
                 type: mongoose.Schema.Types.ObjectId,
                 required: true,
             },
+            _id: false,
         },
     ],
     steps: [
@@ -63,6 +64,7 @@ const recipe = new mongoose.Schema({
                 type: String,
                 required: true,
             },
+            _id: false,
         },
     ],
     commentaries: [
@@ -79,6 +81,7 @@ const recipe = new mongoose.Schema({
                 type: String,
                 reqired: true,
             },
+            _id: false,
         },
     ],
 });

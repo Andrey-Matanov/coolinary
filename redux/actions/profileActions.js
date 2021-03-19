@@ -2,7 +2,7 @@ import axios from "axios";
 import { baseURL } from "../../utils";
 
 export const FETCH_USER_DATA = "@@profile/FETCH_USER_DATA";
-export const FETCH_USER_RECIPES = "@@profile/FETCH_USER_RECIPES";
+export const UPDATE_USER_RECIPES_AFTER_DELETE = "@@profile/UPDATE_USER_RECIPES_AFTER_DELETE";
 export const USERNAME_CHANGE = "@@profile/USERNAME_CHANGE";
 export const EMAIL_CHANGE = "@@profile/EMAIL_CHANGE";
 export const DELETE_USER = "@@profile/DELETE_USER";
@@ -21,6 +21,7 @@ export const fetchUserData = (id) => async (dispatch) => {
                     userId: response.data.id,
                     userName: response.data.name,
                     userEmail: response.data.email,
+                    userRecipes: response.data.userRecipes,
                 },
             },
         });
@@ -30,20 +31,12 @@ export const fetchUserData = (id) => async (dispatch) => {
     }
 };
 
-export const fetchUserRecipes = (authorId) => async (dispatch) => {
-    try {
-        const response = await axios.get(`${baseURL}/api/recipes?author_id=${authorId}`);
-        const json = await response.data;
-        dispatch({
-            type: FETCH_USER_RECIPES,
-            payload: {
-                userRecipes: json.recipes,
-            },
-        });
-    } catch (err) {
-        dispatch({ type: FETCH_ERROR });
-    }
-};
+export const updateUserRecipesAfterDelete = (recipeId) => ({
+    type: UPDATE_USER_RECIPES_AFTER_DELETE,
+    payload: {
+        recipeId: recipeId,
+    },
+});
 
 export const changeUserName = (userId, newUserName) => async (dispatch) => {
     const token = window.localStorage.getItem("currentUserToken");

@@ -1,5 +1,6 @@
 import connectDB from "../../../middleware/mongodb";
 import Recipe from "../../../models/recipe";
+import User from "../../../models/user";
 
 const handler = async (req, res) => {
     const { id } = req.query;
@@ -19,8 +20,24 @@ const handler = async (req, res) => {
         }
     } else if (req.method === "DELETE") {
         try {
-            await Recipe.findByIdAndRemove(id);
-            res.send("removed succesfully");
+            const result = await Recipe.findByIdAndRemove(id);
+
+            if (result) {
+                const authorId = result.authorId;
+                const recipeId = result._id.toString();
+                const userValues = await User.findById(authorId);
+                const userRecipes = userValues.userRecipes.filter(
+                    (recipe) => recipe.id !== recipeId
+                );
+
+                await User.findByIdAndUpdate(authorId, {
+                    userRecipes: userRecipes,
+                });
+
+                res.send("removed succesfully");
+            } else {
+                res.send("no recipe with this id");
+            }
         } catch (error) {
             console.log(error);
             res.status(400).send(error);

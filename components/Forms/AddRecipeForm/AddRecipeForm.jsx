@@ -20,6 +20,7 @@ import {
     TextField,
 } from "@material-ui/core";
 import AddRecipeNutrition from "./AddRecipeNutrition";
+import { updateUserRecipes } from "../../../redux/actions/profileActions";
 
 const Error = styled.div`
     color: red;

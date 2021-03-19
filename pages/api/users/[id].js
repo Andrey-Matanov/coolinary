@@ -7,9 +7,8 @@ const handler = async (req, res) => {
     if (req.method === "GET") {
         try {
             const user = await User.findById(id);
-
             if (user) {
-                res.send(user);
+                res.json(user);
             } else {
                 res.status(400).send(`User doesn't exist`);
             }
@@ -21,6 +20,21 @@ const handler = async (req, res) => {
         try {
             await User.findByIdAndRemove(id);
             res.send("removed succesfully");
+        } catch (error) {
+            console.log(error);
+            res.status(400).send(error);
+        }
+    } else if (req.method === "PUT") {
+        const recipe = req.body.recipe;
+        const userValues = await User.findById(id);
+        const userRecipes = userValues.userRecipes;
+
+        try {
+            await User.findByIdAndUpdate(id, {
+                userRecipes: [...userRecipes, recipe],
+            });
+
+            res.send("succesfully updated user recipes");
         } catch (error) {
             console.log(error);
             res.status(400).send(error);
