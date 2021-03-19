@@ -31,7 +31,6 @@ const LoginPage = () => {
             try {
                 await firebaseApp.auth().signInWithEmailAndPassword(values.email, values.password);
             } catch (error) {
-                console.log(error);
                 setAuthorizationError(error.message);
             }
         },

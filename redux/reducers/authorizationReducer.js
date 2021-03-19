@@ -1,9 +1,8 @@
-import { GET_USER_ID_BY_UID, USER_LOGIN, USER_LOGOUT } from "../actions/authorizationActions";
+import { USER_LOGIN, USER_LOGOUT } from "../actions/authorizationActions";
 
 export const authorizationReducer = (authorization = { userId: null }, action) => {
     switch (action.type) {
-        case USER_LOGIN:
-        case GET_USER_ID_BY_UID: {
+        case USER_LOGIN: {
             return { userId: action.payload.userId };
         }
         case USER_LOGOUT: {

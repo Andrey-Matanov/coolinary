@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { getUserIdByUID } from "../redux/actions/authorizationActions";
 import firebaseApp from "../utils/firebaseConfig";
+import { userLogin } from "../redux/actions/authorizationActions";
 import LoadingDataComponent from "../components/Common/LoadingDataComponent";
 
 export const AuthContext = React.createContext();
@@ -13,37 +13,22 @@ export const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         firebaseApp.auth().onAuthStateChanged((user) => {
+            setIsLoading(true);
+            console.log(user);
+
             if (user) {
                 setIsUserLoggedIn(true);
+                dispatch(userLogin(user.email));
             } else {
                 setIsUserLoggedIn(false);
             }
+
             setIsLoading(false);
         });
     }, []);
 
-    useEffect(() => {
-        if (isUserLoggedIn === true && !window.localStorage.getItem("currentUserUID")) {
-            firebaseApp.auth().onAuthStateChanged((user) => {
-                if (user) {
-                    window.localStorage.setItem("currentUserUID", user.uid);
-                    dispatch(getUserIdByUID());
-                }
-            });
-        } else {
-            dispatch(getUserIdByUID());
-        }
-    }, [isUserLoggedIn]);
-
     if (isLoading) {
-        return (
-            // <AuthContext.Provider value={{ isUserLoggedIn, isLoading }}>
-            //     <BasicLayout>
-            //         <LoadingDataComponent />
-            //     </BasicLayout>
-            // </AuthContext.Provider>
-            <LoadingDataComponent />
-        );
+        return <LoadingDataComponent />;
     } else {
         return (
             <AuthContext.Provider value={{ isUserLoggedIn, isLoading }}>

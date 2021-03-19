@@ -3,8 +3,8 @@ import User from "../../models/user";
 
 const handler = async (req, res) => {
     if (req.method === "GET") {
-        const uid = req.headers.uid;
-        const user = await User.find({ uid: uid });
+        const email = req.headers.email;
+        const user = await User.find({ email: email });
 
         res.send(user[0]);
     } else {

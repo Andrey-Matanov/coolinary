@@ -6,7 +6,7 @@ import firebaseApp from "../utils/firebaseConfig";
 import Register from "../components/PagesComponents/RegisterPage/Register";
 import { AuthContext } from "../providers/Authentication";
 import axios from "axios";
-import { getUserIdByUID } from "../redux/actions/authorizationActions";
+import { userLogin } from "../redux/actions/authorizationActions";
 import { useDispatch } from "react-redux";
 
 const register = () => {
@@ -35,21 +35,18 @@ const register = () => {
         }),
         onSubmit: async () => {
             try {
-                const newFirebaseUser = await firebaseApp
+                await firebaseApp
                     .auth()
                     .createUserWithEmailAndPassword(values.email, values.password);
-                console.log(newFirebaseUser);
-                const uid = newFirebaseUser.user.uid;
-                console.log(uid);
 
                 const newUserData = {
                     name: values.name,
                     email: values.email,
-                    uid: uid,
                 };
 
                 await axios.post("/api/users", newUserData);
-                dispatch(getUserIdByUID());
+
+                dispatch(userLogin(values.email));
             } catch (error) {
                 setRegistrationError(error.message);
             }

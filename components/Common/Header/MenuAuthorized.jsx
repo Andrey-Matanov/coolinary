@@ -99,9 +99,8 @@ const Menu = () => {
             <button
                 onClick={() => {
                     firebaseApp.auth().signOut();
-                    window.localStorage.removeItem("currentUserUID");
                     dispatch(userLogout());
-                    Router.push("/login");
+                    Router.push("/");
                 }}
                 className={classes.button}
             >
