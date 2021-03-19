@@ -1,6 +1,6 @@
 import { wrapper } from "../redux/store";
 import Head from "next/head";
-import { AuthProvider } from "../components/Common/Authentication";
+import { AuthProvider } from "../providers/Authentication";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import { green, lightGreen } from "@material-ui/core/colors";
 

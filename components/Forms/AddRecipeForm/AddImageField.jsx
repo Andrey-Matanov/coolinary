@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { CloudinaryContext, Image } from "cloudinary-react";
-import { openUploadWidget } from "../../../utils/CloudinaryService";
+import { openUploadWidget } from "../../../services/cloudinaryService";
 
 const AddImageField = ({ image, fieldName, setFieldValue }) => {
     useEffect(() => {

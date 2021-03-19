@@ -44,7 +44,15 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const Register = ({ values, errors, handleChange, handleSubmit }) => {
+const Register = ({
+    values,
+    errors,
+    touched,
+    registrationError,
+    handleChange,
+    handleSubmit,
+    handleBlur,
+}) => {
     const classes = useStyles();
 
     return (
@@ -72,8 +80,10 @@ const Register = ({ values, errors, handleChange, handleSubmit }) => {
                             autoFocus
                             value={values.name}
                             onChange={handleChange}
+                            onBlur={handleBlur}
+                            error={touched.name && Boolean(errors.name)}
+                            helperText={touched.name && errors.name}
                         />
-                        {errors.name ? <Error>{errors.name}</Error> : null}
                         <TextField
                             variant="outlined"
                             margin="normal"
@@ -86,8 +96,10 @@ const Register = ({ values, errors, handleChange, handleSubmit }) => {
                             autoFocus
                             value={values.email}
                             onChange={handleChange}
+                            onBlur={handleBlur}
+                            error={touched.email && Boolean(errors.email)}
+                            helperText={touched.email && errors.email}
                         />
-                        {errors.email ? <Error>{errors.email}</Error> : null}
                         <TextField
                             variant="outlined"
                             margin="normal"
@@ -100,8 +112,11 @@ const Register = ({ values, errors, handleChange, handleSubmit }) => {
                             autoComplete="current-password"
                             value={values.password}
                             onChange={handleChange}
+                            onBlur={handleBlur}
+                            error={touched.password && Boolean(errors.password)}
+                            helperText={touched.password && errors.password}
                         />
-                        {errors.password ? <Error>{errors.password}</Error> : null}
+                        <Error>{registrationError}</Error>
                         <Button
                             type="submit"
                             fullWidth

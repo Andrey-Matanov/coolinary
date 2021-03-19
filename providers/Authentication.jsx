@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { getUserIdByUID } from "../../redux/actions/authorizationActions";
-import firebaseApp from "../../utils/firebaseConfig";
-import BasicLayout from "../Layouts/BasicLayout";
-import LoadingDataComponent from "./LoadingDataComponent";
+import { getUserIdByUID } from "../redux/actions/authorizationActions";
+import firebaseApp from "../utils/firebaseConfig";
+import LoadingDataComponent from "../components/Common/LoadingDataComponent";
 
 export const AuthContext = React.createContext();
 

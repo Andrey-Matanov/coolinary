@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import styled from "styled-components";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -9,6 +10,10 @@ import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+
+const Error = styled.div`
+    color: red;
+`;
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -39,7 +44,17 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const Login = ({ onSigninSubmit, email, onEmailChange, password, onPasswordChahge }) => {
+const Login = ({
+    onSigninSubmit,
+    email,
+    onEmailChange,
+    password,
+    onPasswordChange,
+    touched,
+    handleBlur,
+    errors,
+    authorizationError,
+}) => {
     const classes = useStyles();
 
     return (
@@ -67,6 +82,9 @@ const Login = ({ onSigninSubmit, email, onEmailChange, password, onPasswordChahg
                             autoFocus
                             value={email}
                             onChange={onEmailChange}
+                            onBlur={handleBlur}
+                            error={touched.email && Boolean(errors.email)}
+                            helperText={touched.email && errors.email}
                         />
                         <TextField
                             variant="outlined"
@@ -79,8 +97,12 @@ const Login = ({ onSigninSubmit, email, onEmailChange, password, onPasswordChahg
                             id="password"
                             autoComplete="current-password"
                             value={password}
-                            onChange={onPasswordChahge}
+                            onChange={onPasswordChange}
+                            onBlur={handleBlur}
+                            error={touched.password && Boolean(errors.password)}
+                            helperText={touched.password && errors.password}
                         />
+                        <Error>{authorizationError}</Error>
                         <Button
                             type="submit"
                             fullWidth

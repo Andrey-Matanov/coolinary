@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { connect, useDispatch, useSelector } from "react-redux";
 import Router from "next/router";
 import styled from "styled-components";
-import { AuthContext } from "../components/Common/Authentication";
+import { AuthContext } from "../providers/Authentication";
 import { fetchIngredients } from "../redux/actions/ingredientsAction";
 import { fetchCategories } from "../redux/actions/categoriesActions";
 import { fetchUnits } from "../redux/actions/unitsActions";

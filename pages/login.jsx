@@ -1,10 +1,10 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import Router from "next/router";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import firebaseApp from "../utils/firebaseConfig";
 import Login from "../components/PagesComponents/LoginPage/Login";
-import { AuthContext } from "../components/Common/Authentication";
+import { AuthContext } from "../providers/Authentication";
 
 const LoginPage = () => {
     const { isUserLoggedIn } = useContext(AuthContext);
@@ -13,7 +13,9 @@ const LoginPage = () => {
         Router.push("/");
     }
 
-    const { values, handleSubmit, handleChange } = useFormik({
+    const [authorizationError, setAuthorizationError] = useState(null);
+
+    const { values, errors, touched, handleSubmit, handleChange, handleBlur } = useFormik({
         initialValues: {
             email: "",
             password: "",
@@ -30,6 +32,7 @@ const LoginPage = () => {
                 await firebaseApp.auth().signInWithEmailAndPassword(values.email, values.password);
             } catch (error) {
                 console.log(error);
+                setAuthorizationError(error.message);
             }
         },
     });
@@ -38,9 +41,13 @@ const LoginPage = () => {
         <Login
             onSigninSubmit={handleSubmit}
             onEmailChange={handleChange}
-            onPasswordChahge={handleChange}
+            onPasswordChange={handleChange}
             email={values.email}
             password={values.password}
+            handleBlur={handleBlur}
+            errors={errors}
+            touched={touched}
+            authorizationError={authorizationError}
         />
     );
 };

@@ -7,7 +7,7 @@ import { fetchRecipe } from "../../redux/actions/recipeActions";
 import { fetchUnits } from "../../redux/actions/unitsActions";
 import LoadingDataComponent from "../../components/Common/LoadingDataComponent";
 import AddRecipeForm from "../../components/Forms/AddRecipeForm/AddRecipeForm";
-import { AuthContext } from "../../components/Common/Authentication";
+import { AuthContext } from "../../providers/Authentication";
 
 const Wrapper = styled.div`
     padding: 20px;

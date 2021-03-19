@@ -5,7 +5,7 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Menu from "./Menu";
 import MenuAuthorized from "./MenuAuthorized";
-import { AuthContext } from "../Authentication";
+import { AuthContext } from "../../../providers/Authentication";
 
 const useStyles = makeStyles((theme) => ({
     root: {

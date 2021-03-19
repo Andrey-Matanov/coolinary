@@ -1,10 +1,10 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import Router from "next/router";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import firebaseApp from "../utils/firebaseConfig";
 import Register from "../components/PagesComponents/RegisterPage/Register";
-import { AuthContext } from "../components/Common/Authentication";
+import { AuthContext } from "../providers/Authentication";
 import axios from "axios";
 import { getUserIdByUID } from "../redux/actions/authorizationActions";
 import { useDispatch } from "react-redux";
@@ -17,7 +17,9 @@ const register = () => {
         Router.push("/");
     }
 
-    const { values, errors, handleSubmit, handleChange } = useFormik({
+    const [registrationError, setRegistrationError] = useState(null);
+
+    const { values, errors, touched, handleSubmit, handleChange, handleBlur } = useFormik({
         initialValues: {
             name: "",
             email: "",
@@ -36,6 +38,7 @@ const register = () => {
                 const newFirebaseUser = await firebaseApp
                     .auth()
                     .createUserWithEmailAndPassword(values.email, values.password);
+                console.log(newFirebaseUser);
                 const uid = newFirebaseUser.user.uid;
                 console.log(uid);
 
@@ -48,7 +51,7 @@ const register = () => {
                 await axios.post("/api/users", newUserData);
                 dispatch(getUserIdByUID());
             } catch (error) {
-                console.log("error: ", error);
+                setRegistrationError(error.message);
             }
         },
     });
@@ -57,8 +60,11 @@ const register = () => {
         <Register
             values={values}
             errors={errors}
+            touched={touched}
+            registrationError={registrationError}
             handleChange={handleChange}
             handleSubmit={handleSubmit}
+            handleBlur={handleBlur}
         />
     );
 };

@@ -81,8 +81,6 @@ const AddRecipeFormIngredient = ({
         );
     }, [searchedIngredient]);
 
-    const getUnitName = (unitId) => ["граммы", "миллилитры", "штуки", "ч.л.", "ст.л."][unitId - 1];
-
     const Ingredient = ({ index, style }) => {
         const isCurrent = searchedIngredientsArray[index]._id === currentId;
         const isDisabled =
@@ -188,7 +186,7 @@ const AddRecipeFormIngredient = ({
                         type="number"
                         id={`ingredients[${currentNumber}].amount`}
                         name={`ingredients[${currentNumber}].amount`}
-                        label={`Количество(${getUnitName(unitId)})`}
+                        label={`Количество(${units.find((unit) => unit._id === unitId).name[3]})`}
                         value={currentAmount}
                         onChange={(e) => {
                             const value = e.target.value;
