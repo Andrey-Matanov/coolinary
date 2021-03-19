@@ -4,7 +4,13 @@ import User from "../../../models/user";
 
 const handler = async (req, res) => {
     if (req.method === "GET") {
-        const recipes = await Recipe.find();
+        const categoryId = req.query.categoryId ?? null;
+        const findParameters = {};
+        if (categoryId) {
+            findParameters.categoryId = categoryId;
+        }
+
+        const recipes = await Recipe.find(findParameters);
         const amount = req.query.amount ?? recipes.length;
         const last = req.query.last ?? 0;
         const result = recipes.slice(last, last + amount);
