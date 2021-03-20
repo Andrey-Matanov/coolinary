@@ -95,12 +95,8 @@ export const changeEmail = (userId, newEmail) => async (dispatch) => {
 };
 
 export const deleteUser = (userId) => async (dispatch) => {
-    const token = window.localStorage.getItem("currentUserToken");
-    await axios.delete(`${baseURL}/api/users/${userId}`, {
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-    });
+    await axios.delete(`${baseURL}/api/recipes?authorId=${userId}`);
+    await axios.delete(`${baseURL}/api/users/${userId}`);
 
     dispatch({
         type: DELETE_USER,

@@ -29,6 +29,7 @@ import RequestError from "../../components/Common/RequestError.jsx";
 import { deleteRecipe } from "../../redux/actions/recipesListActions";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import firebaseApp from "../../utils/firebaseConfig";
 
 const useStyles = makeStyles((theme) => ({
     avatar: {
@@ -80,10 +81,18 @@ const Profile = () => {
 
     const handleDeleteUser = () => {
         setOpenDeleteUser(false);
-        dispatch(deleteUser(userId));
-        dispatch(userLogout());
-        window.localStorage.removeItem("currentUserToken");
-        history.push("/");
+
+        const user = firebaseApp.auth().currentUser;
+
+        user.delete()
+            .then(() => {
+                router.push("/");
+                dispatch(deleteUser(userId));
+                dispatch(userLogout());
+            })
+            .catch((error) => {
+                console.log(error);
+            });
     };
 
     const renderedRecipes = userRecipes?.length ? (

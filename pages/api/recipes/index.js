@@ -44,6 +44,24 @@ const handler = async (req, res) => {
             console.log(error);
             res.status(400).send("Error");
         }
+    } else if (req.method === "DELETE") {
+        const authorId = req.query.authorId;
+
+        if (authorId?.length > 0) {
+            const userRecipes = await Recipe.find({ authorId: authorId });
+
+            userRecipes.forEach(async (recipe) => await Recipe.findByIdAndDelete(recipe._id));
+
+            res.send("all user recipes were removed successfully");
+        } else {
+            try {
+                await Recipe.deleteMany({});
+
+                res.send("all recipes were removed successfully");
+            } catch (error) {
+                res.status(400).send(error);
+            }
+        }
     } else {
         res.status(422).send("req_method_not_supported");
     }

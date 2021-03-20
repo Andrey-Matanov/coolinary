@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchIngredients } from "../redux/actions/ingredientsAction";
 import { fetchRecipes } from "../redux/actions/recipesListActions";
 import { fetchUnits } from "../redux/actions/unitsActions";
-import { clearUsers, fetchUsers } from "../redux/actions/usersActions";
+import { clearUsers, deleteAllUsers, fetchUsers } from "../redux/actions/usersActions";
 import { fetchCategories } from "../redux/actions/categoriesActions";
 import AdminPanelPageList from "../components/PagesComponents/AdminPanelPage/AdminPanelPageList";
 

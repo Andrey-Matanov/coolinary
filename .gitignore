@@ -36,3 +36,4 @@ yarn-error.log*
 # other
 next.config.js
 todo.md
+.vercel

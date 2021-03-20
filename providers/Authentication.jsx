@@ -14,7 +14,6 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         firebaseApp.auth().onAuthStateChanged((user) => {
             setIsLoading(true);
-            console.log(user);
 
             if (user) {
                 setIsUserLoggedIn(true);
