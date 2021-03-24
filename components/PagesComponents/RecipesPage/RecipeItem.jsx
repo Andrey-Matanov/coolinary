@@ -67,8 +67,7 @@ const RecipeItem = (props) => {
                                 <Typography variant="body1">
                                     Автор:{" "}
                                     <Link href={`/profile/${authorId}`}>
-                                        {/* Temporary */}
-                                        <a>{"author"}</a>
+                                        <a>{author}</a>
                                     </Link>
                                 </Typography>
                             </Grid>

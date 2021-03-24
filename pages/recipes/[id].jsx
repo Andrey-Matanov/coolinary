@@ -14,25 +14,26 @@ const Recipe = () => {
         dispatch(fetchRecipeWithInfo(id));
     }, []);
 
-    const { status, recipe } = useSelector((state) => state.recipe)
-    const ingredients = useSelector((state) => state.ingredients)
-    const units = useSelector((state) => state.units)
-    const { userName } = useSelector((state) => state.profile)
+    const { status, recipe } = useSelector((state) => state.recipe);
+    const ingredients = useSelector((state) => state.ingredients);
+    const units = useSelector((state) => state.units);
 
     switch (status) {
         case "loading": {
-            return <Box justifyContent="center" display="flex">
-                <CircularProgress color="primary" />
-            </Box>
+            return (
+                <Box justifyContent="center" display="flex">
+                    <CircularProgress color="primary" />
+                </Box>
+            );
         }
         case "ok": {
             return (
                 <Container maxWidth="md">
                     <RecipeStepsList
-                        recipe={ recipe.recipe }
-                        ingredientsData={ ingredients }
-                        author = { userName }
-                        unitsData={ units }
+                        recipe={recipe.recipe}
+                        ingredientsData={ingredients}
+                        author={recipe.recipe.authorName}
+                        unitsData={units}
                     />
                 </Container>
             );

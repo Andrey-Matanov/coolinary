@@ -1,20 +1,17 @@
-import React from "react"
-import AddCommentaryForm from "../../Forms/AddCommentaryForm.jsx"
-import {useDispatch, useSelector} from "react-redux"
-import {
-    List,
-    ListItem,
-    Box,
-    Grid,
-    Paper,
-    Typography,
-    makeStyles,
-} from "@material-ui/core"
-import Button from '@material-ui/core/Button'
-import DeleteIcon from '@material-ui/icons/Delete'
-import {deleteCommentary} from "../../../redux/actions/recipesListActions.js"
-import {fetchRecipe} from "../../../redux/actions/recipeActions.js"
-
+import React from "react";
+import AddCommentaryForm from "../../Forms/AddCommentaryForm.jsx";
+import { useDispatch, useSelector } from "react-redux";
+import { makeStyles } from "@material-ui/core";
+import List from "@material-ui/core/List";
+import Grid from "@material-ui/core/Grid";
+import ListItem from "@material-ui/core/ListItem";
+import Box from "@material-ui/core/Box";
+import Paper from "@material-ui/core/Paper";
+import Typography from "@material-ui/core/Typography";
+import Button from "@material-ui/core/Button";
+import DeleteIcon from "@material-ui/icons/Delete";
+import { deleteCommentary } from "../../../redux/actions/recipesListActions.js";
+import { fetchRecipe } from "../../../redux/actions/recipeActions.js";
 
 const useStyles = makeStyles((theme) => ({
     reviewsFormPaper: {
@@ -23,26 +20,24 @@ const useStyles = makeStyles((theme) => ({
     button: {
         margin: theme.spacing(1),
     },
-}))
+}));
 
 const ReviewsBlock = () => {
     const classes = useStyles();
     const dispatch = useDispatch();
     const userLoggedIn = useSelector((state) => state.authorization.userId);
-    const reviewsList = useSelector(state => state.recipe.reviews);
-    const recipeId = useSelector(state => state.recipe.recipe.id);
+    const reviewsList = useSelector((state) => state.recipe.reviews);
+    const recipeId = useSelector((state) => state.recipe.recipe.id);
     const renderReviews = (reviewsList) => {
         if (reviewsList) {
-            return reviewsList.map((review, i) =>
-                (<ListItem key={`review${i}`}>
+            return reviewsList.map((review, i) => (
+                <ListItem key={`review${i}`}>
                     <Paper elevation={1}>
                         <Box p={2}>
                             <Grid container>
                                 <Grid item xs={12}>
                                     <Box py={1}>
-                                        <Typography variant="body1">
-                                            {review.user_name}
-                                        </Typography>
+                                        <Typography variant="body1">{review.user_name}</Typography>
                                     </Box>
                                 </Grid>
                                 <Grid item xs={12}>
@@ -54,29 +49,30 @@ const ReviewsBlock = () => {
                                 </Grid>
                                 <Grid item xs={12}>
                                     <Box py={1}>
-                                        {userLoggedIn === review.user_id
-                                            ? <Button
+                                        {userLoggedIn === review.user_id ? (
+                                            <Button
                                                 variant="contained"
                                                 color="secondary"
                                                 className={classes.button}
-                                                startIcon={<DeleteIcon/>}
+                                                startIcon={<DeleteIcon />}
                                                 onClick={() => {
                                                     dispatch(deleteCommentary(review.id))
                                                         .then(() => dispatch(fetchRecipe(recipeId)))
-                                                        .catch((err) => console.error(err))
+                                                        .catch((err) => console.error(err));
                                                 }}
-                                            >Удалить
+                                            >
+                                                Удалить
                                             </Button>
-                                            : null}
+                                        ) : null}
                                     </Box>
                                 </Grid>
                             </Grid>
                         </Box>
                     </Paper>
                 </ListItem>
-            ))
+            ));
         }
-    }
+    };
 
     return (
         <Box>
@@ -94,7 +90,7 @@ const ReviewsBlock = () => {
                 </ListItem>
             </List>
         </Box>
-    )
-}
+    );
+};
 
-export default ReviewsBlock
+export default ReviewsBlock;

@@ -32,16 +32,10 @@ const Recipes = () => {
     const classes = useStyles();
 
     const recipesList = useSelector((state) => state.recipesObject.recipes);
-
-    const {
-        currentLastId,
-        isLastRecipes,
-        currentCategory,
-        status,
-    } = useSelector((state) => state.recipesObject);
-
+    const { currentLastId, isLastRecipes, currentCategory, status } = useSelector(
+        (state) => state.recipesObject
+    );
     const categories = useSelector((state) => state.categories);
-
     const [isScrolledDown, setIsScrolledDown] = useState(false);
 
     useEffect(() => {
@@ -112,12 +106,7 @@ const Recipes = () => {
             {status === "failed" ? (
                 <RequestError
                     retryFunction={() =>
-                        dispatch(
-                            fetchRecipesAndCategories(
-                                currentLastId,
-                                currentCategory
-                            )
-                        )
+                        dispatch(fetchRecipesAndCategories(currentLastId, currentCategory))
                     }
                 />
             ) : (

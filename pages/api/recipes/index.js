@@ -25,6 +25,8 @@ const handler = async (req, res) => {
         try {
             const authorId = recipeValues.authorId;
             const userValues = await User.findById(authorId);
+            recipeValues.authorName = userValues.name;
+            console.log(recipeValues);
 
             if (userValues) {
                 const newRecipe = new Recipe(recipeValues);

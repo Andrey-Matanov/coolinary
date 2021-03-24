@@ -1,5 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Grid, Box, CircularProgress, Fab } from "@material-ui/core";
+import Grid from "@material-ui/core/Grid";
+import Box from "@material-ui/core/Box";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import Fab from "@material-ui/core/Fab";
 import UpIcon from "@material-ui/icons/KeyboardArrowUp";
 import { makeStyles } from "@material-ui/core/styles";
 import RecipeItem from "./RecipeItem.jsx";
@@ -73,7 +76,7 @@ const RecipesList = ({ recipesList, loadRecipes, isLast }) => {
                         <RecipeItem
                             _id={item._id}
                             name={item.name}
-                            author={item.author}
+                            author={item.authorName}
                             authorId={item.authorId}
                             time={item.time}
                             difficulty={item.difficulty}
@@ -108,12 +111,7 @@ const RecipesList = ({ recipesList, loadRecipes, isLast }) => {
                 ) : null}
             </Grid>
             {isScrolled ? (
-                <Fab
-                    aria-label="Up"
-                    className={classes.fab}
-                    color="primary"
-                    onClick={scrollUp}
-                >
+                <Fab aria-label="Up" className={classes.fab} color="primary" onClick={scrollUp}>
                     <UpIcon />
                 </Fab>
             ) : null}
