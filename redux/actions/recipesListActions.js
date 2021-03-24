@@ -14,20 +14,14 @@ export const CATEGORY_CHANGE = "@@recipesList/CATEGORY_CHANGE";
 export const FETCH_SUCCESS = "@@recipesList/FETCH_SUCCESS";
 export const FETCH_STARTED = "@@recipesList/FETCH_STARTED";
 
-export const addCommentary = (recipeId, text) => async (dispatch) => {
-    const token = window.localStorage.getItem("currentUserToken");
+export const addCommentary = (recipeId, userId, userName, text) => async (dispatch) => {
     try {
-        const response = await fetch(`${baseURL}/api/reviews`, {
-            method: "POST",
-            body: JSON.stringify({
-                recipe_id: recipeId,
-                description: text,
-            }),
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
+        axios.put(`${baseURL}/api/recipes/${recipeId}`, {
+            user_id: userId,
+            user_name: userName,
+            content: text,
         });
-        const data = await response.json();
+
         dispatch({ type: FETCH_SUCCESS });
     } catch (err) {
         dispatch({ type: FETCH_ERROR });

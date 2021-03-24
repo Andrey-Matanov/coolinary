@@ -1,7 +1,7 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { Star, StarBorder, StarHalf } from '@material-ui/icons'
-import { Typography } from '@material-ui/core'
+import { Star, StarBorder, StarHalf } from "@material-ui/icons";
+import { Typography } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
     difficultyContainer: {
@@ -19,23 +19,21 @@ const RatingBar = ({ rating }) => {
     const renderScale = Array(5)
         .fill(5)
         .map((item, i) =>
-            (i - ratingRounded + 1) <= 0 ? (
+            i - ratingRounded + 1 <= 0 ? (
                 <Star key={i} />
+            ) : Math.abs(i - ratingRounded + 1) === 0.5 ? (
+                <StarHalf key={i} />
             ) : (
-                (Math.abs(i - ratingRounded + 1) === 0.5) ? (
-                    <StarHalf key={i} />
-                ) : (
-                    <StarBorder key={i} />
-                )
+                <StarBorder key={i} />
             )
         );
 
-    return <div className={classes.difficultyContainer}>
+    return (
+        <div className={classes.difficultyContainer}>
             {renderScale}
-            <Typography variant="body1">
-                {rating} / 5
-            </Typography>
-        </div>;
+            <Typography variant="body1">{rating} / 5</Typography>
+        </div>
+    );
 };
 
 export default RatingBar;

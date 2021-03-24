@@ -15,6 +15,7 @@ export const userLogin = (email) => async (dispatch) => {
         type: USER_LOGIN,
         payload: {
             userId: response.data._id,
+            userName: response.data.name,
         },
     });
 };

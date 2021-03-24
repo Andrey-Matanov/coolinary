@@ -3,7 +3,6 @@ import Ingredients from "./Ingredients";
 import { makeStyles } from "@material-ui/core/styles";
 import Link from "next/link";
 import { Paper, Grid, Box, Typography } from "@material-ui/core";
-
 import ReviewsBlock from "../../../components/PagesComponents/RecipePage/ReviewsBlock.jsx";
 import Nutrition from "./Nutrition.jsx";
 // import AddCommentaryForm from '../components/Forms/AddCommentaryForm';
@@ -47,27 +46,6 @@ let formatTime = (sourceTime) => {
     return retVal;
 };
 
-const renderReviews = (reviews, users) => {
-    if (reviews) {
-        reviews.map((review) => (
-            <div
-                style={{
-                    backgroundColor: "lightgray",
-                    padding: "5px",
-                    borderRadius: "5px",
-                    marginBottom: "5px",
-                }}
-                key={review.id}
-            >
-                <p>Автор: {users.find((user) => user.id === review.authorId).name}</p>
-                <p>{review.text}</p>
-            </div>
-        ));
-    } else {
-        return <div></div>;
-    }
-};
-
 const renderSteps = (steps) => {
     const classes = useStyles();
     if (steps) {
@@ -102,18 +80,19 @@ const renderSteps = (steps) => {
     }
 };
 
-const RecipeStepsList = ({ recipe, ingredientsData, author, unitsData }) => {
+const RecipeStepsList = ({ recipeId, recipe, ingredientsData, unitsData }) => {
     const classes = useStyles();
     const {
         name,
         authorId,
+        authorName,
         difficulty,
         image,
         description,
         time,
         rating,
         ingredients,
-        reviews,
+        commentaries,
         steps,
     } = recipe;
     return (
@@ -133,7 +112,7 @@ const RecipeStepsList = ({ recipe, ingredientsData, author, unitsData }) => {
                                 <p>
                                     Автор:{" "}
                                     <Link className="author-link" href={`/profile/${authorId}`}>
-                                        <a>{author}</a>
+                                        <a>{authorName}</a>
                                     </Link>
                                 </p>
                             </Box>
@@ -176,18 +155,7 @@ const RecipeStepsList = ({ recipe, ingredientsData, author, unitsData }) => {
                 </Grid>
                 {renderSteps(steps)}
                 <Grid item>
-                    <ReviewsBlock reviews={reviews} />
-                    {/* <div
-                        style={{
-                            border: "1px solid black",
-                            padding: "5px",
-                            borderRadius: "5px",
-                        }}
-                    >
-                        <h2 style={{ marginBottom: "10px" }}>Комментарии:</h2>
-                        {renderReviews()}
-                    </div> */}
-                    {/* <AddCommentaryForm recipeId={recipeId} /> */}
+                    <ReviewsBlock recipeId={recipeId} commentaries={commentaries} />
                 </Grid>
             </Grid>
         </Box>

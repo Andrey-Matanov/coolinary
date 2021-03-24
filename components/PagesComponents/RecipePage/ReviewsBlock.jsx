@@ -22,15 +22,13 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const ReviewsBlock = () => {
+const ReviewsBlock = ({ recipeId, commentaries }) => {
     const classes = useStyles();
     const dispatch = useDispatch();
-    const userLoggedIn = useSelector((state) => state.authorization.userId);
-    const reviewsList = useSelector((state) => state.recipe.reviews);
-    const recipeId = useSelector((state) => state.recipe.recipe.id);
-    const renderReviews = (reviewsList) => {
-        if (reviewsList) {
-            return reviewsList.map((review, i) => (
+    const userId = useSelector((state) => state.authorization.userId);
+    const renderReviews = () => {
+        if (commentaries?.length > 0) {
+            return commentaries.map((review, i) => (
                 <ListItem key={`review${i}`}>
                     <Paper elevation={1}>
                         <Box p={2}>
@@ -42,14 +40,12 @@ const ReviewsBlock = () => {
                                 </Grid>
                                 <Grid item xs={12}>
                                     <Box py={1}>
-                                        <Typography variant="body2">
-                                            {review.description}
-                                        </Typography>
+                                        <Typography variant="body2">{review.content}</Typography>
                                     </Box>
                                 </Grid>
                                 <Grid item xs={12}>
                                     <Box py={1}>
-                                        {userLoggedIn === review.user_id ? (
+                                        {userId === review.user_id ? (
                                             <Button
                                                 variant="contained"
                                                 color="secondary"
@@ -78,12 +74,12 @@ const ReviewsBlock = () => {
         <Box>
             <Typography variant="h5">Комментарии</Typography>
             <List>
-                {renderReviews(reviewsList)}
+                {renderReviews()}
                 <ListItem>
                     <Paper elevation={1} className={classes.reviewsFormPaper}>
-                        {userLoggedIn ? (
+                        {userId !== null ? (
                             <Box p={2}>
-                                <AddCommentaryForm />
+                                <AddCommentaryForm userId={userId} recipeId={recipeId} />
                             </Box>
                         ) : null}
                     </Paper>

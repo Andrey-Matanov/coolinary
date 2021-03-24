@@ -31,10 +31,7 @@ const Footer = () => {
     return (
         <div className={classes.footer}>
             <div className={classes.footerWrapper}>
-                <div
-                    className={classes.content}
-                    style={{ display: "flex", alignItems: "center" }}
-                >
+                <div className={classes.content} style={{ display: "flex", alignItems: "center" }}>
                     <i
                         className="fa fa-youtube fa-2x"
                         style={{ padding: 10 }}
@@ -70,16 +67,10 @@ const Footer = () => {
                         rel="nofollow"
                     ></i>
                 </div>
-                <Link
-                    href="#"
-                    onClick={(e) => e.preventDefault()}
-                    style={{ color: grey[300] }}
-                >
+                <Link href="#" onClick={(e) => e.preventDefault()} style={{ color: grey[300] }}>
                     email@email.com
                 </Link>
-                <p className={classes.content}>
-                    Coolинари © 2021. Все Права Защищены.
-                </p>
+                <p className={classes.content}>Coolинари © 2021. Все Права Защищены.</p>
             </div>
         </div>
     );

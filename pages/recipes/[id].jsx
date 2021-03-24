@@ -11,8 +11,12 @@ const Recipe = () => {
     const { id } = router.query;
 
     useEffect(() => {
-        dispatch(fetchRecipeWithInfo(id));
-    }, []);
+        console.log(id);
+
+        if (id) {
+            dispatch(fetchRecipeWithInfo(id));
+        }
+    }, [id]);
 
     const { status, recipe } = useSelector((state) => state.recipe);
     const ingredients = useSelector((state) => state.ingredients);
@@ -30,9 +34,9 @@ const Recipe = () => {
             return (
                 <Container maxWidth="md">
                     <RecipeStepsList
+                        recipeId={id}
                         recipe={recipe.recipe}
                         ingredientsData={ingredients}
-                        author={recipe.recipe.authorName}
                         unitsData={units}
                     />
                 </Container>

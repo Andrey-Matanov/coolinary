@@ -73,12 +73,12 @@ const recipe = new mongoose.Schema({
     ],
     commentaries: [
         {
-            id: {
+            user_id: {
                 type: mongoose.Schema.Types.ObjectId,
                 required: true,
             },
-            authorId: {
-                type: mongoose.Schema.Types.ObjectId,
+            user_name: {
+                type: String,
                 required: true,
             },
             content: {

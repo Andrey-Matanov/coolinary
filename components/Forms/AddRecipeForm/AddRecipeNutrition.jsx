@@ -19,14 +19,12 @@ const AddRecipeNutrition = ({ calories, proteins, fat, carbs }) => {
                     <Grid container justify="space-between">
                         <Grid item>
                             <Typography variant="body1">
-                                <BoltIcon color="primary" fontSize="inherit" />{" "}
-                                Энергетическая ценность:
+                                <BoltIcon color="primary" fontSize="inherit" /> Энергетическая
+                                ценность:
                             </Typography>
                         </Grid>
                         <Grid item>
-                            <Typography variant="body1">
-                                {calories} ккал
-                            </Typography>
+                            <Typography variant="body1">{calories} ккал</Typography>
                         </Grid>
                     </Grid>
                 </ListItem>
@@ -34,17 +32,12 @@ const AddRecipeNutrition = ({ calories, proteins, fat, carbs }) => {
                     <Grid container justify="space-between">
                         <Grid item>
                             <Typography variant="body1">
-                                <DrumstickBiteIcon
-                                    color="primary"
-                                    fontSize="inherit"
-                                />
+                                <DrumstickBiteIcon color="primary" fontSize="inherit" />
                                 Протеины:
                             </Typography>
                         </Grid>
                         <Grid item>
-                            <Typography variant="body1">
-                                {proteins} г
-                            </Typography>
+                            <Typography variant="body1">{proteins} г</Typography>
                         </Grid>
                     </Grid>
                 </ListItem>
@@ -52,10 +45,7 @@ const AddRecipeNutrition = ({ calories, proteins, fat, carbs }) => {
                     <Grid container justify="space-between">
                         <Grid item>
                             <Typography variant="body1">
-                                <CandyCaneIcon
-                                    color="primary"
-                                    fontSize="inherit"
-                                />
+                                <CandyCaneIcon color="primary" fontSize="inherit" />
                                 Углеводы:
                             </Typography>
                         </Grid>
@@ -68,10 +58,7 @@ const AddRecipeNutrition = ({ calories, proteins, fat, carbs }) => {
                     <Grid container justify="space-between">
                         <Grid item>
                             <Typography variant="body1">
-                                <CheeseIcon
-                                    color="primary"
-                                    fontSize="inherit"
-                                />
+                                <CheeseIcon color="primary" fontSize="inherit" />
                                 Жиры:
                             </Typography>
                         </Grid>

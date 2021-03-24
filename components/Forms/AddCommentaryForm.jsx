@@ -1,29 +1,41 @@
-import React from "react"
-import { useDispatch, useSelector } from "react-redux"
-import { useFormik } from "formik"
-import { addCommentary } from "../../redux/actions/recipesListActions.js"
-import { Box, Grid, Typography, TextField, Button } from '@material-ui/core'
-import {fetchRecipe} from "../../redux/actions/recipeActions.js"
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useFormik } from "formik";
+import { addCommentary } from "../../redux/actions/recipesListActions.js";
+import { Box, Grid, Typography, TextField, Button } from "@material-ui/core";
+import { fetchRecipe, updateRecipeCommentaries } from "../../redux/actions/recipeActions.js";
 
-const AddCommentaryForm = () => {
+const AddCommentaryForm = ({ userId, recipeId }) => {
     const dispatch = useDispatch();
-    const recipeId = useSelector(state => state.recipe.recipe.id)
+    const userName = useSelector((state) => state.authorization.userName);
     const formik = useFormik({
         initialValues: {
             text: "",
         },
         onSubmit: ({ text }, actions) => {
-            dispatch(addCommentary(recipeId, text))
-                .then(() => dispatch(fetchRecipe(recipeId)))
+            dispatch(addCommentary(recipeId, userId, userName, text))
+                .then(
+                    dispatch(
+                        updateRecipeCommentaries("add", {
+                            user_id: userId,
+                            user_name: userName,
+                            content: text,
+                        })
+                    )
+                )
                 .catch((err) => console.error(err));
-            actions.resetForm()
+            actions.resetForm();
         },
-    })
+    });
 
     return (
         <form onSubmit={formik.handleSubmit}>
             <Grid container>
-                <Grid item xs={12}><Box p={1}><Typography variant="h5">Добавить комментарий</Typography></Box></Grid>
+                <Grid item xs={12}>
+                    <Box p={1}>
+                        <Typography variant="h5">Добавить комментарий</Typography>
+                    </Box>
+                </Grid>
                 <Grid item xs={12}>
                     <Box p={1}>
                         <TextField
@@ -37,10 +49,16 @@ const AddCommentaryForm = () => {
                         />
                     </Box>
                 </Grid>
-                <Grid item xs={12}><Box p={1}><Button variant="contained" color="primary" type="submit">Отправить</Button></Box></Grid>
+                <Grid item xs={12}>
+                    <Box p={1}>
+                        <Button variant="contained" color="primary" type="submit">
+                            Отправить
+                        </Button>
+                    </Box>
+                </Grid>
             </Grid>
         </form>
-    )
-}
+    );
+};
 
-export default AddCommentaryForm
+export default AddCommentaryForm;

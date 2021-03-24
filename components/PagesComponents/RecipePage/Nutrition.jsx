@@ -17,9 +17,11 @@ const Nutrition = ({ ingredients, ingredientsData }) => {
         carb: 0,
     };
 
-    if(ingredients) {
+    if (ingredients) {
         ingredients.map((item) => {
-            const referencedIngredient = ingredientsData.find(itemFind => itemFind._id === item.id)
+            const referencedIngredient = ingredientsData.find(
+                (itemFind) => itemFind._id === item.id
+            );
             nutritionValues.calories += referencedIngredient.calories * item.amount;
             nutritionValues.protein += referencedIngredient.protein * item.amount;
             nutritionValues.fat += referencedIngredient.fat * item.amount;
@@ -46,11 +48,8 @@ const Nutrition = ({ ingredients, ingredientsData }) => {
                     <Grid container justify="space-between">
                         <Grid item>
                             <Typography variant="body1">
-                                <BoltIcon
-                                    color="secondary"
-                                    fontSize="inherit"
-                                />{" "}
-                                Энергетическая ценность:
+                                <BoltIcon color="secondary" fontSize="inherit" /> Энергетическая
+                                ценность:
                             </Typography>
                         </Grid>
                         <Grid item>
@@ -64,11 +63,7 @@ const Nutrition = ({ ingredients, ingredientsData }) => {
                     <Grid container justify="space-between">
                         <Grid item>
                             <Typography variant="body1">
-                                <DrumstickBiteIcon
-                                    color="secondary"
-                                    fontSize="inherit"
-                                />{" "}
-                                Протеины:
+                                <DrumstickBiteIcon color="secondary" fontSize="inherit" /> Протеины:
                             </Typography>
                         </Grid>
                         <Grid item>
@@ -82,17 +77,11 @@ const Nutrition = ({ ingredients, ingredientsData }) => {
                     <Grid container justify="space-between">
                         <Grid item>
                             <Typography variant="body1">
-                                <CandyCaneIcon
-                                    color="secondary"
-                                    fontSize="inherit"
-                                />{" "}
-                                Углеводы:
+                                <CandyCaneIcon color="secondary" fontSize="inherit" /> Углеводы:
                             </Typography>
                         </Grid>
                         <Grid item>
-                            <Typography variant="body1">
-                                {nutritionValues.carb / 100} г
-                            </Typography>
+                            <Typography variant="body1">{nutritionValues.carb / 100} г</Typography>
                         </Grid>
                     </Grid>
                 </ListItem>
@@ -100,17 +89,11 @@ const Nutrition = ({ ingredients, ingredientsData }) => {
                     <Grid container justify="space-between">
                         <Grid item>
                             <Typography variant="body1">
-                                <CheeseIcon
-                                    color="secondary"
-                                    fontSize="inherit"
-                                />{" "}
-                                Жиры:
+                                <CheeseIcon color="secondary" fontSize="inherit" /> Жиры:
                             </Typography>
                         </Grid>
                         <Grid item>
-                            <Typography variant="body1">
-                                {nutritionValues.fat / 100} г
-                            </Typography>
+                            <Typography variant="body1">{nutritionValues.fat / 100} г</Typography>
                         </Grid>
                     </Grid>
                 </ListItem>

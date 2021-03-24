@@ -4,12 +4,7 @@ import MenuIcon from "@material-ui/icons/Menu";
 
 const BurgerMenu = () => {
     return (
-        <IconButton
-            edge="start"
-            className={classes.menuButton}
-            color="inherit"
-            aria-label="menu"
-        >
+        <IconButton edge="start" color="inherit" aria-label="menu">
             <MenuIcon />
         </IconButton>
     );

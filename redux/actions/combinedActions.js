@@ -71,20 +71,14 @@ export const fetchRecipesAndCategories = (currentLastId, category = "") => async
     }
 };
 
-export const fetchRecipeWithInfo = (_id) => async (dispatch, getState) => {
-    // if (
-    //     !getState().ingredients.length &&
-    //     !getState().recipe.length &&
-    //     !getState().profile.length
-    // ) {
-    const recipeResponse = await axios.get(`${baseURL}/api/recipes/${_id}`);
+export const fetchRecipeWithInfo = (id) => async (dispatch, getState) => {
+    const recipeResponse = await axios.get(`${baseURL}/api/recipes/${id}`);
     const recipeJson = recipeResponse.data;
-    const ingredientsResponse = await axios.get(`${baseURL}/api/ingredients?recipeId=${_id}`);
+    const ingredientsResponse = await axios.get(`${baseURL}/api/ingredients?recipeId=${id}`);
     const ingredientsJson = ingredientsResponse.data;
-    const unitsResponse = await axios.get(`${baseURL}/api/units?recipeId=${_id}`);
+    const unitsResponse = await axios.get(`${baseURL}/api/units?recipeId=${id}`);
     const unitsJson = unitsResponse.data;
-    const profileResponse = await axios.get(`${baseURL}/api/users/${recipeJson.authorId}`);
-    const profileJson = profileResponse.data;
+
     batch(() => {
         dispatch({
             type: FETCH_INGREDIENTS,
@@ -96,16 +90,6 @@ export const fetchRecipeWithInfo = (_id) => async (dispatch, getState) => {
             type: FETCH_RECIPE,
             payload: {
                 recipe: recipeJson,
-            },
-        });
-        dispatch({
-            type: FETCH_USER_DATA,
-            payload: {
-                userData: {
-                    userId: profileJson._id,
-                    userName: profileJson.name,
-                    userEmail: profileJson.email,
-                },
             },
         });
         dispatch({
