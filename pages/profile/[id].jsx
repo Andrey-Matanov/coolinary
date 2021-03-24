@@ -344,7 +344,7 @@ const Profile = () => {
                 aria-labelledby="simple-modal-title"
                 aria-describedby="simple-modal-description"
             >
-                <ChangePasswordForm userId={userId} handleClose={() => setOpenPassword(false)} />
+                <ChangePasswordForm email={userEmail} handleClose={() => setOpenPassword(false)} />
             </Dialog>
             <Dialog
                 open={openDeleteUser}

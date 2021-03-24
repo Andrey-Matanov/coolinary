@@ -1,12 +1,17 @@
-import React from "react";
-import { useDispatch } from "react-redux";
+import React, { useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import firebaseApp from "../../utils/firebaseConfig.js"
+import firebase from "firebase"
 
 import { Box, Paper, TextField, Button, Typography } from "@material-ui/core";
 
-const ChangePasswordFormik = ({ userId, handleClose }) => {
-    const dispatch = useDispatch();
+const ChangePasswordFormik = ({ email, handleClose }) => {
+    const user = firebaseApp.auth().currentUser;
+
+    const [updateFailed, setUpdateFailed] = useState(false);
+    const [updateSucceed, setUpdateSucceed] = useState(false);
+    const [authenticateFailed, setAuthenticateFailed] = useState(false);
 
     const { handleChange, handleSubmit, values, errors, touched } = useFormik({
         initialValues: {
@@ -22,8 +27,25 @@ const ChangePasswordFormik = ({ userId, handleClose }) => {
                 "Пароли должны быть одинаковыми!"
             ),
         }),
-        onSubmit: ({ newPassword }) => {
-            console.log("accepted");
+        onSubmit: ({ oldPassword, newPassword }) => {
+            user.reauthenticateWithCredential(firebase.auth.EmailAuthProvider.credential(email, oldPassword)).then(() => {
+                user.updatePassword(newPassword).then(() => {
+                    setAuthenticateFailed(false);
+                    setUpdateFailed(false);
+                    setUpdateSucceed(true);
+                    setTimeout(() => { handleClose() }, 2000);
+                }).catch(err => {
+                    setAuthenticateFailed(false);
+                    setUpdateSucceed(false);
+                    setUpdateFailed(true);
+                    console.log(err)
+                })
+            }).catch(err => {
+                setAuthenticateFailed(true);
+                setUpdateSucceed(false);
+                setUpdateFailed(false);
+                console.log(err)
+            })
         },
     });
 
@@ -80,6 +102,11 @@ const ChangePasswordFormik = ({ userId, handleClose }) => {
                         <Button type="submit" variant="contained">
                             Изменить
                         </Button>
+                    </Box>
+                    <Box py={1}>
+                        {(updateSucceed) ? <Typography variant="body2" color="primary">Пароль успешно изменён</Typography> : null}
+                        {(updateFailed) ? <Typography variant="body2" color="error">Ошибка, попробуйте снова</Typography> : null} 
+                        {(authenticateFailed) ? <Typography variant="body2" color="error">Неверный пароль</Typography> : null} 
                     </Box>
                 </Box>
             </Paper>
