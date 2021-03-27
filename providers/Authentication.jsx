@@ -12,8 +12,6 @@ export const AuthProvider = ({ children }) => {
     const [isUserLoggedIn, setIsUserLoggedIn] = useState(null);
 
     useEffect(() => {
-        console.log("vercel auto deployment test");
-
         firebaseApp.auth().onAuthStateChanged((user) => {
             setIsLoading(true);
 

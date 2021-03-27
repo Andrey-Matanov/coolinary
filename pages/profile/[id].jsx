@@ -5,6 +5,7 @@ import {
     changeEmail,
     deleteUser,
     fetchUserData,
+    updateUserInfo,
 } from "../../redux/actions/profileActions";
 import ChangePasswordForm from "../../components/Forms/ChangePasswordForm.jsx";
 import DeleteDialog from "../../components/PagesComponents/ProfilePage/DeleteDialog.jsx";
@@ -33,8 +34,6 @@ import firebaseApp from "../../utils/firebaseConfig";
 
 const useStyles = makeStyles((theme) => ({
     avatar: {
-        // width: theme.spacing(7),
-        // height: theme.spacing(7),
         width: "50px",
         height: "50px",
     },
@@ -71,7 +70,7 @@ const Profile = () => {
 
     const applyEditName = () => {
         setNameChange(false);
-        dispatch(changeUserName(userId, newNameValue));
+        dispatch(updateUserInfo(userId, { name: newNameValue }));
     };
 
     const applyEditEmail = () => {

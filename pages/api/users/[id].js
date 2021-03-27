@@ -24,6 +24,20 @@ const handler = async (req, res) => {
             console.log(error);
             res.status(400).send(error);
         }
+    } else if (req.method === "PATCH") {
+        const newValues = req.body;
+
+        try {
+            const result = await User.findByIdAndUpdate(id, { ...newValues });
+
+            if (result === null) {
+                res.status(400).send(`User with id = ${id} was not found`);
+            } else {
+                res.send("User info was updated successfully");
+            }
+        } catch (error) {
+            res.status(400).send(error);
+        }
     } else if (req.method === "PUT") {
         const recipe = req.body.recipe;
         const userValues = await User.findById(id);

@@ -1,6 +1,7 @@
 import {
     FETCH_USER_DATA,
     UPDATE_USER_RECIPES_AFTER_DELETE,
+    UPDATE_USER_INFO,
     USERNAME_CHANGE,
     EMAIL_CHANGE,
     DELETE_USER,
@@ -34,6 +35,12 @@ export const profileReducer = (
                 userRecipes: profile.userRecipes.filter(
                     (recipe) => recipe.id !== action.payload.recipeId
                 ),
+            };
+        }
+        case UPDATE_USER_INFO: {
+            return {
+                ...profile,
+                userName: action.payload.newUserInfo.name,
             };
         }
         case USERNAME_CHANGE: {

@@ -1,8 +1,10 @@
 import axios from "axios";
 import { baseURL } from "../../utils";
+import configuredAxios from "../../utils/configuredAxios";
 
 export const FETCH_USER_DATA = "@@profile/FETCH_USER_DATA";
 export const UPDATE_USER_RECIPES_AFTER_DELETE = "@@profile/UPDATE_USER_RECIPES_AFTER_DELETE";
+export const UPDATE_USER_INFO = "@@profile/UPDATE_USER_INFO";
 export const USERNAME_CHANGE = "@@profile/USERNAME_CHANGE";
 export const EMAIL_CHANGE = "@@profile/EMAIL_CHANGE";
 export const DELETE_USER = "@@profile/DELETE_USER";
@@ -11,8 +13,6 @@ export const FETCH_ERROR = "@@profile/FETCH_ERROR";
 export const fetchUserData = (id) => async (dispatch) => {
     try {
         const response = await axios.get(`${baseURL}/api/users/${id}`);
-
-        console.log(response);
 
         dispatch({
             type: FETCH_USER_DATA,
@@ -25,8 +25,8 @@ export const fetchUserData = (id) => async (dispatch) => {
                 },
             },
         });
-    } catch (err) {
-        console.log(err);
+    } catch (error) {
+        console.log(error);
         dispatch({ type: FETCH_ERROR });
     }
 };
@@ -37,6 +37,18 @@ export const updateUserRecipesAfterDelete = (recipeId) => ({
         recipeId: recipeId,
     },
 });
+
+export const updateUserInfo = (userId, newUserInfo) => async (dispatch) => {
+    console.log(newUserInfo);
+    await configuredAxios.patch(`/users/${userId}`, newUserInfo);
+
+    dispatch({
+        type: UPDATE_USER_INFO,
+        payload: {
+            newUserInfo,
+        },
+    });
+};
 
 export const changeUserName = (userId, newUserName) => async (dispatch) => {
     const token = window.localStorage.getItem("currentUserToken");
