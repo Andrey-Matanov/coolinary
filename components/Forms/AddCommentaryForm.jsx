@@ -4,7 +4,7 @@ import { useFormik } from "formik";
 import { addCommentary } from "../../redux/actions/recipesListActions.js";
 import { Box, Grid, Typography, TextField, Button } from "@material-ui/core";
 
-const AddCommentaryForm = ({ userId, recipeId }) => {
+const AddCommentaryForm = ({ currentUserId, recipeId }) => {
     const dispatch = useDispatch();
     const userName = useSelector((state) => state.authorization.userName);
     const formik = useFormik({
@@ -12,7 +12,8 @@ const AddCommentaryForm = ({ userId, recipeId }) => {
             text: "",
         },
         onSubmit: ({ text }, actions) => {
-            dispatch(addCommentary(recipeId, userId, userName, text));
+            console.log(recipeId, currentUserId, userName, text);
+            dispatch(addCommentary(recipeId, currentUserId, userName, text));
             actions.resetForm();
         },
     });
