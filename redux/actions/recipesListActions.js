@@ -1,6 +1,8 @@
 import axios from "axios";
 import { baseURL } from "../../utils";
 import { updateUserRecipesAfterDelete } from "./profileActions";
+import { updateRecipeCommentaries } from "./recipeActions";
+import configuredAxios from "../../utils/configuredAxios";
 
 export const ADD_RECIPE = "@@recipesList/ADD_RECIPE";
 export const EDIT_RECIPE = "@@recipesList/EDIT_RECIPE";
@@ -13,31 +15,57 @@ export const FETCH_ERROR = "@@recipesList/FETCH_ERR";
 export const CATEGORY_CHANGE = "@@recipesList/CATEGORY_CHANGE";
 export const FETCH_SUCCESS = "@@recipesList/FETCH_SUCCESS";
 export const FETCH_STARTED = "@@recipesList/FETCH_STARTED";
+export const ADD_COMMENTARY_FAILURE = "@@reicpesList/ADD_COMMENTARY_FAILURE";
+export const DELETE_COMMENTARY_FAILURE = "@@reicpesList/DELETE_COMMENTARY_FAILURE";
+export const EDIT_COMMENTARY_FAILURE = "@@reicpesList/EDIT_COMMENTARY_FAILURE";
 
 export const addCommentary = (recipeId, userId, userName, text) => async (dispatch) => {
     try {
-        axios.put(`${baseURL}/api/recipes/${recipeId}`, {
-            user_id: userId,
-            user_name: userName,
+        const response = await axios.post(`${baseURL}/api/commentaries`, {
             content: text,
+            targetId: recipeId,
+            authorId: userId,
+            authorName: userName,
         });
 
-        dispatch({ type: FETCH_SUCCESS });
-    } catch (err) {
-        dispatch({ type: FETCH_ERROR });
+        dispatch(
+            updateRecipeCommentaries("add", {
+                _id: response.data._id,
+                authorId: userId,
+                authorName: userName,
+                content: text,
+            })
+        );
+    } catch (error) {
+        dispatch({ type: ADD_COMMENTARY_FAILURE, payload: error });
     }
 };
-export const deleteCommentary = (reviewId) => async (dispatch) => {
-    const token = window.localStorage.getItem("currentUserToken");
-    await fetch(`${baseURL}/api/reviews/${reviewId}`, {
-        method: "DELETE",
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-    });
-    dispatch({
-        type: DELETE_COMMENTARY,
-    });
+
+export const deleteCommentary = (commentaryId) => async (dispatch) => {
+    try {
+        await configuredAxios.delete(`/commentaries/${commentaryId}`);
+
+        dispatch(updateRecipeCommentaries("delete", commentaryId));
+    } catch (error) {
+        dispatch({ type: DELETE_COMMENTARY_FAILURE, payload: error });
+    }
+};
+
+export const editCommentary = (commentaryId, newContent) => async (dispatch) => {
+    try {
+        await configuredAxios.patch(`/commentaries/${commentaryId}`, {
+            content: newContent,
+        });
+
+        dispatch(
+            updateRecipeCommentaries("edit", {
+                commentaryId,
+                newContent,
+            })
+        );
+    } catch (error) {
+        dispatch({ type: EDIT_COMMENTARY_FAILURE, payload: error });
+    }
 };
 
 export const fetchRecipes = (currentLastId, category = "") => async (dispatch) => {

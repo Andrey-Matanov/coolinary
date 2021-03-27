@@ -11,6 +11,7 @@ const Recipe = () => {
     const { id } = router.query;
 
     useEffect(() => {
+        const { id } = router.query;
         console.log(id);
 
         if (id) {
@@ -35,7 +36,8 @@ const Recipe = () => {
                 <Container maxWidth="md">
                     <RecipeStepsList
                         recipeId={id}
-                        recipe={recipe.recipe}
+                        recipe={recipe.recipe.recipe}
+                        commentaries={recipe.recipe.recipeCommentaries}
                         ingredientsData={ingredients}
                         unitsData={units}
                     />

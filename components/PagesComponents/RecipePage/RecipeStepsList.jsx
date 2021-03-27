@@ -80,7 +80,7 @@ const renderSteps = (steps) => {
     }
 };
 
-const RecipeStepsList = ({ recipeId, recipe, ingredientsData, unitsData }) => {
+const RecipeStepsList = ({ recipeId, recipe, commentaries, ingredientsData, unitsData }) => {
     const classes = useStyles();
     const {
         name,
@@ -92,7 +92,6 @@ const RecipeStepsList = ({ recipeId, recipe, ingredientsData, unitsData }) => {
         time,
         rating,
         ingredients,
-        commentaries,
         steps,
     } = recipe;
     return (

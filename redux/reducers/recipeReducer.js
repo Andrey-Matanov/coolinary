@@ -27,12 +27,19 @@ export const recipeReducer = (recipe = recipeObject, action) => {
         case UPDATE_RECIPE_COMMENTARIES: {
             const type = action.payload.updateType;
             const updatedRecipes = { ...recipe };
-            const updatedCommentaries = updatedRecipes.recipe.recipe.commentaries;
+            const updatedCommentaries = updatedRecipes.recipe.recipe.recipeCommentaries;
 
             if (type === "add") {
                 updatedCommentaries.push(action.payload.newCommentary);
-            } else if (type === "remove") {
-                updatedCommentaries.splice(action.payload.commentaryIndex, 1);
+            } else if (type === "delete") {
+                updatedRecipes.recipe.recipe.recipeCommentaries = updatedCommentaries.filter(
+                    (commentary) => commentary._id !== action.payload.commentaryId
+                );
+            } else if (type === "edit") {
+                updatedCommentaries.find(
+                    (commentary) =>
+                        commentary._id === action.payload.updatedCommentaryValues.commentaryId
+                ).content = action.payload.updatedCommentaryValues.newContent;
             }
 
             return updatedRecipes;

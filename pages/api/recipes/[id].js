@@ -1,6 +1,7 @@
 import connectDB from "../../../middleware/mongodb";
 import Recipe from "../../../models/recipe";
 import User from "../../../models/user";
+import Commentary from "../../../models/commentary";
 
 const handler = async (req, res) => {
     const { id } = req.query;
@@ -10,7 +11,14 @@ const handler = async (req, res) => {
             const recipe = await Recipe.findById(id);
 
             if (recipe) {
-                res.send(recipe);
+                const recipeCommentaries = await Commentary.find({
+                    targetId: id,
+                });
+
+                res.send({
+                    recipe,
+                    recipeCommentaries,
+                });
             } else {
                 res.status(400).send(`Recipe doesn't exist`);
             }

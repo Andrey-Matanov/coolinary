@@ -10,14 +10,18 @@ export const fetchRecipe = (id) => async (dispatch) => {
     dispatch({ type: RECIPE_IS_LOADING });
 
     const response = await axios.get(`${baseURL}/api/recipes/${id}`);
-    const json = await response.data;
+    const data = await response.data;
 
-    if (json.status === "failed") {
+    if (data.status === "failed") {
         dispatch({ type: FETCH_RECIPE_ERROR });
     } else {
         dispatch({
             type: FETCH_RECIPE,
-            payload: json,
+            payload: {
+                ...data,
+                commentaries: data.recipeCommentaries,
+                recipeCommentaries: undefined,
+            },
         });
     }
 };
@@ -27,7 +31,7 @@ export const updateRecipeCommentaries = (updateType, content) => {
         return {
             type: UPDATE_RECIPE_COMMENTARIES,
             payload: {
-                updateType: updateType,
+                updateType,
                 newCommentary: content,
             },
         };
@@ -35,8 +39,16 @@ export const updateRecipeCommentaries = (updateType, content) => {
         return {
             type: UPDATE_RECIPE_COMMENTARIES,
             payload: {
-                updateType: updateType,
-                commentaryIndex: content,
+                updateType,
+                commentaryId: content,
+            },
+        };
+    } else if (updateType === "edit") {
+        return {
+            type: UPDATE_RECIPE_COMMENTARIES,
+            payload: {
+                updateType,
+                updatedCommentaryValues: content,
             },
         };
     }

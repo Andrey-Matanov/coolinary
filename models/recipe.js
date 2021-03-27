@@ -71,23 +71,6 @@ const recipe = new mongoose.Schema({
             _id: false,
         },
     ],
-    commentaries: [
-        {
-            user_id: {
-                type: mongoose.Schema.Types.ObjectId,
-                required: true,
-            },
-            user_name: {
-                type: String,
-                required: true,
-            },
-            content: {
-                type: String,
-                reqired: true,
-            },
-            _id: false,
-        },
-    ],
 });
 
 mongoose.models = {};

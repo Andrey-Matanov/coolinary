@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { useFormik } from "formik";
 import { addCommentary } from "../../redux/actions/recipesListActions.js";
 import { Box, Grid, Typography, TextField, Button } from "@material-ui/core";
-import { fetchRecipe, updateRecipeCommentaries } from "../../redux/actions/recipeActions.js";
 
 const AddCommentaryForm = ({ userId, recipeId }) => {
     const dispatch = useDispatch();
@@ -13,17 +12,7 @@ const AddCommentaryForm = ({ userId, recipeId }) => {
             text: "",
         },
         onSubmit: ({ text }, actions) => {
-            dispatch(addCommentary(recipeId, userId, userName, text))
-                .then(
-                    dispatch(
-                        updateRecipeCommentaries("add", {
-                            user_id: userId,
-                            user_name: userName,
-                            content: text,
-                        })
-                    )
-                )
-                .catch((err) => console.error(err));
+            dispatch(addCommentary(recipeId, userId, userName, text));
             actions.resetForm();
         },
     });
