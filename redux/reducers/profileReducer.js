@@ -1,4 +1,5 @@
 import {
+    USER_DATA_IS_LOADING,
     FETCH_USER_DATA,
     UPDATE_USER_RECIPES_AFTER_DELETE,
     UPDATE_USER_INFO,
@@ -10,23 +11,40 @@ import {
 
 export const profileReducer = (
     profile = {
-        userId: null,
+        profileUserId: null,
         userName: null,
         userEmail: null,
         userRecipes: [],
-        status: "loading",
+        status: null,
     },
     action
 ) => {
     switch (action.type) {
+        case USER_DATA_IS_LOADING: {
+            return {
+                profileUserId: null,
+                userName: null,
+                userEmail: null,
+                userRecipes: [],
+                status: "loading",
+            };
+        }
         case FETCH_USER_DATA: {
             return {
-                ...profile,
-                userId: action.payload.userData.userId,
+                profileUserId: action.payload.userData.profileUserId,
                 userName: action.payload.userData.userName,
                 userEmail: action.payload.userData.userEmail,
                 userRecipes: action.payload.userData.userRecipes,
                 status: "ok",
+            };
+        }
+        case FETCH_ERROR: {
+            return {
+                profileUserId: null,
+                userName: null,
+                userEmail: null,
+                userRecipes: [],
+                status: "failed",
             };
         }
         case UPDATE_USER_RECIPES_AFTER_DELETE: {
@@ -47,28 +65,24 @@ export const profileReducer = (
             return {
                 ...profile,
                 userName: action.payload.name,
-                status: "ok",
             };
         }
         case EMAIL_CHANGE: {
             return {
                 ...profile,
                 userEmail: action.payload.email,
-                status: "ok",
             };
         }
         case DELETE_USER: {
             return {
-                userId: null,
+                profileUserId: null,
                 userName: null,
                 userEmail: null,
                 userRecipes: [],
-                status: "ok",
+                status: null,
             };
         }
-        case FETCH_ERROR: {
-            return { ...profile, status: "failed" };
-        }
+
         default: {
             return profile;
         }

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
     changeUserName,
@@ -6,6 +6,7 @@ import {
     deleteUser,
     fetchUserData,
     updateUserInfo,
+    userDataIsLoading,
 } from "../../redux/actions/profileActions";
 import ChangePasswordForm from "../../components/Forms/ChangePasswordForm.jsx";
 import DeleteDialog from "../../components/PagesComponents/ProfilePage/DeleteDialog.jsx";
@@ -31,6 +32,7 @@ import { deleteRecipe } from "../../redux/actions/recipesListActions";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import firebaseApp from "../../utils/firebaseConfig";
+import LoadingDataComponent from "../../components/Common/LoadingDataComponent";
 
 const useStyles = makeStyles((theme) => ({
     avatar: {
@@ -46,7 +48,9 @@ const Profile = () => {
     const router = useRouter();
     const { id } = router.query;
     const classes = useStyles();
-    const { userName, userEmail, userRecipes, status } = useSelector((state) => state.profile);
+    const { profileUserId, userName, userEmail, userRecipes, status } = useSelector(
+        (state) => state.profile
+    );
     const { userId } = useSelector((state) => state.authorization);
 
     const [openPassword, setOpenPassword] = useState(false);
@@ -56,17 +60,13 @@ const Profile = () => {
     const [newNameValue, setNewNameValue] = useState(userName);
     const [newEmailValue, setNewEmailValue] = useState(userEmail);
 
-    const fetchData = (id) => {
-        dispatch(fetchUserData(id));
-    };
-
-    useEffect(() => {
-        fetchData(id);
-    }, [dispatch]);
-
-    useEffect(() => {
-        fetchData(id);
+    useLayoutEffect(() => {
+        if (id !== null && profileUserId !== id) dispatch(userDataIsLoading());
     }, [id]);
+
+    useEffect(() => {
+        if (status === "loading") dispatch(fetchUserData(id));
+    }, [status]);
 
     const applyEditName = () => {
         setNameChange(false);
@@ -328,15 +328,27 @@ const Profile = () => {
         );
     };
 
+    const renderMainContent = () => {
+        switch (status) {
+            case "failed": {
+                <RequestError retryFunction={() => fetchData(id)} />;
+                return;
+            }
+            case "ok": {
+                return renderSucceed();
+            }
+            case "loading": {
+                return <LoadingDataComponent />;
+            }
+            default: {
+                return null;
+            }
+        }
+    };
+
     return (
         <>
-            <Container maxWidth="lg">
-                {status === "failed" ? (
-                    <RequestError retryFunction={() => fetchData(id)} />
-                ) : (
-                    renderSucceed()
-                )}
-            </Container>
+            <Container maxWidth="lg">{renderMainContent()}</Container>
             <Dialog
                 open={openPassword}
                 onClose={() => setOpenPassword(false)}

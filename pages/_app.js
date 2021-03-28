@@ -1,11 +1,10 @@
 import { wrapper } from "../redux/store";
 import Head from "next/head";
-import { AuthProvider } from "../providers/Authentication";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import { green, lightGreen } from "@material-ui/core/colors";
-
-import "../styles/globals.css";
+import { AuthProvider } from "../providers/Authentication";
 import BasicLayout from "../components/Layouts/BasicLayout";
+import "../styles/globals.css";
 
 const theme = createMuiTheme({
     palette: {
