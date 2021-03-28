@@ -30,7 +30,7 @@ const Authors = () => {
                         <Link style={{ color: "blue" }} href={`/profile/${_id}`}>
                             <a>{name}</a>
                         </Link>
-                        <p>Количество рецептов пользователя: {recipesList.length}</p>
+                        <p>Количество рецептов пользователя: {userRecipes.length}</p>
                         <p>Средний рейтинг всех рецептов: {rating.average}</p>
                         <p>Общая оценка всех рецептов: {rating.total}</p>
                     </div>
