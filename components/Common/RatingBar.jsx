@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Star, StarBorder, StarHalf } from "@material-ui/icons";
-import { Typography } from "@material-ui/core";
+import { Typography, ButtonBase } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
     difficultyContainer: {
@@ -9,6 +9,8 @@ const useStyles = makeStyles((theme) => ({
         display: "flex",
         margin: "5px 0",
     },
+
+    ratingLink: {}
 }));
 
 const RatingBar = ({ rating }) => {
@@ -16,15 +18,29 @@ const RatingBar = ({ rating }) => {
 
     const ratingRounded = Math.floor(rating / 0.5) * 0.5;
 
+    const [hoveredOn, setHoveredOn] = useState(-1);
+
     const renderScale = Array(5)
         .fill(5)
         .map((item, i) =>
             i - ratingRounded + 1 <= 0 ? (
-                <Star key={i} />
+                <ButtonBase key={i}>
+                    <a className = "ratingLink">
+                        <Star />
+                    </a>
+                </ButtonBase>
             ) : Math.abs(i - ratingRounded + 1) === 0.5 ? (
-                <StarHalf key={i} />
+                <ButtonBase key={i}>
+                    <a className = "ratingLink">
+                        <StarHalf />
+                    </a>
+                </ButtonBase>
             ) : (
-                <StarBorder key={i} />
+                <ButtonBase key={i}>
+                    <a className = "ratingLink">
+                        <StarBorder />
+                    </a>
+                </ButtonBase>
             )
         );
 

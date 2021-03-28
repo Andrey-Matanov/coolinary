@@ -6,25 +6,18 @@ const handler = async (req, res) => {
     const { rating } = req.query;
 
     if (req.method === "GET") {
-        if (typeof(rating) != undefined) {
-            const users = await User.find({}, 'name userRecipes rating').sort('-rating').limit(10);
-            // const ids = users.map(user => user.userRecipes,map(recipe => recipe.id));
-            // const recipes = await Recipe.find({"_id": { $in: ids }}, undefined, undefined)
-            const ratingTable = users.map(user => {
-                return({
-                    id: user._id,
-                    name: user.name,
-                    count: user.userRecipes.length,
-                    avg: user.rating.total,
-                    summ: user.rating.average,
-                })
-            })
-            res.json(ratingTable);
-        } else {
-            const users = await User.find({});
+            const users = await User.find().sort('-rating');
+            // const ratingTable = users.map(user => {
+            //     return({
+            //         id: user._id,
+            //         name: user.name,
+            //         count: user.userRecipes.length,
+            //         avg: user.rating.total,
+            //         summ: user.rating.average,
+            //     })
+            // })
 
             res.json(users);
-        }
     } else if (req.method === "POST") {
         console.log("body: ", req.body);
 

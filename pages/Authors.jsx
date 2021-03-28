@@ -15,7 +15,9 @@ const Authors = () => {
         <>
             <h1>Рейтинг авторов</h1>
             <div className="rating">
-                {rating.map(({ id, name, count, avg, summ }, i) => (
+                {rating.map(({ _id, name, userRecipes, rating }, i) => {
+                    console.log(_id, name, userRecipes, rating)
+                    return(
                     <div
                         key={i}
                         style={{
@@ -25,14 +27,14 @@ const Authors = () => {
                         }}
                     >
                         <p>№{i + 1}.</p>
-                        <Link style={{ color: "blue" }} href={`/profile/${id}`}>
+                        <Link style={{ color: "blue" }} href={`/profile/${_id}`}>
                             <a>{name}</a>
                         </Link>
-                        <p>Количество рецептов пользователя: {count}</p>
-                        <p>Средний рейтинг всех рецептов: {avg}</p>
-                        <p>Общая оценка всех рецептов: {summ}</p>
+                        <p>Количество рецептов пользователя: {recipesList.length}</p>
+                        <p>Средний рейтинг всех рецептов: {rating.average}</p>
+                        <p>Общая оценка всех рецептов: {rating.total}</p>
                     </div>
-                ))}
+                )})}
             </div>
         </>
     );
