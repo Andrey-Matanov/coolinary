@@ -34,6 +34,10 @@ const userSchema = new mongoose.Schema({
         ],
         default: [],
     },
+    rating: {
+        type: Object,
+        required: true,
+    },
 });
 
 mongoose.models = {};

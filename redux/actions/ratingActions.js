@@ -1,15 +1,16 @@
-import { baseURL } from "../../utils";
+import configuredAxios from "../../utils/configuredAxios.js";
 
 export const FETCH_RATING = "@@rating/FETCH_RATING";
 
 export const fetchRating = () => async (dispatch) => {
-    const response = await fetch(`${baseURL}/api/rating`);
-    const json = await response.json();
+
+    const response = await configuredAxios.get(`/users?rating`);
+    const data = await response.data;
 
     dispatch({
         type: FETCH_RATING,
         payload: {
-            rating: json.rating,
+            rating: data,
         },
     });
 };
