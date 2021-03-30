@@ -40,8 +40,17 @@ const ReviewsBlock = ({ recipeId, commentaries }) => {
     };
 
     return (
-        <Box>
+        <Box mx="auto" width="100%">
             <Typography variant="h5">Комментарии</Typography>
+            {(currentUserId === null && commentaries.length === 0) ? (
+                <Box width="100%" display="flex" p={1} justifyContent="center">
+                    <Paper elevation={2}>
+                        <Box py={2} px={5}>
+                            <Typography align="center" variant="subtitle1">Комментариев пока нет. Войдите, чтобы оставить первый!</Typography>
+                        </Box>
+                    </Paper>
+                </Box>
+            ) : null}
             <List>
                 {renderReviews()}
                 <ListItem>

@@ -22,6 +22,7 @@ const Recipe = () => {
     const { status, recipe } = useSelector((state) => state.recipe);
     const ingredients = useSelector((state) => state.ingredients);
     const units = useSelector((state) => state.units);
+    const categories = useSelector((state) => state.categories);
 
     switch (status) {
         case "loading": {
@@ -40,6 +41,7 @@ const Recipe = () => {
                         commentaries={recipe.recipe.recipeCommentaries}
                         ingredientsData={ingredients}
                         unitsData={units}
+                        category={categories.find(item => item._id === recipe.recipe.recipe.categoryId).name}
                     />
                 </Container>
             );

@@ -3,12 +3,13 @@ import Ingredients from "./Ingredients";
 import { makeStyles } from "@material-ui/core/styles";
 import Link from "next/link";
 import { Paper, Grid, Box, Typography } from "@material-ui/core";
-import ReviewsBlock from "../../../components/PagesComponents/RecipePage/ReviewsBlock.jsx";
+import ReviewsBlock from "../../Common/Commentaries/ReviewsBlock.jsx";
 import Nutrition from "./Nutrition.jsx";
 // import AddCommentaryForm from '../components/Forms/AddCommentaryForm';
 import DifficultyBar from "../../Common/DifficultyBar";
 import RatingBar from "../../Common/RatingBar.jsx";
 import CloudinaryImage from "../../Common/CloudinaryImage";
+import { Link as LinkMUI } from "@material-ui/core"
 
 const useStyles = makeStyles((theme) => ({
     scrolling: {
@@ -33,6 +34,12 @@ const useStyles = makeStyles((theme) => ({
     image: {
         maxWidth: "100%",
         height: "auto",
+    },
+    diffContainer: {
+        display: "flex",
+        justifyContent: "space-between",
+        maxWidth: "240px",
+        paddingRight: "20px",
     },
 }));
 
@@ -80,7 +87,7 @@ const renderSteps = (steps) => {
     }
 };
 
-const RecipeStepsList = ({ recipeId, recipe, commentaries, ingredientsData, unitsData }) => {
+const RecipeStepsList = ({ recipeId, recipe, commentaries, ingredientsData, unitsData, category }) => {
     const classes = useStyles();
     const {
         name,
@@ -104,6 +111,9 @@ const RecipeStepsList = ({ recipeId, recipe, commentaries, ingredientsData, unit
                             <Box mt={3}>
                                 <Typography variant="h4">{name}</Typography>
                             </Box>
+                            <Box mt={3}>
+                                <Typography variant="subtitle1">{category}</Typography>
+                            </Box>
                             <Box my={3} textAlign="center">
                                 <CloudinaryImage image={image} />
                             </Box>
@@ -111,12 +121,13 @@ const RecipeStepsList = ({ recipeId, recipe, commentaries, ingredientsData, unit
                                 <p>
                                     Автор:{" "}
                                     <Link className="author-link" href={`/profile/${authorId}`}>
-                                        <a>{authorName}</a>
+                                        <a><LinkMUI variant="body1">{authorName}</LinkMUI></a>
                                     </Link>
                                 </p>
                             </Box>
-                            <Box my={3}>Рейтинг:</Box>
-                            <DifficultyBar diff={difficulty} />
+                            <Box my={3}>
+                                <div className={classes.diffContainer}>Сложность: <DifficultyBar diff={difficulty} /></div>
+                            </Box>
                             <Box my={3}>Время приготовления: {formatTime(time)}</Box>
                             <Box my={3}>
                                 <RatingBar rating={rating} />
@@ -153,7 +164,7 @@ const RecipeStepsList = ({ recipeId, recipe, commentaries, ingredientsData, unit
                     </Paper>
                 </Grid>
                 {renderSteps(steps)}
-                <Grid item>
+                <Grid item xs={12}>
                     <ReviewsBlock recipeId={recipeId} commentaries={commentaries} />
                 </Grid>
             </Grid>

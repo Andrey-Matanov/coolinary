@@ -78,6 +78,8 @@ export const fetchRecipeWithInfo = (id) => async (dispatch, getState) => {
     const ingredientsJson = ingredientsResponse.data;
     const unitsResponse = await axios.get(`${baseURL}/api/units?recipeId=${id}`);
     const unitsJson = unitsResponse.data;
+    const categoriesResponse = await axios.get(`${baseURL}/api/categories`);
+    const categoriesJson = categoriesResponse.data;
 
     batch(() => {
         dispatch({
@@ -96,6 +98,12 @@ export const fetchRecipeWithInfo = (id) => async (dispatch, getState) => {
             type: FETCH_UNITS,
             payload: {
                 units: unitsJson,
+            },
+        });
+        dispatch({
+            type: FETCH_CATEGORIES,
+            payload: {
+                categories: categoriesJson,
             },
         });
     });
