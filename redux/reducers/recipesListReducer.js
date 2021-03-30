@@ -19,14 +19,25 @@ export const recipesListReducer = (
 ) => {
     switch (action.type) {
         case FETCH_RECIPES: {
-            return {
-                ...recipesObject,
-                recipes: [...recipesObject.recipes, ...action.payload.recipes],
-                currentLastId: action.payload.recipes[action.payload.recipes.length - 1].id,
-                isLastRecipes: action.payload.isLastRecipes,
-                currentCategory: recipesObject.currentCategory,
-                status: "ok",
-            };
+            if (action.payload.recipes.length) {
+                return {
+                    ...recipesObject,
+                    recipes: [...recipesObject.recipes, ...action.payload.recipes],
+                    currentLastId: action.payload.recipes[action.payload.recipes.length - 1].id,
+                    isLastRecipes: action.payload.isLastRecipes,
+                    currentCategory: recipesObject.currentCategory,
+                    status: "ok",
+                };
+            } else {
+                return {
+                    ...recipesObject,
+                    recipes: [...recipesObject.recipes],
+                    currentLastId: 0,
+                    isLastRecipes: action.payload.isLastRecipes,
+                    currentCategory: recipesObject.currentCategory,
+                    status: "ok",
+                }
+            }
         }
         case CATEGORY_CHANGE: {
             return {

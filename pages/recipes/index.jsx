@@ -12,7 +12,7 @@ import {
     FormControl,
     InputLabel,
     Select,
-    CircularProgress,
+    Paper,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import LoadingDataComponent from "../../components/Common/LoadingDataComponent.jsx";
@@ -32,6 +32,7 @@ const Recipes = () => {
     const classes = useStyles();
 
     const recipesList = useSelector((state) => state.recipesObject.recipes);
+    const recipesListStatus = useSelector((state => state.recipesObject.status))
     const { currentLastId, isLastRecipes, currentCategory, status } = useSelector(
         (state) => state.recipesObject
     );
@@ -61,7 +62,7 @@ const Recipes = () => {
 
     const renderCategoryOptions = (categories) => {
         return categories.map((item) => (
-            <option key={item.id} value={item.id}>
+            <option key={item._id} value={item._id}>
                 {item.name}
             </option>
         ));
@@ -87,15 +88,25 @@ const Recipes = () => {
                         </Select>
                     </FormControl>
                 </Box>
-                {recipesList.length ? (
+                {(recipesListStatus === "ok" && recipesList.length) ? (
                     <RecipesList
                         recipesList={recipesList}
                         loadRecipes={renderRecipes}
                         isLast={isLastRecipes}
                         currentLastId={currentLastId}
                     />
-                ) : (
-                    <LoadingDataComponent />
+                ) : ((recipesListStatus === "ok") ? (
+                    <Box width="100%" display="flex" p={1} justifyContent="center">
+                        <Paper elevation={2}>
+                            <Box py={2} px={5}>
+                                <Typography align="center" variant="subtitle1">Рецептов в этой категории пока нет. Но скоро будут!</Typography>
+                            </Box>
+                        </Paper>
+                    </Box>
+                    ) : (
+                        <LoadingDataComponent />
+                    )
+                    
                 )}
             </>
         );

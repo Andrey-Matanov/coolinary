@@ -68,10 +68,10 @@ export const editCommentary = (commentaryId, newContent) => async (dispatch) => 
     }
 };
 
-export const fetchRecipes = (currentLastId, category = "") => async (dispatch) => {
+export const fetchRecipes = (currentLastId, categoryId = "") => async (dispatch) => {
     try {
         const response = await fetch(
-            `${baseURL}/api/recipes/?amount=10&last=${currentLastId}&category=${category}`
+            `${baseURL}/api/recipes?amount=10&last=${currentLastId}&categoryId=${categoryId}`
         );
         const data = await response.json();
 
