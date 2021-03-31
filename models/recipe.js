@@ -11,7 +11,7 @@ const recipe = new mongoose.Schema({
     },
     image: {
         type: String,
-        required: true,
+        default: "https://via.placeholder.com/150x150",
     },
     time: {
         type: Number,
@@ -66,7 +66,7 @@ const recipe = new mongoose.Schema({
             },
             image: {
                 type: String,
-                required: true,
+                default: "https://via.placeholder.com/150x150",
             },
             _id: false,
         },
