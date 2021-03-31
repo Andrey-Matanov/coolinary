@@ -36,7 +36,10 @@ const userSchema = new mongoose.Schema({
     },
     rating: {
         type: Object,
-        required: true,
+        default: {
+            total: 0,
+            average: 0,
+        },
     },
 });
 
