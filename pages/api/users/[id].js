@@ -39,19 +39,78 @@ const handler = async (req, res) => {
             res.status(400).send(error);
         }
     } else if (req.method === "PUT") {
-        const recipe = req.body.recipe;
-        const userValues = await User.findById(id);
-        const userRecipes = userValues.userRecipes;
+        const type = req.body.type;
 
-        try {
-            await User.findByIdAndUpdate(id, {
-                userRecipes: [...userRecipes, recipe],
-            });
+        switch (type) {
+            case "add_recipe": {
+                const userValues = await User.findById(id);
 
-            res.send("succesfully updated user recipes");
-        } catch (error) {
-            console.log(error);
-            res.status(400).send(error);
+                if (userValues === null) {
+                    res.status(400).send(`user with id = ${id} was removed or wasn't created yet`);
+                } else {
+                    const newRecipe = req.body.newRecipe;
+                    const userCollectionsRecipes = userValues.collections.recipes;
+
+                    if (userCollectionsRecipes.some((recipe) => recipe.id === newRecipe.id)) {
+                        res.status(400).send("this recipe is already in collections");
+                    } else {
+                        try {
+                            await User.findByIdAndUpdate(id, {
+                                collections: {
+                                    ...userValues.collections,
+                                    recipes: [...userCollectionsRecipes, newRecipe],
+                                },
+                            });
+
+                            res.send("user's recipes collections were successfully updated");
+                        } catch (error) {
+                            console.log(error);
+                            res.status(400).send(error);
+                        }
+                    }
+                }
+
+                break;
+            }
+            case "remove_recipe": {
+                const userValues = await User.findById(id);
+
+                if (userValues === null) {
+                    res.status(400).send(`user with id = ${id} was removed or wasn't created yet`);
+                } else {
+                    const removedRecipeId = req.body.removedRecipeId;
+                    const userCollectionsRecipes = userValues.collections.recipes;
+
+                    if (userCollectionsRecipes.some((recipe) => recipe.id === removedRecipeId)) {
+                        try {
+                            await User.findByIdAndUpdate(id, {
+                                collections: {
+                                    ...userValues.collections,
+                                    recipes: [
+                                        ...userCollectionsRecipes.filter(
+                                            (recipe) => recipe.id !== removedRecipeId
+                                        ),
+                                    ],
+                                },
+                            });
+
+                            res.send(
+                                `recipe with id = ${removedRecipeId} was successfully removed`
+                            );
+                        } catch (error) {
+                            console.log(error);
+                            res.status(400).send(error);
+                        }
+                    } else {
+                        res.send(`recipe with id = ${removedRecipeId} is not in collections`);
+                    }
+                }
+
+                break;
+            }
+            default: {
+                res.status(400).send("wrong request parameters");
+            }
         }
     } else {
         res.status(422).send("req_method_not_supported");

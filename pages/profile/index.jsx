@@ -4,7 +4,7 @@ import React from "react";
 const index = () => {
     const router = useRouter();
 
-    router.push("/");
+    router.push("/login");
 
     return <div></div>;
 };

@@ -67,26 +67,6 @@ const handler = async (req, res) => {
             console.log(error);
             res.status(400).send(error);
         }
-    } else if (req.method === "PUT") {
-        const recipeValues = await Recipe.findById(id);
-
-        if (recipeValues === null) {
-            res.status(400).send("there is no recipe with this id");
-        } else {
-            const recipeCommentaries = recipeValues.commentaries;
-            const newCommentary = req.body;
-
-            try {
-                await Recipe.findByIdAndUpdate(id, {
-                    commentaries: [...recipeCommentaries, newCommentary],
-                });
-
-                res.send("new commentary was successfully posted");
-            } catch (error) {
-                console.log(error);
-                res.status(400).send(error);
-            }
-        }
     } else {
         res.status(422).send("req_method_not_supported");
     }

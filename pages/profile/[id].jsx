@@ -33,13 +33,16 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import firebaseApp from "../../utils/firebaseConfig";
 import LoadingDataComponent from "../../components/Common/LoadingDataComponent";
+import ProfilePageUserCollections from "../../components/PagesComponents/ProfilePage/ProfilePageUserCollections";
 
-const useStyles = makeStyles((theme) => ({
-    avatar: {
-        width: "50px",
-        height: "50px",
-    },
-}));
+const useStyles = makeStyles((theme) => {
+    return {
+        avatar: {
+            width: "50px",
+            height: "50px",
+        },
+    };
+});
 
 // import { fetchRecipe } from "../actions/recipeActions";
 
@@ -48,9 +51,14 @@ const Profile = () => {
     const router = useRouter();
     const { id } = router.query;
     const classes = useStyles();
-    const { profileUserId, userName, userEmail, userRecipes, status } = useSelector(
-        (state) => state.profile
-    );
+    const {
+        profileUserId,
+        userName,
+        userEmail,
+        userRecipes,
+        userCollections,
+        status,
+    } = useSelector((state) => state.profile);
     const { userId } = useSelector((state) => state.authorization);
 
     const [openPassword, setOpenPassword] = useState(false);
@@ -303,27 +311,32 @@ const Profile = () => {
                 </Grid>
                 {renderedRecipes}
                 {id === userId ? (
-                    <Grid item xs={12}>
-                        <Box py={1}>
-                            <Link style={{ textDecoration: "none" }} href="/add_recipe">
-                                <Button variant="contained" size="small">
-                                    Добавить рецепт
-                                </Button>
-                            </Link>
-                        </Box>
-                    </Grid>
-                ) : (
-                    <div />
-                )}
-                {id === userId ? (
-                    <Grid item xs={12}>
-                        <Button size="small" onClick={() => setOpenDeleteUser(true)}>
-                            Удалить профиль
-                        </Button>
-                    </Grid>
-                ) : (
-                    <div />
-                )}
+                    <>
+                        <Grid item xs={12}>
+                            <Box py={1}>
+                                <Link style={{ textDecoration: "none" }} href="/add_recipe">
+                                    <Button variant="contained" size="small">
+                                        Добавить рецепт
+                                    </Button>
+                                </Link>
+                            </Box>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Button
+                                variant="contained"
+                                size="small"
+                                onClick={() => setOpenDeleteUser(true)}
+                            >
+                                Удалить профиль
+                            </Button>
+                        </Grid>
+                        <ProfilePageUserCollections
+                            userCollections={userCollections}
+                            currentUserId={id}
+                            dispatch={dispatch}
+                        />
+                    </>
+                ) : null}
             </Grid>
         );
     };

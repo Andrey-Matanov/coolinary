@@ -35,10 +35,47 @@ const userSchema = new mongoose.Schema({
         default: [],
     },
     rating: {
-        type: Object,
+        type: {
+            total: Number,
+            average: Number,
+        },
         default: {
             total: 0,
             average: 0,
+        },
+    },
+    collections: {
+        type: {
+            recipes: [
+                {
+                    id: {
+                        type: String,
+                        required: true,
+                    },
+                    name: {
+                        type: String,
+                        required: true,
+                    },
+                    _id: false,
+                },
+            ],
+            articles: [
+                {
+                    id: {
+                        type: String,
+                        required: true,
+                    },
+                    name: {
+                        type: String,
+                        required: true,
+                    },
+                    _id: false,
+                },
+            ],
+        },
+        default: {
+            recipes: [],
+            articles: [],
         },
     },
 });

@@ -15,9 +15,9 @@ export const FETCH_ERROR = "@@recipesList/FETCH_ERR";
 export const CATEGORY_CHANGE = "@@recipesList/CATEGORY_CHANGE";
 export const FETCH_SUCCESS = "@@recipesList/FETCH_SUCCESS";
 export const FETCH_STARTED = "@@recipesList/FETCH_STARTED";
-export const ADD_COMMENTARY_FAILURE = "@@reicpesList/ADD_COMMENTARY_FAILURE";
-export const DELETE_COMMENTARY_FAILURE = "@@reicpesList/DELETE_COMMENTARY_FAILURE";
-export const EDIT_COMMENTARY_FAILURE = "@@reicpesList/EDIT_COMMENTARY_FAILURE";
+export const ADD_COMMENTARY_FAILURE = "@@recipesList/ADD_COMMENTARY_FAILURE";
+export const DELETE_COMMENTARY_FAILURE = "@@recipesList/DELETE_COMMENTARY_FAILURE";
+export const EDIT_COMMENTARY_FAILURE = "@@recipesList/EDIT_COMMENTARY_FAILURE";
 
 export const addCommentary = (recipeId, userId, userName, text) => async (dispatch) => {
     try {

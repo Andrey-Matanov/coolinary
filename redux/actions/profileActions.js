@@ -8,6 +8,9 @@ export const UPDATE_USER_INFO = "@@profile/UPDATE_USER_INFO";
 export const USERNAME_CHANGE = "@@profile/USERNAME_CHANGE";
 export const EMAIL_CHANGE = "@@profile/EMAIL_CHANGE";
 export const DELETE_USER = "@@profile/DELETE_USER";
+export const PROFILE_UPDATE_CURRENT_USER_COLLECTIONS =
+    "@@authorization/PROFILE_UPDATE_CURRENT_USER_COLLECTIONS";
+export const ERROR = "@@profile/ERROR";
 
 export const userDataIsLoading = () => ({ type: USER_DATA_IS_LOADING });
 
@@ -23,6 +26,7 @@ export const fetchUserData = (id) => async (dispatch) => {
                     userName: response.data.name,
                     userEmail: response.data.email,
                     userRecipes: response.data.userRecipes,
+                    userCollections: response.data.collections,
                     status: "ok",
                 },
             },
@@ -93,4 +97,32 @@ export const deleteUser = (userId) => async (dispatch) => {
     dispatch({
         type: DELETE_USER,
     });
+};
+
+export const profileUpdateCurrentUserCollections = (type, payload) => {
+    switch (type) {
+        case "add_recipe": {
+            return {
+                type: PROFILE_UPDATE_CURRENT_USER_COLLECTIONS,
+                payload: {
+                    type,
+                    newRecipe: payload,
+                },
+            };
+        }
+        case "remove_recipe": {
+            return {
+                type: PROFILE_UPDATE_CURRENT_USER_COLLECTIONS,
+                payload: {
+                    type,
+                    removedRecipeId: payload,
+                },
+            };
+        }
+        default: {
+            return {
+                type: ERROR,
+            };
+        }
+    }
 };

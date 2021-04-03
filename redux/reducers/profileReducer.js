@@ -7,6 +7,7 @@ import {
     EMAIL_CHANGE,
     DELETE_USER,
     FETCH_ERROR,
+    PROFILE_UPDATE_CURRENT_USER_COLLECTIONS,
 } from "../actions/profileActions";
 
 export const profileReducer = (
@@ -15,6 +16,10 @@ export const profileReducer = (
         userName: null,
         userEmail: null,
         userRecipes: [],
+        userCollections: {
+            recipes: [],
+            articles: [],
+        },
         status: null,
     },
     action
@@ -26,6 +31,10 @@ export const profileReducer = (
                 userName: null,
                 userEmail: null,
                 userRecipes: [],
+                userCollections: {
+                    recipes: [],
+                    articles: [],
+                },
                 status: "loading",
             };
         }
@@ -35,6 +44,7 @@ export const profileReducer = (
                 userName: action.payload.userData.userName,
                 userEmail: action.payload.userData.userEmail,
                 userRecipes: action.payload.userData.userRecipes,
+                userCollections: action.payload.userData.userCollections,
                 status: "ok",
             };
         }
@@ -44,6 +54,10 @@ export const profileReducer = (
                 userName: null,
                 userEmail: null,
                 userRecipes: [],
+                userCollections: {
+                    recipes: [],
+                    articles: [],
+                },
                 status: "failed",
             };
         }
@@ -79,10 +93,40 @@ export const profileReducer = (
                 userName: null,
                 userEmail: null,
                 userRecipes: [],
+                userCollections: {
+                    recipes: [],
+                    articles: [],
+                },
                 status: null,
             };
         }
+        case PROFILE_UPDATE_CURRENT_USER_COLLECTIONS: {
+            const newCollections = { ...profile.userCollections };
 
+            switch (action.payload.type) {
+                case "add_recipe": {
+                    newCollections.recipes.push(action.payload.newRecipe);
+
+                    return {
+                        ...profile,
+                        collections: newCollections,
+                    };
+                }
+                case "remove_recipe": {
+                    newCollections.recipes = newCollections.recipes.filter(
+                        (recipe) => recipe.id !== action.payload.removedRecipeId
+                    );
+
+                    return {
+                        ...profile,
+                        userCollections: newCollections,
+                    };
+                }
+                default: {
+                    return profile;
+                }
+            }
+        }
         default: {
             return profile;
         }

@@ -1,26 +1,23 @@
 import connectDB from "../../../middleware/mongodb";
 import User from "../../../models/user";
-import Recipe from "../../../models/recipe.js";
 
 const handler = async (req, res) => {
     const { rating } = req.query;
 
     if (req.method === "GET") {
-            const users = await User.find().sort('-rating');
-            // const ratingTable = users.map(user => {
-            //     return({
-            //         id: user._id,
-            //         name: user.name,
-            //         count: user.userRecipes.length,
-            //         avg: user.rating.total,
-            //         summ: user.rating.average,
-            //     })
-            // })
+        const users = await User.find().sort("-rating");
+        // const ratingTable = users.map(user => {
+        //     return({
+        //         id: user._id,
+        //         name: user.name,
+        //         count: user.userRecipes.length,
+        //         avg: user.rating.total,
+        //         summ: user.rating.average,
+        //     })
+        // })
 
-            res.json(users);
+        res.json(users);
     } else if (req.method === "POST") {
-        console.log("body: ", req.body);
-
         const newUser = new User({
             name: req.body.name,
             email: req.body.email,

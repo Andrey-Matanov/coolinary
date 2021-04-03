@@ -1,15 +1,17 @@
-import React from "react";
-import Ingredients from "./Ingredients";
-import { makeStyles } from "@material-ui/core/styles";
+import React, { useState } from "react";
 import Link from "next/link";
-import { Paper, Grid, Box, Typography } from "@material-ui/core";
-import ReviewsBlock from "../../Common/Commentaries/ReviewsBlock.jsx";
-import Nutrition from "./Nutrition.jsx";
-// import AddCommentaryForm from '../components/Forms/AddCommentaryForm';
-import DifficultyBar from "../../Common/DifficultyBar";
+import { makeStyles } from "@material-ui/core/styles";
+import { Paper, Grid, Box, Typography, Button } from "@material-ui/core";
+import { Link as LinkMUI } from "@material-ui/core";
+import AddIcon from "@material-ui/icons/Add";
+import RemoveIcon from "@material-ui/icons/Remove";
 import RatingBar from "../../Common/RatingBar.jsx";
 import CloudinaryImage from "../../Common/CloudinaryImage";
-import { Link as LinkMUI } from "@material-ui/core"
+import DifficultyBar from "../../Common/DifficultyBar";
+import ReviewsBlock from "../../Common/Commentaries/ReviewsBlock.jsx";
+import Nutrition from "./Nutrition.jsx";
+import Ingredients from "./Ingredients";
+import { authorizationUpdateCurrentUserCollections } from "../../../redux/actions/authorizationActions.js";
 
 const useStyles = makeStyles((theme) => ({
     scrolling: {
@@ -87,7 +89,17 @@ const renderSteps = (steps) => {
     }
 };
 
-const RecipeStepsList = ({ recipeId, recipe, commentaries, ingredientsData, unitsData, category }) => {
+const RecipeStepsList = ({
+    recipeId,
+    recipe,
+    commentaries,
+    ingredientsData,
+    unitsData,
+    category,
+    autorizedUserId,
+    recipeIsInCollections,
+    dispatch,
+}) => {
     const classes = useStyles();
     const {
         name,
@@ -121,12 +133,14 @@ const RecipeStepsList = ({ recipeId, recipe, commentaries, ingredientsData, unit
                                 <p>
                                     Автор:{" "}
                                     <Link className="author-link" href={`/profile/${authorId}`}>
-                                        <a><LinkMUI variant="body1">{authorName}</LinkMUI></a>
+                                        <LinkMUI variant="body1">{authorName}</LinkMUI>
                                     </Link>
                                 </p>
                             </Box>
                             <Box my={3}>
-                                <div className={classes.diffContainer}>Сложность: <DifficultyBar diff={difficulty} /></div>
+                                <div className={classes.diffContainer}>
+                                    Сложность: <DifficultyBar diff={difficulty} />
+                                </div>
                             </Box>
                             <Box my={3}>Время приготовления: {formatTime(time)}</Box>
                             <Box my={3}>
@@ -164,6 +178,48 @@ const RecipeStepsList = ({ recipeId, recipe, commentaries, ingredientsData, unit
                     </Paper>
                 </Grid>
                 {renderSteps(steps)}
+                <Grid item xs={12}>
+                    {recipeIsInCollections ? (
+                        <Button
+                            variant="contained"
+                            color="secondary"
+                            startIcon={<RemoveIcon />}
+                            fullWidth={true}
+                            onClick={() => {
+                                dispatch(
+                                    authorizationUpdateCurrentUserCollections(
+                                        "remove_recipe",
+                                        autorizedUserId,
+                                        recipeId
+                                    )
+                                );
+                            }}
+                        >
+                            Убрать рецепт из своей коллекции
+                        </Button>
+                    ) : (
+                        <Button
+                            variant="contained"
+                            color="secondary"
+                            startIcon={<AddIcon />}
+                            fullWidth={true}
+                            onClick={() => {
+                                dispatch(
+                                    authorizationUpdateCurrentUserCollections(
+                                        "add_recipe",
+                                        autorizedUserId,
+                                        {
+                                            id: recipeId,
+                                            name: recipe.name,
+                                        }
+                                    )
+                                );
+                            }}
+                        >
+                            Сохранить рецепт в свою коллекцию
+                        </Button>
+                    )}
+                </Grid>
                 <Grid item xs={12}>
                     <ReviewsBlock recipeId={recipeId} commentaries={commentaries} />
                 </Grid>
