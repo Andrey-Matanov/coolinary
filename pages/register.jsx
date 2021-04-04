@@ -1,4 +1,4 @@
-import React, { useContext, useLayoutEffect, useState } from "react";
+import React, { useContext, useEffect, useLayoutEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -13,10 +13,8 @@ const register = () => {
     const router = useRouter();
     const { isUserLoggedIn } = useContext(AuthContext);
 
-    useLayoutEffect(() => {
-        if (isUserLoggedIn) {
-            router.replace;
-        }
+    useEffect(() => {
+        router.prefetch("/login");
     }, []);
 
     const [registrationError, setRegistrationError] = useState(null);
@@ -41,10 +39,6 @@ const register = () => {
                     .auth()
                     .createUserWithEmailAndPassword(values.email, values.password); // Регистрация в Firebase
 
-                router.push("/login"); // Редирект на страницу авторизации
-
-                toast.success("Вы успешно зарегистрировались!"); // Уведомление об успешной регистрации
-
                 response.user.updateProfile({
                     displayName: values.name,
                 }); // Обновление имени пользователя в Firebase
@@ -55,6 +49,10 @@ const register = () => {
                     name: values.name,
                     email: values.email,
                 }); // Создание нового пользователя в MongoDB
+
+                router.push("/login"); // Редирект на страницу авторизации
+
+                toast.success("Вы успешно зарегистрировались!"); // Уведомление об успешной регистрации
             } catch (error) {
                 console.log(error);
                 setRegistrationError(error);
