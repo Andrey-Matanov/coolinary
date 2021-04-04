@@ -41,6 +41,8 @@ const register = () => {
                     .auth()
                     .createUserWithEmailAndPassword(values.email, values.password); // Регистрация в Firebase
 
+                router.push("/login"); // Редирект на страницу авторизации
+
                 response.user.updateProfile({
                     displayName: values.name,
                 }); // Обновление имени пользователя в Firebase
@@ -52,9 +54,7 @@ const register = () => {
                     email: values.email,
                 }); // Создание нового пользователя в MongoDB
 
-                router.push("/login"); // Редирект на страницу авторизации
-
-                toast("Вы успешно зарегистрировались!"); // Уведомление об успешной регистрации
+                toast.success("Вы успешно зарегистрировались!"); // Уведомление об успешной регистрации
             } catch (error) {
                 console.log(error);
                 setRegistrationError(error);
