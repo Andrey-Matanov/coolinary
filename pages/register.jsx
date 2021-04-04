@@ -43,6 +43,8 @@ const register = () => {
 
                 router.push("/login"); // Редирект на страницу авторизации
 
+                toast.success("Вы успешно зарегистрировались!"); // Уведомление об успешной регистрации
+
                 response.user.updateProfile({
                     displayName: values.name,
                 }); // Обновление имени пользователя в Firebase
@@ -53,8 +55,6 @@ const register = () => {
                     name: values.name,
                     email: values.email,
                 }); // Создание нового пользователя в MongoDB
-
-                toast.success("Вы успешно зарегистрировались!"); // Уведомление об успешной регистрации
             } catch (error) {
                 console.log(error);
                 setRegistrationError(error);
