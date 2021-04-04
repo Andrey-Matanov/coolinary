@@ -1,21 +1,23 @@
-import React, { useContext, useState } from "react";
-import Router from "next/router";
+import React, { useContext, useLayoutEffect, useState } from "react";
+import { useRouter } from "next/router";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import firebaseApp from "../utils/firebaseConfig";
 import Register from "../components/PagesComponents/RegisterPage/Register";
 import { AuthContext } from "../providers/Authentication";
 import axios from "axios";
-import { userLogin } from "../redux/actions/authorizationActions";
-import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
+import LoadingDataComponent from "../components/Common/LoadingDataComponent";
 
 const register = () => {
-    const dispatch = useDispatch();
+    const router = useRouter();
     const { isUserLoggedIn } = useContext(AuthContext);
 
-    if (isUserLoggedIn) {
-        Router.push("/");
-    }
+    useLayoutEffect(() => {
+        if (isUserLoggedIn) {
+            router.replace;
+        }
+    }, []);
 
     const [registrationError, setRegistrationError] = useState(null);
 
@@ -35,25 +37,34 @@ const register = () => {
         }),
         onSubmit: async () => {
             try {
-                await firebaseApp
+                const response = await firebaseApp
                     .auth()
-                    .createUserWithEmailAndPassword(values.email, values.password);
+                    .createUserWithEmailAndPassword(values.email, values.password); // Регистрация в Firebase
 
-                const newUserData = {
+                response.user.updateProfile({
+                    displayName: values.name,
+                }); // Обновление имени пользователя в Firebase
+
+                await firebaseApp.auth().signOut(); //
+
+                await axios.post("/api/users", {
                     name: values.name,
                     email: values.email,
-                };
+                }); // Создание нового пользователя в MongoDB
 
-                await axios.post("/api/users", newUserData);
+                router.push("/login"); // Редирект на страницу авторизации
 
-                dispatch(userLogin(values.email));
+                toast("Вы успешно зарегистрировались!"); // Уведомление об успешной регистрации
             } catch (error) {
-                setRegistrationError(error.message);
+                console.log(error);
+                setRegistrationError(error);
             }
         },
     });
 
-    return (
+    return isUserLoggedIn ? (
+        <LoadingDataComponent />
+    ) : (
         <Register
             values={values}
             errors={errors}

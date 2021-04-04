@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
 import firebaseApp from "../utils/firebaseConfig";
-import { userLogin } from "../redux/actions/authorizationActions";
 import LoadingDataComponent from "../components/Common/LoadingDataComponent";
 
 export const AuthContext = React.createContext();
 
 export const AuthProvider = ({ children }) => {
-    const dispatch = useDispatch();
     const [isLoading, setIsLoading] = useState(true);
     const [isUserLoggedIn, setIsUserLoggedIn] = useState(null);
 
@@ -15,9 +12,8 @@ export const AuthProvider = ({ children }) => {
         firebaseApp.auth().onAuthStateChanged((user) => {
             setIsLoading(true);
 
-            if (user) {
+            if (user !== null && user?.displayName !== null) {
                 setIsUserLoggedIn(true);
-                dispatch(userLogin(user.email));
             } else {
                 setIsUserLoggedIn(false);
             }
