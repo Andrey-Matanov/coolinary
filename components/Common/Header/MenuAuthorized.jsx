@@ -7,7 +7,6 @@ import PeopleIcon from "@material-ui/icons/People";
 import AccountBoxIcon from "@material-ui/icons/AccountBox";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import RecipeIcon from "../../Icons/RecipeIcon";
-import SearchIcon from "@material-ui/icons/Search";
 import firebaseApp from "../../../utils/firebaseConfig";
 import { useDispatch, useSelector } from "react-redux";
 import { userLogout } from "../../../redux/actions/authorizationActions";
@@ -69,16 +68,6 @@ const Menu = () => {
                 <LinkDiv>
                     <RecipeIcon color="action" />
                     <Heading>Рецепты</Heading>
-                </LinkDiv>
-            </Link>
-            <Link
-                href="/recipesearch"
-                className={classes.link}
-                activeClassName={classes.selected_link}
-            >
-                <LinkDiv>
-                    <SearchIcon color="action" />
-                    <Heading>Поиск рецептов</Heading>
                 </LinkDiv>
             </Link>
             <Link href="/authors" className={classes.link} activeClassName={classes.selected_link}>
