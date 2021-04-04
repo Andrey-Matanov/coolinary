@@ -3,6 +3,7 @@ import {
     FETCH_RECIPE,
     FETCH_RECIPE_ERROR,
     UPDATE_RECIPE_COMMENTARIES,
+    UPDATE_RECIPE_RATING,
 } from "../actions/recipeActions";
 
 const recipeObject = {
@@ -43,6 +44,15 @@ export const recipeReducer = (recipe = recipeObject, action) => {
             }
 
             return updatedRecipes;
+        }
+        case UPDATE_RECIPE_RATING: {
+            const markToAdd = action.payload.newMark;
+            const updatedRecipe = { ...recipe };
+            const updatedRating = updatedRecipe.recipe.recipe.recipe.rating;
+            updatedRating.average = (updatedRating.average * updatedRating.count + markToAdd)/(updatedRating.count + 1);
+            updatedRating.count++;
+
+            return updatedRecipe;
         }
         default: {
             return recipe;

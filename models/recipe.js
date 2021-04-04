@@ -1,4 +1,5 @@
-import mongoose from "mongoose";
+import { DoubleArrow, DoubleArrowSharp } from "@material-ui/icons";
+import mongoose, { Mongoose } from "mongoose";
 
 const recipe = new mongoose.Schema({
     name: {
@@ -34,8 +35,14 @@ const recipe = new mongoose.Schema({
         required: true,
     },
     rating: {
-        type: Number,
-        default: 0,
+        type: {
+            avegare: Number,
+            count: Number,
+        },
+        default: {
+            average: 0,
+            count: 0,
+        },
     },
     ingredients: [
         {

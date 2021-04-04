@@ -108,6 +108,78 @@ const handler = async (req, res) => {
 
                 break;
             }
+
+            case "rate_recipe": {
+                const userValues = await User.findById(id);
+
+                if (userValues === null) {
+                    res.status(400).send(`user with id = ${id} was removed or wasn't created yet`);
+                } else {
+                    const newMark = req.body.newMark;
+                    const userMarksRecipes = userValues.userMarks.recipes
+
+                    if (userMarksRecipes.some((recipe) => recipe.id === newMark)) {
+                        res.status(400).send("this recipe is already marked");
+                    } else {
+                        try {
+                            await User.findByIdAndUpdate(id, {
+                                userMarks: {
+                                    ...userValues.userMarks,
+                                    recipes: [...userMarksRecipes, newMark],
+                                },
+                            });
+
+                            res.send("user's marks were successfully updated");
+                        } catch (error) {
+                            console.log(error);
+                            res.status(400).send(error);
+                        }
+                    }
+                }
+
+                break;
+            }
+
+            case "update_user_rating": {
+                const userValues = await User.findById(id);
+                if (userValues === null) {
+                    res.status(400).send(`user with id = ${id} was removed or wasn't created yet`);
+                } else {
+                    const newMark = req.body.newMark;
+                    if (userValues.rating.average === 0) {
+                        try {
+                            await User.findByIdAndUpdate(id, {
+                                rating: {
+                                    total: newMark,
+                                    average: newMark,
+                                },
+                            });
+    
+                            res.send("user's marks were successfully updated");
+                        } catch (error) {
+                            console.log(error);
+                            res.status(400).send(error);
+                        }
+                    } else {
+                        try {
+                            await User.findByIdAndUpdate(id, {
+                                rating: {
+                                    total: userValues.rating.total + newMark,
+                                    average: (userValues.rating.total + newMark)/(userValues.rating.total/userValues.rating.average),
+                                },
+                            });
+    
+                            res.send("user's marks were successfully updated");
+                        } catch (error) {
+                            console.log(error);
+                            res.status(400).send(error);
+                        }
+                    }
+                }
+
+                break;
+            }
+
             default: {
                 res.status(400).send("wrong request parameters");
             }

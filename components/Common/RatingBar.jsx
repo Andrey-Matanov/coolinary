@@ -10,44 +10,75 @@ const useStyles = makeStyles((theme) => ({
         margin: "5px 0",
     },
 
-    ratingLink: {}
+    ratingLink: {
+        cursor: "pointer",
+        width: "30px",
+        margin: "-5px",
+        color: "inherit",
+    }
 }));
 
-const RatingBar = ({ rating }) => {
+const RatingBar = ({ rating, isRated, clickFunction }) => {
     const classes = useStyles();
 
-    const ratingRounded = Math.floor(rating / 0.5) * 0.5;
+    const ratingRounded = Math.floor(rating.average / 0.5) * 0.5;
 
-    const [hoveredOn, setHoveredOn] = useState(-1);
+    const [hoveredOn, setHoveredOn] = useState(0);
 
-    const renderScale = Array(5)
-        .fill(5)
-        .map((item, i) =>
-            i - ratingRounded + 1 <= 0 ? (
-                <ButtonBase key={i}>
-                    <a className = "ratingLink">
-                        <Star />
-                    </a>
+    const hovered = e => {
+        if (!isRated) {
+            let val = 0;
+            if (e && e.target && e.target.getAttribute('data-star-id')) {
+                val = e.target.getAttribute('data-star-id');
+            }
+            setHoveredOn(val);
+        }
+    };
+
+    const clicked = e => {
+        if (!isRated) {
+            const mark = parseInt(e.target.getAttribute("data-star-id"))
+            clickFunction(mark);
+        }
+    }
+
+    const ScaleElement = ({ value, id, isRated }) => {
+        return (
+            <div data-star-id = { id } className={classes.hover}>
+                <ButtonBase disabled = { isRated } style={{pointerEvents: "none", cursor: "pointer"}}>
+                    {id - value <= 0 ? (
+                        // <a className = "ratingLink">
+                            <Star className = {classes.ratingLink} />
+                        // </a>
+                    ) : Math.abs(id - value) === 0.5 ? (
+                        // <a className = "ratingLink">
+                            <StarHalf className = {classes.ratingLink} />
+                        // </a>
+                    ) : (
+                        // <a className = "ratingLink">
+                            <StarBorder className = {classes.ratingLink} />
+                        // </a>
+                    )}
                 </ButtonBase>
-            ) : Math.abs(i - ratingRounded + 1) === 0.5 ? (
-                <ButtonBase key={i}>
-                    <a className = "ratingLink">
-                        <StarHalf />
-                    </a>
-                </ButtonBase>
-            ) : (
-                <ButtonBase key={i}>
-                    <a className = "ratingLink">
-                        <StarBorder />
-                    </a>
-                </ButtonBase>
-            )
-        );
+            </div>
+    )}
 
     return (
-        <div className={classes.difficultyContainer}>
-            {renderScale}
-            <Typography variant="body1">{rating} / 5</Typography>
+        <div 
+            className={classes.difficultyContainer}
+            onMouseOut = { () => hovered(null) }
+            onClick = { clicked }
+            onMouseOver = { hovered }
+        >
+            { Array(5).fill(5).map((item, i) => 
+                <ScaleElement 
+                    id = { i+1 }
+                    key = { i }
+                    value = { hoveredOn ? parseInt(hoveredOn) : ratingRounded }
+                    isRated = { isRated }
+                />
+            ) }
+            <Typography variant="body1">{Math.round(rating.average*10)/10} / 5</Typography>
         </div>
     );
 };

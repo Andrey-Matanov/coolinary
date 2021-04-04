@@ -85,7 +85,7 @@ const RecipeItem = (props) => {
                             </Grid>
                             <Grid item>
                                 <Typography variant="body1">Рейтинг:</Typography>
-                                <RatingBar rating={rating} />
+                                <RatingBar rating={rating} isRated={true} />
                             </Grid>
                             <Grid item>
                                 <Typography variant="body2">{description}</Typography>

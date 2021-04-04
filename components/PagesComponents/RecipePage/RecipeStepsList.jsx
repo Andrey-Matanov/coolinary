@@ -12,6 +12,8 @@ import ReviewsBlock from "../../Common/Commentaries/ReviewsBlock.jsx";
 import Nutrition from "./Nutrition.jsx";
 import Ingredients from "./Ingredients";
 import { authorizationUpdateCurrentUserCollections } from "../../../redux/actions/authorizationActions.js";
+import { changeRating } from "../../../redux/actions/combinedActions.js"
+import { useSelector } from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
     scrolling: {
@@ -113,6 +115,8 @@ const RecipeStepsList = ({
         ingredients,
         steps,
     } = recipe;
+    const currentUserId = useSelector((state) => state.authorization.userId);
+    const currentUserRated = useSelector((state) => state.authorization.userMarks.recipes);
     return (
         <Box mt={"45px"}>
             <div style={{ marginTop: "20px" }}></div>
@@ -144,7 +148,22 @@ const RecipeStepsList = ({
                             </Box>
                             <Box my={3}>Время приготовления: {formatTime(time)}</Box>
                             <Box my={3}>
-                                <RatingBar rating={rating} />
+                                <RatingBar
+                                    rating={rating}
+                                    isRated={authorId === currentUserId || !!currentUserRated.find(item => item === recipeId)}
+                                    clickFunction={
+                                        (rateValue)=>{
+                                            dispatch(
+                                                changeRating(
+                                                    "rate_recipe",
+                                                    autorizedUserId,
+                                                    authorId,
+                                                    recipeId,
+                                                    rateValue
+                                                )
+                                            )
+                                        }
+                                    } />
                             </Box>
                         </Box>
                     </Paper>

@@ -10,6 +10,8 @@ export const EMAIL_CHANGE = "@@profile/EMAIL_CHANGE";
 export const DELETE_USER = "@@profile/DELETE_USER";
 export const PROFILE_UPDATE_CURRENT_USER_COLLECTIONS =
     "@@authorization/PROFILE_UPDATE_CURRENT_USER_COLLECTIONS";
+export const PROFILE_UPDATE_CURRENT_USER_MARKS =
+    "@@authorization/PROFILE_UPDATE_CURRENT_USER_MARKS";
 export const ERROR = "@@profile/ERROR";
 
 export const userDataIsLoading = () => ({ type: USER_DATA_IS_LOADING });
@@ -126,3 +128,12 @@ export const profileUpdateCurrentUserCollections = (type, payload) => {
         }
     }
 };
+
+// export const profileUpdateCurrentUserMarks = (payload) => {
+//     return {
+//         type: PROFILE_UPDATE_CURRENT_USER_MARKS,
+//         payload: {
+//             newMark: payload,
+//         }
+//     }
+// }

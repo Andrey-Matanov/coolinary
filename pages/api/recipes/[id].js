@@ -50,6 +50,29 @@ const handler = async (req, res) => {
             console.log(error);
             res.status(400).send(error);
         }
+    } else if (req.method === "PUT") {
+        const recipeValues = await Recipe.findById(id);
+
+        if (recipeValues === null) {
+            res.status(400).send(`recipe with id = ${id} was removed or wasn't created yet`);
+        } else {
+            const newMark = req.body.newMark;
+
+            try {
+                await Recipe.findByIdAndUpdate(id, {
+                    rating: {
+                        ...recipeValues.rating,
+                        average: (recipeValues.rating.average*recipeValues.rating.count + newMark)/(recipeValues.rating.count + 1),
+                        count: recipeValues.rating.count + 1,
+                    },
+                });
+
+                res.send("recipe rating has been successfully updated");
+            } catch (error) {
+                console.log(error);
+                res.status(400).send(error);
+            }
+        }
     } else if (req.method === "PATCH") {
         const newValues = req.body;
 

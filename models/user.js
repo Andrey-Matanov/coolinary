@@ -78,6 +78,16 @@ const userSchema = new mongoose.Schema({
             articles: [],
         },
     },
+    userMarks: {
+        type: {
+            recipes: [String],
+            articles: [String]
+        },
+        default: {
+            recipes: [],
+            articles: [],
+        }
+    }
 });
 
 mongoose.models = {};

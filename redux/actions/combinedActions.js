@@ -1,12 +1,15 @@
 import { batch } from "react-redux";
 import axios from "axios";
+import configuredAxios from "../../utils/configuredAxios";
+import { toast } from "react-toastify";
 import { baseURL } from "../../utils";
 import { fetchIngredients, FETCH_INGREDIENTS } from "./ingredientsAction";
 import { fetchCategories, FETCH_CATEGORIES } from "./categoriesActions";
 import { fetchRecipes, FETCH_RECIPES } from "./recipesListActions";
-import { fetchRecipe, FETCH_RECIPE } from "./recipeActions";
+import { fetchRecipe, FETCH_RECIPE, UPDATE_RECIPE_RATING } from "./recipeActions";
 import { fetchUserData, FETCH_USER_DATA } from "./profileActions.js";
 import { FETCH_UNITS } from "./unitsActions.js";
+import { AUTHORIZATION_UPDATE_CURRENT_USER_MARKS } from "./authorizationActions.js"
 
 export const fetchIngredientsAndCategories = () => async (dispatch, getState) => {
     if (!getState().ingredients.length && !getState().recipesObject.recipes.length) {
@@ -115,3 +118,40 @@ export const fetchRecipeWithInfo = (id) => async (dispatch, getState) => {
     //     dispatch(fetchRecipe());
     // }
 };
+
+export const changeRating = (type, userId, authorId, recipeId, payload) => async dispatch => {
+    const newMarkUserResponse = await configuredAxios.put(`/users/${userId}`, {
+        type: type,
+        newMark: recipeId,
+    });
+    const newMarkRecipeResponse = await configuredAxios.put(`/recipes/${recipeId}`, {
+        type: type,
+        newMark: payload,
+    });
+    const newMarkAuthorResponse = await configuredAxios.put(`/users/${authorId}`, {
+        type: "update_user_rating",
+        newMark: payload,
+    });
+
+    if (newMarkUserResponse.status === 200 && newMarkRecipeResponse.status === 200 && newMarkAuthorResponse.status === 200) {
+        batch(() => {
+            dispatch({
+                type: AUTHORIZATION_UPDATE_CURRENT_USER_MARKS,
+                payload: {
+                    type: type,
+                    newMark: recipeId,
+                },
+            });
+            dispatch({
+                type: UPDATE_RECIPE_RATING,
+                payload: {
+                    type,
+                    newMark: payload,
+                },
+            });
+        })
+    }
+
+    toast.dismiss(); // dismisses all notifications
+    toast("Спасибо за оценку!"); // shows notification
+}
