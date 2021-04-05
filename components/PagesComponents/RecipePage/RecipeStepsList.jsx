@@ -150,7 +150,7 @@ const RecipeStepsList = ({
                             <Box my={3}>
                                 <RatingBar
                                     rating={rating}
-                                    isRated={authorId === currentUserId || !!currentUserRated.find(item => item === recipeId)}
+                                    isRated={currentUserId === null || authorId === currentUserId || !!currentUserRated.find(item => item === recipeId)}
                                     clickFunction={
                                         (rateValue)=>{
                                             dispatch(

@@ -1,9 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useLayoutEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { Container, Box, CircularProgress } from "@material-ui/core";
 import RecipeStepsList from "../../components/PagesComponents/RecipePage/RecipeStepsList";
 import { fetchRecipeWithInfo } from "../../redux/actions/combinedActions.js";
+import { recipeDataIsLoading } from "../../redux/actions/recipeActions.js";
 
 const Recipe = () => {
     const dispatch = useDispatch();
@@ -18,14 +19,22 @@ const Recipe = () => {
         state.authorization.collections.recipes?.some((recipe) => recipe.id === id)
     );
 
-    useEffect(() => {
-        const { id } = router.query;
-        console.log(id);
-
-        if (id) {
-            dispatch(fetchRecipeWithInfo(id));
-        }
+    useLayoutEffect(() => {
+        if (id !== null && recipe.recipe?.recipe._id !== id) dispatch(recipeDataIsLoading());
     }, [id]);
+
+    useEffect(() => {
+        if (status === "loading") dispatch(fetchRecipeWithInfo(id));
+    }, [status]);
+
+    // useEffect(() => {
+    //     const { id } = router.query;
+    //     console.log(id);
+
+    //     if (id) {
+    //         dispatch(fetchRecipeWithInfo(id));
+    //     }
+    // }, [id]);
 
     switch (status) {
         case "loading": {

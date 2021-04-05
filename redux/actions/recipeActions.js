@@ -5,7 +5,8 @@ export const RECIPE_IS_LOADING = "@@recipe/RECIPE_IS_LOADING";
 export const FETCH_RECIPE = "@@recipe/FETCH_RECIPE";
 export const UPDATE_RECIPE_COMMENTARIES = "@@recipe/UPDATE_RECIPE_COMMENTARIES";
 export const FETCH_RECIPE_ERROR = "@@recipe/FETCH_RECIPE_ERROR";
-export const UPDATE_RECIPE_RATING = "@@recipe/UPDATE_RECIPE_RATING"
+export const UPDATE_RECIPE_RATING = "@@recipe/UPDATE_RECIPE_RATING";
+export const RECIPE_DATA_IS_LOADING = "@@recipe/RECIPE_DATA_IS_LOADING";
 
 export const fetchRecipe = (id) => async (dispatch) => {
     dispatch({ type: RECIPE_IS_LOADING });
@@ -61,3 +62,5 @@ export const updateRating = (newMark) => {
         payload: newMark,
     };
 }
+
+export const recipeDataIsLoading = () => ({ type: RECIPE_DATA_IS_LOADING })

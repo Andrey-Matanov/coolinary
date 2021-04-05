@@ -1,5 +1,5 @@
 import {
-    RECIPE_IS_LOADING,
+    RECIPE_DATA_IS_LOADING,
     FETCH_RECIPE,
     FETCH_RECIPE_ERROR,
     UPDATE_RECIPE_COMMENTARIES,
@@ -13,8 +13,8 @@ const recipeObject = {
 
 export const recipeReducer = (recipe = recipeObject, action) => {
     switch (action.type) {
-        case RECIPE_IS_LOADING: {
-            return { ...recipe, status: "loading" };
+        case RECIPE_DATA_IS_LOADING: {
+            return { recipe: null, status: "loading" };
         }
         case FETCH_RECIPE: {
             return {
