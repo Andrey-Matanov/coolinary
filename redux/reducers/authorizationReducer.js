@@ -80,7 +80,12 @@ export const authorizationReducer = (
             }
         }
         case USER_LOGOUT: {
-            return { userId: null, userName: null, collections: { recipes: [], articles: [] } };
+            return {
+                    userId: null,
+                    userName: null,
+                    collections: { recipes: [], articles: [] },
+                    userMarks: { recipes: [], articles: [] }
+                };
         }
         default: {
             return authorization;
