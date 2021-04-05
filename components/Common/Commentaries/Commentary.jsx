@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { useDispatch } from "react-redux";
+import { makeStyles } from "@material-ui/core/styles";
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
@@ -10,13 +11,22 @@ import Typography from "@material-ui/core/Typography";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
 import CancelIcon from "@material-ui/icons/Cancel";
+import { Link as LinkMUI } from "@material-ui/core";
 import { deleteCommentary, editCommentary } from "../../../redux/actions/recipesListActions";
+
+const useStyles = makeStyles((theme) => ({
+    link: {
+        cursor: "pointer",
+    },
+}));
 
 const Commentary = ({ currentUserId, commentaryId, authorId, authorName, content }) => {
     const dispatch = useDispatch();
     const [isCommentaryEditing, setIsCommentaryEditing] = useState(false);
     const [newContent, setNewContent] = useState(content);
     const [error, setError] = useState(null);
+
+    const classes = useStyles();
 
     const errors = {
         empty: "Комментарий не может быть пустым",
@@ -100,9 +110,7 @@ const Commentary = ({ currentUserId, commentaryId, authorId, authorName, content
             <Grid item xs={12}>
                 <Box py={1}>
                     <Link href={`/profile/${authorId}`}>
-                        <a>
-                            <Typography variant="body1">{authorName}</Typography>
-                        </a>
+                        <LinkMUI className={classes.link}>{authorName}</LinkMUI>
                     </Link>
                 </Box>
             </Grid>

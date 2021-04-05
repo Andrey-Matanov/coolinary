@@ -16,6 +16,9 @@ import { changeRating } from "../../../redux/actions/combinedActions.js"
 import { useSelector } from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
+    link: {
+        cursor: "pointer",
+    },
     scrolling: {
         height: "80vh",
         paddingRight: "20px",
@@ -136,8 +139,8 @@ const RecipeStepsList = ({
                             <Box my={3}>
                                 <p>
                                     Автор:{" "}
-                                    <Link className="author-link" href={`/profile/${authorId}`}>
-                                        <LinkMUI variant="body1">{authorName}</LinkMUI>
+                                    <Link href={`/profile/${authorId}`}>
+                                        <LinkMUI className={classes.link}>{authorName}</LinkMUI>
                                     </Link>
                                 </p>
                             </Box>
