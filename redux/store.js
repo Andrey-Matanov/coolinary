@@ -1,15 +1,30 @@
-import { createStore, applyMiddleware } from "redux";
-import thunk from "redux-thunk";
-import { composeWithDevTools } from "redux-devtools-extension";
+import { configureStore } from "@reduxjs/toolkit";
 import { createWrapper } from "next-redux-wrapper";
-import rootReducer from "./reducers/rootReducer";
+import logger from "redux-logger";
+import { authorizationReducer } from "./reducers/authorizationReducer";
+import { categoriesReducer } from "./reducers/categoriesReducer";
+import { ingredientsReducer } from "./reducers/ingredientsReducer";
+import { profileReducer } from "./reducers/profileReducer";
+import { ratingReducer } from "./reducers/ratingReducer";
+import { recipeReducer } from "./reducers/recipeReducer";
+import { recipesListReducer } from "./reducers/recipesListReducer";
+import { unitsReducer } from "./reducers/unitsReducer";
+import { usersReducer } from "./reducers/usersReducer";
 
-const middleware = [thunk];
-
-const composeEnhancers = composeWithDevTools({
-    // Specify here name, actionsBlacklist, actionsCreators and other options
-});
-const enhancer = composeEnhancers(applyMiddleware(...middleware));
-const makeStore = () => createStore(rootReducer, enhancer);
+const makeStore = () =>
+    configureStore({
+        reducer: {
+            authorization: authorizationReducer,
+            recipesObject: recipesListReducer,
+            categories: categoriesReducer,
+            ingredients: ingredientsReducer,
+            usersState: usersReducer,
+            rating: ratingReducer,
+            profile: profileReducer,
+            recipe: recipeReducer,
+            units: unitsReducer,
+        },
+        middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
+    });
 
 export const wrapper = createWrapper(makeStore);
