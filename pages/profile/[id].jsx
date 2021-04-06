@@ -7,7 +7,7 @@ import {
     fetchUserData,
     updateUserInfo,
     userDataIsLoading,
-} from "../../redux/actions/profileActions";
+} from "../../redux/slices/profileSlice";
 import ChangePasswordForm from "../../components/Forms/ChangePasswordForm.jsx";
 import DeleteDialog from "../../components/PagesComponents/ProfilePage/DeleteDialog.jsx";
 import {

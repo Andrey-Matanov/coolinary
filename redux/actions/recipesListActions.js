@@ -1,8 +1,12 @@
 import axios from "axios";
 import { baseURL } from "../../utils";
-import { updateUserRecipesAfterDelete } from "./profileActions";
+import {
+    updateUserRecipesAfterCreation,
+    updateUserRecipesAfterDelete,
+} from "../slices/profileSlice";
 import { updateRecipeCommentaries } from "./recipeActions";
 import configuredAxios from "../../utils/configuredAxios";
+import { toast } from "react-toastify";
 
 export const ADD_RECIPE = "@@recipesList/ADD_RECIPE";
 export const EDIT_RECIPE = "@@recipesList/EDIT_RECIPE";
@@ -104,9 +108,14 @@ export const fetchCategories = () => async (dispatch) => {
 };
 
 export const addRecipe = (recipe, authorId) => async (dispatch) => {
-    await axios.post(`${baseURL}/api/recipes`, { ...recipe, authorId });
-
-    dispatch({ type: "SUCCESS" });
+    const response = await axios.post(`${baseURL}/api/recipes`, { ...recipe, authorId });
+    const newRecipeId = response.data.newRecipeId;
+    dispatch(
+        updateUserRecipesAfterCreation({
+            id: newRecipeId,
+            name: recipe.name,
+        })
+    );
 };
 
 export const editRecipe = (recipe, authorId, recipeId) => async (dispatch) => {

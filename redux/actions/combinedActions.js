@@ -6,10 +6,9 @@ import { baseURL } from "../../utils";
 import { fetchIngredients, FETCH_INGREDIENTS } from "./ingredientsAction";
 import { fetchCategories, FETCH_CATEGORIES } from "./categoriesActions";
 import { fetchRecipes, FETCH_RECIPES } from "./recipesListActions";
-import { fetchRecipe, FETCH_RECIPE, UPDATE_RECIPE_RATING } from "./recipeActions";
-import { fetchUserData, FETCH_USER_DATA } from "./profileActions.js";
+import { FETCH_RECIPE, UPDATE_RECIPE_RATING } from "./recipeActions";
 import { FETCH_UNITS } from "./unitsActions.js";
-import { AUTHORIZATION_UPDATE_CURRENT_USER_MARKS } from "./authorizationActions.js"
+import { AUTHORIZATION_UPDATE_CURRENT_USER_MARKS } from "./authorizationActions.js";
 
 export const fetchIngredientsAndCategories = () => async (dispatch, getState) => {
     if (!getState().ingredients.length && !getState().recipesObject.recipes.length) {
@@ -119,7 +118,7 @@ export const fetchRecipeWithInfo = (id) => async (dispatch, getState) => {
     // }
 };
 
-export const changeRating = (type, userId, authorId, recipeId, payload) => async dispatch => {
+export const changeRating = (type, userId, authorId, recipeId, payload) => async (dispatch) => {
     const newMarkUserResponse = await configuredAxios.put(`/users/${userId}`, {
         type: type,
         newMark: recipeId,
@@ -133,7 +132,11 @@ export const changeRating = (type, userId, authorId, recipeId, payload) => async
         newMark: payload,
     });
 
-    if (newMarkUserResponse.status === 200 && newMarkRecipeResponse.status === 200 && newMarkAuthorResponse.status === 200) {
+    if (
+        newMarkUserResponse.status === 200 &&
+        newMarkRecipeResponse.status === 200 &&
+        newMarkAuthorResponse.status === 200
+    ) {
         batch(() => {
             dispatch({
                 type: AUTHORIZATION_UPDATE_CURRENT_USER_MARKS,
@@ -149,9 +152,9 @@ export const changeRating = (type, userId, authorId, recipeId, payload) => async
                     newMark: payload,
                 },
             });
-        })
+        });
     }
 
     toast.dismiss(); // dismisses all notifications
     toast("Спасибо за оценку!"); // shows notification
-}
+};

@@ -4,7 +4,7 @@ import logger from "redux-logger";
 import { authorizationReducer } from "./reducers/authorizationReducer";
 import { categoriesReducer } from "./reducers/categoriesReducer";
 import { ingredientsReducer } from "./reducers/ingredientsReducer";
-import { profileReducer } from "./reducers/profileReducer";
+import { reducer as profileReducer } from "./slices/profileSlice";
 import { ratingReducer } from "./reducers/ratingReducer";
 import { recipeReducer } from "./reducers/recipeReducer";
 import { recipesListReducer } from "./reducers/recipesListReducer";

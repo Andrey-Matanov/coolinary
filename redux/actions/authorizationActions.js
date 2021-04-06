@@ -1,14 +1,14 @@
 import { toast } from "react-toastify";
 import configuredAxios from "../../utils/configuredAxios";
-import { profileUpdateCurrentUserCollections, profileUpdateCurrentUserMarks } from "./profileActions";
+import { profileUpdateCurrentUserCollections } from "../slices/profileSlice";
 
 export const USER_LOGIN = "@@authorization/USER_LOGIN";
 export const AUTHORIZATION_UPDATE_CURRENT_USER_COLLECTIONS =
     "@@authorization/AUTHORIZATION_UPDATE_CURRENT_USER_COLLECTIONS";
 export const USER_LOGOUT = "@@authorization/USER_LOGOUT";
 export const ERROR = "@@authorization/ERROR";
-export const AUTHORIZATION_UPDATE_CURRENT_USER_MARKS = 
-    "@@authorization/AUTHORIZATION_UPDATE_CURRENT_USER_MARKS"
+export const AUTHORIZATION_UPDATE_CURRENT_USER_MARKS =
+    "@@authorization/AUTHORIZATION_UPDATE_CURRENT_USER_MARKS";
 
 export const userLogin = (email) => async (dispatch) => {
     const response = await configuredAxios.get(`/userdata`, {
@@ -84,9 +84,7 @@ export const authorizationUpdateCurrentUserCollections = (type, userId, payload)
     }
 };
 
-export const authorizationUpdateMarks = (type, userId, payload) => async (
-    dispatch
-) => {
+export const authorizationUpdateMarks = (type, userId, payload) => async (dispatch) => {
     const response = await configuredAxios.put(`/users/${userId}`, {
         type: type,
         newMark: payload,

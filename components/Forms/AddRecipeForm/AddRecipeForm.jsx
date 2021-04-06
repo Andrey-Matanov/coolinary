@@ -20,7 +20,6 @@ import {
     TextField,
 } from "@material-ui/core";
 import AddRecipeNutrition from "./AddRecipeNutrition";
-import { updateUserRecipes } from "../../../redux/actions/profileActions";
 
 const Error = styled.div`
     color: red;
@@ -144,6 +143,7 @@ const AddRecipeFormik = ({
                 onSubmit={(values) => {
                     console.log("submit");
                     const recipe = { ...values };
+                    console.log(recipe);
 
                     switch (additionalInfo.type) {
                         case "edit": {

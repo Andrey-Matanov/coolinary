@@ -26,7 +26,6 @@ const handler = async (req, res) => {
             const authorId = recipeValues.authorId;
             const userValues = await User.findById(authorId);
             recipeValues.authorName = userValues.name;
-            console.log(recipeValues);
 
             if (userValues) {
                 const newRecipe = new Recipe(recipeValues);
@@ -38,7 +37,7 @@ const handler = async (req, res) => {
                     userRecipes: [...userRecipes, newUserRecipe],
                 });
 
-                res.status(200).send("ok");
+                res.status(200).send({ newRecipeId: result._id });
             } else {
                 res.status(400).send("no user with this id");
             }
