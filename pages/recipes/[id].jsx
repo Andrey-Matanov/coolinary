@@ -27,14 +27,14 @@ const Recipe = () => {
         if (status === "loading") dispatch(fetchRecipeWithInfo(id));
     }, [status]);
 
-    // useEffect(() => {
-    //     const { id } = router.query;
-    //     console.log(id);
+    useEffect(() => {
+        const { id } = router.query;
+        console.log(id);
 
-    //     if (id) {
-    //         dispatch(fetchRecipeWithInfo(id));
-    //     }
-    // }, [id]);
+        if (id) {
+            dispatch(fetchRecipeWithInfo(id));
+        }
+    }, [id]);
 
     switch (status) {
         case "loading": {
