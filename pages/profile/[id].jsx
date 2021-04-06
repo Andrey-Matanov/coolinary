@@ -145,7 +145,7 @@ const Profile = () => {
                                     </Button>
                                 </Grid>
                             ) : (
-                                <div />
+                                null
                             )}
                         </Grid>
                     </Paper>
