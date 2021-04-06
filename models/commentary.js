@@ -13,10 +13,6 @@ const commentary = new mongoose.Schema({
         type: String,
         required: true,
     },
-    authorName: {
-        type: String,
-        required: true,
-    },
 });
 
 mongoose.models = {};

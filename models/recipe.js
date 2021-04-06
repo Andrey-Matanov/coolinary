@@ -29,10 +29,6 @@ const recipe = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         required: true,
     },
-    authorName: {
-        type: String,
-        required: true,
-    },
     rating: {
         type: {
             average: Number,

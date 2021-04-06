@@ -8,12 +8,34 @@ const handler = async (req, res) => {
 
     if (req.method === "GET") {
         try {
-            const recipe = await Recipe.findById(id);
+            const mongoRecipe = await Recipe.findById(id);
 
-            if (recipe) {
-                const recipeCommentaries = await Commentary.find({
+            if (mongoRecipe) {
+                
+                const recipe = JSON.parse(JSON.stringify(mongoRecipe))
+
+                const recipeAuthor = await User.findById(recipe.authorId, "name");
+                recipe["authorName"] = recipeAuthor.name;
+
+                const mongoRecipeCommentaries = await Commentary.find({
                     targetId: id,
-                });
+                },
+                "content targetId authorId"
+                );
+
+                const recipeCommentaries = JSON.parse(JSON.stringify(mongoRecipeCommentaries))
+
+                const authorIds = recipeCommentaries.map(item => item.authorId)
+                const userNames = await User.find({"_id": {$in: authorIds }}, "_id name");
+
+                recipeCommentaries.forEach(item => {
+                    userNames.find(el => "" + el._id === item.authorId) ? (
+                        item["authorName"] = userNames.find(el => "" + el._id === item.authorId).name
+                    ) : (
+                        item["authorName"] = "DELETED_USER"
+                    )
+                }
+                );
 
                 res.send({
                     recipe,

@@ -10,14 +10,32 @@ const handler = async (req, res) => {
             findParameters.categoryId = categoryId;
         }
 
-        const recipes = await Recipe.find(findParameters);
-        const amount = req.query.amount ?? recipes.length;
-        const last = req.query.last ?? 0;
-        const result = recipes.slice(last, last + amount);
+        const amount = parseInt(req.query.amount) ?? null
+        const last = req.query.last ?? "0";
+
+        if (last != "0") {
+            findParameters._id = {$gt: last}
+        }
+        
+        const mongoRecipes = await Recipe.find(findParameters).limit(amount);
+        
+        const recipes = JSON.parse(JSON.stringify(mongoRecipes))
+
+        const authorIds = recipes.map(item => item.authorId)
+        const userNames = await User.find({"_id": {$in: authorIds }}, "_id name");
+
+        recipes.forEach(item => {
+            userNames.find(el => "" + el._id === item.authorId) ? (
+                item["authorName"] = userNames.find(el => "" + el._id === item.authorId).name
+            ) : (
+                item["authorName"] = "DELETED_USER"
+            )
+        }
+        );
 
         res.json({
-            recipes: result,
-            isLastRecipes: last + amount >= recipes.length,
+            recipes: recipes,
+            isLastRecipes: mongoRecipes.length < amount
         });
     } else if (req.method === "POST") {
         const recipeValues = req.body;
@@ -25,7 +43,6 @@ const handler = async (req, res) => {
         try {
             const authorId = recipeValues.authorId;
             const userValues = await User.findById(authorId);
-            recipeValues.authorName = userValues.name;
 
             if (userValues) {
                 const newRecipe = new Recipe(recipeValues);

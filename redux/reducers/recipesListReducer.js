@@ -23,7 +23,7 @@ export const recipesListReducer = (
                 return {
                     ...recipesObject,
                     recipes: [...recipesObject.recipes, ...action.payload.recipes],
-                    currentLastId: action.payload.recipes[action.payload.recipes.length - 1].id,
+                    currentLastId: action.payload.recipes[action.payload.recipes.length - 1]._id,
                     isLastRecipes: action.payload.isLastRecipes,
                     currentCategory: recipesObject.currentCategory,
                     status: "ok",
