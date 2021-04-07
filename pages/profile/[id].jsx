@@ -1,13 +1,7 @@
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-    changeUserName,
-    changeEmail,
-    deleteUser,
-    fetchUserData,
-    updateUserInfo,
-    userDataIsLoading,
-} from "../../redux/slices/profileSlice";
+import { changeEmail } from "../../redux/slices/profileSlice";
+import { fetchUserData, updateUserInfo, deleteUser } from "../../redux/slices/profileSlice/thunks";
 import ChangePasswordForm from "../../components/Forms/ChangePasswordForm.jsx";
 import DeleteDialog from "../../components/PagesComponents/ProfilePage/DeleteDialog.jsx";
 import {
@@ -68,13 +62,9 @@ const Profile = () => {
     const [newNameValue, setNewNameValue] = useState(userName);
     const [newEmailValue, setNewEmailValue] = useState(userEmail);
 
-    useLayoutEffect(() => {
-        if (id !== null && profileUserId !== id) dispatch(userDataIsLoading());
-    }, [id]);
-
     useEffect(() => {
-        if (status === "loading") dispatch(fetchUserData(id));
-    }, [status]);
+        if (id !== null && id !== undefined && profileUserId !== id) dispatch(fetchUserData(id));
+    }, [id]);
 
     const applyEditName = () => {
         setNameChange(false);
@@ -144,9 +134,7 @@ const Profile = () => {
                                         Удалить рецепт
                                     </Button>
                                 </Grid>
-                            ) : (
-                                null
-                            )}
+                            ) : null}
                         </Grid>
                     </Paper>
                 </Box>
