@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import firebaseApp from "../utils/firebaseConfig";
 import LoadingDataComponent from "../components/Common/LoadingDataComponent";
-import { userLogin } from "../redux/slices/authorizationSlice/thunks";
+import { userLogin } from "../redux/slices/authorizationSlice";
 
 export const AuthContext = React.createContext();
 

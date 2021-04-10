@@ -9,7 +9,6 @@ import { ratingReducer } from "./reducers/ratingReducer";
 import { recipeReducer } from "./reducers/recipeReducer";
 import { recipesListReducer } from "./reducers/recipesListReducer";
 import { unitsReducer } from "./reducers/unitsReducer";
-import { usersReducer } from "./reducers/usersReducer";
 
 const makeStore = () =>
     configureStore({
@@ -18,7 +17,6 @@ const makeStore = () =>
             recipesObject: recipesListReducer,
             categories: categoriesReducer,
             ingredients: ingredientsReducer,
-            usersState: usersReducer,
             rating: ratingReducer,
             profile: profileReducer,
             recipe: recipeReducer,

@@ -12,7 +12,7 @@ import Typography from "@material-ui/core/Typography";
 import EditIcon from "@material-ui/icons/Edit";
 import CheckIcon from "@material-ui/icons/Check";
 import ClearIcon from "@material-ui/icons/Clear";
-import { deleteUser, updateUserInfo } from "../../../redux/slices/profileSlice/thunks";
+import { deleteUser, updateUserInfo } from "../../../redux/slices/profileSlice";
 import { userLogout } from "../../../redux/slices/authorizationSlice";
 import { firebaseRemoveCurrentUser, firebaseUpdateEmail } from "../../../utils/firebaseConfig";
 import ChangePasswordForm from "../../Forms/ChangePasswordForm";

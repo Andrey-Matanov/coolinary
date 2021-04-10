@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchUserData } from "../../redux/slices/profileSlice/thunks";
+import { fetchUserData } from "../../redux/slices/profileSlice";
 import { Container, Grid, Box, Typography } from "@material-ui/core";
 import RequestError from "../../components/Common/RequestError.jsx";
 import { useRouter } from "next/router";

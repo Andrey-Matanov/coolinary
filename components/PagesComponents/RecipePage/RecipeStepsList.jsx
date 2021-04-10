@@ -13,7 +13,7 @@ import Nutrition from "./Nutrition.jsx";
 import Ingredients from "./Ingredients";
 import { changeRating } from "../../../redux/actions/combinedActions.js";
 import { useSelector } from "react-redux";
-import { authorizationUpdateCurrentUserCollections } from "../../../redux/slices/authorizationSlice/thunks.js";
+import { authorizationUpdateCurrentUserCollections } from "../../../redux/slices/authorizationSlice";
 
 const useStyles = makeStyles((theme) => ({
     link: {
