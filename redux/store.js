@@ -2,13 +2,13 @@ import { configureStore } from "@reduxjs/toolkit";
 import { createWrapper } from "next-redux-wrapper";
 import logger from "redux-logger";
 import { reducer as authorizationReducer } from "./slices/authorizationSlice";
-import { categoriesReducer } from "./reducers/categoriesReducer";
-import { ingredientsReducer } from "./reducers/ingredientsReducer";
+import { reducer as categoriesReducer } from "./slices/categoriesSlice.js";
+import { reducer as ingredientsReducer } from "./slices/ingredientsSlice.js";
 import { reducer as profileReducer } from "./slices/profileSlice";
 import { ratingReducer } from "./reducers/ratingReducer";
-import { recipeReducer } from "./reducers/recipeReducer";
-import { recipesListReducer } from "./reducers/recipesListReducer";
-import { unitsReducer } from "./reducers/unitsReducer";
+import { reducer as recipeReducer } from "./slices/recipeSlice.js";
+import { reducer as recipesListReducer } from "./slices/recipesListSlice.js";
+import { reducer as unitsReducer } from "./slices/unitsSlice.js";
 
 const makeStore = () =>
     configureStore({

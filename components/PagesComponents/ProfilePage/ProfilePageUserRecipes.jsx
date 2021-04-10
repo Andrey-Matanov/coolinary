@@ -6,7 +6,7 @@ import Grid from "@material-ui/core/Grid";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
 import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
-import { deleteRecipe } from "../../../redux/actions/recipesListActions";
+import { deleteRecipe } from "../../../redux/slices/recipesListSlice.js";
 
 const ProfilePageUserRecipes = ({ userRecipes, id, userId, dispatch }) => {
     const userOwnsRecipe = id === userId;

@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import RecipesList from "../../components/PagesComponents/RecipesPage/RecipesList.jsx";
 import RequestError from "../../components/Common/RequestError.jsx";
-import { fetchRecipes, switchCategory } from "../../redux/actions/recipesListActions.js";
-import { fetchRecipesAndCategories } from "../../redux/actions/combinedActions.js";
+import { fetchRecipes, switchCategory } from "../../redux/slices/recipesListSlice.js";
+import { fetchRecipesAndCategories } from "../../redux/slices/combinedThunks.js";
 
 import {
     Container,
@@ -41,19 +41,19 @@ const Recipes = () => {
 
     useEffect(() => {
         if (!recipesList.length)
-            dispatch(fetchRecipesAndCategories(currentLastId, currentCategory));
+            dispatch(fetchRecipesAndCategories({ currentLastId, categoryId: currentCategory}));
     }, [dispatch]);
 
     useEffect(() => {
         if (isScrolledDown && !isLastRecipes) {
-            dispatch(fetchRecipes(currentLastId, currentCategory));
+            dispatch(fetchRecipes({ currentLastId, categoryId: currentCategory }));
             setIsScrolledDown(false);
         }
     }, [isScrolledDown]);
 
     const handleChange = (e) => {
         dispatch(switchCategory(e.target.value));
-        dispatch(fetchRecipes(0, e.target.value));
+        dispatch(fetchRecipes({ currentLastId: 0, categoryId: e.target.value }));
     };
 
     const renderRecipes = () => {
@@ -84,7 +84,7 @@ const Recipes = () => {
                             className={classes.selectEmpty}
                         >
                             <option aria-label="None" value="" />
-                            {renderCategoryOptions(categories)}
+                            {categories.length ? (renderCategoryOptions(categories)) : null}
                         </Select>
                     </FormControl>
                 </Box>
@@ -114,10 +114,10 @@ const Recipes = () => {
 
     return (
         <Container maxWidth="lg">
-            {status === "failed" ? (
+            {(status === "failed") ? (
                 <RequestError
                     retryFunction={() =>
-                        dispatch(fetchRecipesAndCategories(currentLastId, currentCategory))
+                        dispatch(fetchRecipesAndCategories({ currentLastId: 0, categoryId: currentCategory }))
                     }
                 />
             ) : (

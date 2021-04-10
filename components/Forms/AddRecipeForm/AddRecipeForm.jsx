@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import styled from "styled-components";
-import { addRecipe, editRecipe } from "../../../redux/actions/recipesListActions";
+import { addRecipe, editRecipe } from "../../../redux/slices/recipesListSlice.js";
 import AddRecipeFormStep from "./AddRecipeFormStep";
 import AddRecipeFormIngredient from "./AddRecipeFormIngredient";
 import AddImageField from "./AddImageField";
@@ -143,11 +143,11 @@ const AddRecipeFormik = ({
 
                     switch (additionalInfo.type) {
                         case "edit": {
-                            dispatch(editRecipe(recipe, authorId, additionalInfo.recipeId));
+                            dispatch(editRecipe({recipe, authorId, recipeId: additionalInfo.recipeId}));
                             break;
                         }
                         case "add": {
-                            dispatch(addRecipe(recipe, authorId));
+                            dispatch(addRecipe({recipe, authorId}));
                             break;
                         }
                     }

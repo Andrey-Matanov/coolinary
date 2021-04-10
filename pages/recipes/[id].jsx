@@ -3,8 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { Container, Box, CircularProgress } from "@material-ui/core";
 import RecipeStepsList from "../../components/PagesComponents/RecipePage/RecipeStepsList";
-import { fetchRecipeWithInfo } from "../../redux/actions/combinedActions.js";
-import { recipeDataIsLoading } from "../../redux/actions/recipeActions.js";
+import RequestError from "../../components/Common/RequestError.jsx";
+import { fetchRecipeWithInfo } from "../../redux/slices/combinedThunks.js";
 
 const Recipe = () => {
     const dispatch = useDispatch();
@@ -18,15 +18,6 @@ const Recipe = () => {
     const recipeIsInCollections = useSelector((state) =>
         state.authorization.collections.recipes?.some((recipe) => recipe.id === id)
     );
-
-    useLayoutEffect(() => {
-        if (id !== null && id !== undefined && recipe.recipe?.recipe._id !== id)
-            dispatch(recipeDataIsLoading());
-    }, [id]);
-
-    useEffect(() => {
-        if (status === "loading") dispatch(fetchRecipeWithInfo(id));
-    }, [status]);
 
     useEffect(() => {
         const { id } = router.query;
@@ -51,13 +42,13 @@ const Recipe = () => {
                     <Container maxWidth="md">
                         <RecipeStepsList
                             recipeId={id}
-                            recipe={recipe.recipe.recipe}
-                            commentaries={recipe.recipe.recipeCommentaries}
+                            recipe={recipe.recipe}
+                            commentaries={recipe.recipeCommentaries}
                             ingredientsData={ingredients}
                             unitsData={units}
                             category={
                                 categories.find(
-                                    (item) => item._id === recipe.recipe.recipe.categoryId
+                                    (item) => item._id === recipe.recipe.categoryId
                                 ).name
                             }
                             autorizedUserId={autorizedUserId}
