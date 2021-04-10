@@ -1,63 +1,50 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
-import configuredAxios from "../../utils/configuredAxios.js"
-import { fetchRecipesAndCategories } from "./combinedThunks.js"
-import { updateUserRecipesAfterCreation, updateUserRecipesAfterDelete } from "./profileSlice.js"
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import configuredAxios from "../../utils/configuredAxios.js";
+import { fetchRecipesAndCategories } from "../combinedThunks.js";
+import { updateUserRecipesAfterCreation, updateUserRecipesAfterDelete } from "./profileSlice.js";
 
 export const FETCH = "recipesList/FETCH";
 
 export const fetchRecipes = createAsyncThunk(FETCH, async (userData, thunkAPI) => {
     const { currentLastId, categoryId } = userData;
-    try {
-        const response = await configuredAxios.get(`/recipes?amount=10&last=${currentLastId}&categoryId=${categoryId}`);
-        return {
-            recipes: response.data.recipes,
-            isLastRecipes: response.data.isLastRecipes,
-            categoryId: categoryId,
-        };
-    } catch(err) {
-        return thunkAPI.rejectWithValue([], err);
-    }
-})
+    const response = await configuredAxios.get(
+        `/recipes?amount=10&last=${currentLastId}&categoryId=${categoryId}`
+    );
+    return {
+        recipes: response.data.recipes,
+        isLastRecipes: response.data.isLastRecipes,
+        categoryId: categoryId,
+    };
+});
 
 export const addRecipe = createAsyncThunk("recipesList/add", async (userData, thunkAPI) => {
     const { recipe, authorId } = userData;
-    try {
-        const response = await configuredAxios.post(`/recipes`, { ...recipe, authorId });
+    const response = await configuredAxios.post(`/recipes`, { ...recipe, authorId });
 
-        dispatch(
-            updateUserRecipesAfterCreation({
-                id: response.data.newRecipeId,
-                name: recipe.name,
-            })
-        );
-    } catch(err) {
-        return thunkAPI.rejectWithValue([], err);
-    }
-})
+    thunkAPI.dispatch(
+        updateUserRecipesAfterCreation({
+            id: response.data.newRecipeId,
+            name: recipe.name,
+        })
+    );
+});
 
 export const editRecipe = createAsyncThunk("recipesList/edit", async (userData, thunkAPI) => {
     const { recipe, authorId, recipeId } = userData;
-    try {
-        await configuredAxios.patch(`/recipes/${recipeId}`, { ...recipe, authorId });
-    } catch(err) {
-        return thunkAPI.rejectWithValue([], err);
-    }
-})
+    await configuredAxios.patch(`/recipes/${recipeId}`, { ...recipe, authorId });
+    return;
+});
 
 export const deleteRecipe = createAsyncThunk("recipesList/delete", async (recipeId, thunkAPI) => {
-    try {
-        await configuredAxios.delete(`/recipes/${recipeId}`);
-        dispatch(updateUserRecipesAfterDelete(recipeId));
-    } catch(err) {
-        return thunkAPI.rejectWithValue([], err);
-    }
-})
+    await configuredAxios.delete(`/recipes/${recipeId}`);
+    thunkAPI.dispatch(updateUserRecipesAfterDelete(recipeId));
+});
 
 const initialRecipesListState = {
     recipes: [],
     currentLastId: 0,
     isLastRecipes: false,
-    currentCategory: '',
+    currentCategory: "",
     status: "loading",
 };
 
@@ -90,7 +77,7 @@ const recipesListSlice = createSlice({
                     isLastRecipes: action.payload.isLastRecipes,
                     currentCategory: action.payload.categoryId,
                     status: "ok",
-                }
+                };
             }
         },
         [fetchRecipes.pending]: (state, action) => {
@@ -121,7 +108,7 @@ const recipesListSlice = createSlice({
                     isLastRecipes: action.payload.isLastRecipes,
                     currentCategory: state.currentCategory,
                     status: "ok",
-                }
+                };
             }
         },
         [fetchRecipesAndCategories.pending]: (state, action) => {
@@ -136,12 +123,10 @@ const recipesListSlice = createSlice({
                 status: "failed",
             };
         },
-    }
-})
+    },
+});
 
 export const {
-    actions: {
-        switchCategory,
-    },
+    actions: { switchCategory },
     reducer,
 } = recipesListSlice;

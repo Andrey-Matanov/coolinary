@@ -4,9 +4,9 @@ import Router from "next/router";
 import styled from "styled-components";
 import { AuthContext } from "../providers/Authentication";
 import AddRecipeForm from "../components/Forms/AddRecipeForm/AddRecipeForm";
-import { fetchIngredients } from "../redux/actions/ingredientsAction";
-import { fetchCategories } from "../redux/actions/categoriesActions";
-import { fetchUnits } from "../redux/actions/unitsActions";
+import { fetchIngredients } from "../redux/slices/ingredientsSlice.js";
+import { fetchCategories } from "../redux/slices/categoriesSlice.js";
+import { fetchUnits } from "../redux/slices/unitsSlice.js";
 import LoadingDataComponent from "../components/Common/LoadingDataComponent";
 
 const Wrapper = styled.div`
@@ -46,7 +46,7 @@ const AddRecipe = ({ ingredients, categories, units }) => {
         }
     }, []);
 
-    if (isUserLoggedIn) {
+    if (isUserLoggedIn && categories.length) {
         return (
             <Wrapper>
                 <h1>Добавить рецепт</h1>

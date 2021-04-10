@@ -1,18 +1,17 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
-import configuredAxios from "../../utils/configuredAxios.js"
-import { fetchRecipesAndCategories, fetchIngredientsAndCategories, fetchRecipeWithInfo } from "./combinedThunks.js"
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import configuredAxios from "../../utils/configuredAxios.js";
+import {
+    fetchRecipesAndCategories,
+    fetchIngredientsAndCategories,
+    fetchRecipeWithInfo,
+} from "../combinedThunks.js";
 
 export const FETCH = "categories/FETCH";
 
 export const fetchCategories = createAsyncThunk(FETCH, async (thunkAPI) => {
-    try {
-        const response = await configuredAxios.get(`/categories`);
-        return response.data;
-    } catch(err) {
-        return thunkAPI.rejectWithValue([], err);
-    }
-    
-})
+    const response = await configuredAxios.get(`/categories`);
+    return response.data;
+});
 
 const initialCategoriesState = [];
 
@@ -73,7 +72,7 @@ const categoriesSlice = createSlice({
                 ...initialCategoriesState,
             };
         },
-    }
-})
+    },
+});
 
-export const { actions, reducer } = categoriesSlice;
+export const { reducer } = categoriesSlice;

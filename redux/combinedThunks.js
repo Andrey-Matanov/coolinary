@@ -1,9 +1,10 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import configuredAxios from "../../utils/configuredAxios";
+import configuredAxios from "../utils/configuredAxios";
 
-export const fetchRecipesAndCategories = createAsyncThunk("combined/fetchRecipesAndCategories", async (userData, thunkAPI) => {
-    const { currentLastId, category } = userData;
-    try {
+export const fetchRecipesAndCategories = createAsyncThunk(
+    "combined/fetchRecipesAndCategories",
+    async (userData, thunkAPI) => {
+        const { currentLastId, category } = userData;
         const recipesResponse = await configuredAxios.get(
             `/recipes/?amount=10&last=${currentLastId}&category=${category}`
         );
@@ -13,26 +14,24 @@ export const fetchRecipesAndCategories = createAsyncThunk("combined/fetchRecipes
             recipes: recipesResponse.data.recipes,
             isLastRecipes: recipesResponse.data.isLastRecipes,
         };
-    } catch(err) {
-        return thunkAPI.rejectWithValue([], err);
     }
-});
+);
 
-export const fetchIngredientsAndCategories = createAsyncThunk("combined/fetchIngredientsAndCategories", async (thunkAPI) => {
-    try {
-        const ingredientsResponse = await configuredAxios.get(`/ingredients`)
+export const fetchIngredientsAndCategories = createAsyncThunk(
+    "combined/fetchIngredientsAndCategories",
+    async (thunkAPI) => {
+        const ingredientsResponse = await configuredAxios.get(`/ingredients`);
         const categoriesResponse = await configuredAxios.get(`/categories`);
         return {
             ingredients: ingredientsResponse.data,
-            categories: categoriesResponse.data
+            categories: categoriesResponse.data,
         };
-    } catch(err) {
-        return thunkAPI.rejectWithValue([], err);
     }
-});
+);
 
-export const fetchRecipeWithInfo = createAsyncThunk("combined/fetchRecipeWithInfo", async (id, thunkAPI) => {
-    try {
+export const fetchRecipeWithInfo = createAsyncThunk(
+    "combined/fetchRecipeWithInfo",
+    async (id, thunkAPI) => {
         const recipeResponse = await configuredAxios.get(`/recipes/${id}`);
         const ingredientsResponse = await configuredAxios.get(`/ingredients?recipeId=${id}`);
         const unitsResponse = await configuredAxios.get(`/units?recipeId=${id}`);
@@ -43,7 +42,5 @@ export const fetchRecipeWithInfo = createAsyncThunk("combined/fetchRecipeWithInf
             categories: categoriesResponse.data,
             units: unitsResponse.data,
         };
-    } catch(err) {
-        return thunkAPI.rejectWithValue([], err);
     }
-});
+);

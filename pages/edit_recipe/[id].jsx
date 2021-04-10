@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { connect, useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-import { fetchIngredientsAndCategories } from "../../redux/slices/combinedThunks.js";
+import { fetchIngredientsAndCategories } from "../../redux/combinedThunks.js";
 import { fetchRecipe } from "../../redux/slices/recipeSlice.js";
 import { fetchUnits } from "../../redux/slices/unitsSlice.js";
 import LoadingDataComponent from "../../components/Common/LoadingDataComponent";

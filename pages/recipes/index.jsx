@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import RecipesList from "../../components/PagesComponents/RecipesPage/RecipesList.jsx";
 import RequestError from "../../components/Common/RequestError.jsx";
 import { fetchRecipes, switchCategory } from "../../redux/slices/recipesListSlice.js";
-import { fetchRecipesAndCategories } from "../../redux/slices/combinedThunks.js";
+import { fetchRecipesAndCategories } from "../../redux/combinedThunks.js";
 
 import {
     Container,
@@ -32,7 +32,7 @@ const Recipes = () => {
     const classes = useStyles();
 
     const recipesList = useSelector((state) => state.recipesObject.recipes);
-    const recipesListStatus = useSelector((state => state.recipesObject.status))
+    const recipesListStatus = useSelector((state) => state.recipesObject.status);
     const { currentLastId, isLastRecipes, currentCategory, status } = useSelector(
         (state) => state.recipesObject
     );
@@ -41,7 +41,7 @@ const Recipes = () => {
 
     useEffect(() => {
         if (!recipesList.length)
-            dispatch(fetchRecipesAndCategories({ currentLastId, categoryId: currentCategory}));
+            dispatch(fetchRecipesAndCategories({ currentLastId, categoryId: currentCategory }));
     }, [dispatch]);
 
     useEffect(() => {
@@ -84,29 +84,29 @@ const Recipes = () => {
                             className={classes.selectEmpty}
                         >
                             <option aria-label="None" value="" />
-                            {categories.length ? (renderCategoryOptions(categories)) : null}
+                            {categories.length ? renderCategoryOptions(categories) : null}
                         </Select>
                     </FormControl>
                 </Box>
-                {(recipesListStatus === "ok" && recipesList.length) ? (
+                {recipesListStatus === "ok" && recipesList.length ? (
                     <RecipesList
                         recipesList={recipesList}
                         loadRecipes={renderRecipes}
                         isLast={isLastRecipes}
                         currentLastId={currentLastId}
                     />
-                ) : ((recipesListStatus === "ok") ? (
+                ) : recipesListStatus === "ok" ? (
                     <Box width="100%" display="flex" p={1} justifyContent="center">
                         <Paper elevation={2}>
                             <Box py={2} px={5}>
-                                <Typography align="center" variant="subtitle1">Рецептов в этой категории пока нет. Но скоро будут!</Typography>
+                                <Typography align="center" variant="subtitle1">
+                                    Рецептов в этой категории пока нет. Но скоро будут!
+                                </Typography>
                             </Box>
                         </Paper>
                     </Box>
-                    ) : (
-                        <LoadingDataComponent />
-                    )
-                    
+                ) : (
+                    <LoadingDataComponent />
                 )}
             </>
         );
@@ -114,10 +114,15 @@ const Recipes = () => {
 
     return (
         <Container maxWidth="lg">
-            {(status === "failed") ? (
+            {status === "failed" ? (
                 <RequestError
                     retryFunction={() =>
-                        dispatch(fetchRecipesAndCategories({ currentLastId: 0, categoryId: currentCategory }))
+                        dispatch(
+                            fetchRecipesAndCategories({
+                                currentLastId: 0,
+                                categoryId: currentCategory,
+                            })
+                        )
                     }
                 />
             ) : (

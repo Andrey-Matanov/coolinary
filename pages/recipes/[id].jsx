@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { Container, Box, CircularProgress } from "@material-ui/core";
 import RecipeStepsList from "../../components/PagesComponents/RecipePage/RecipeStepsList";
 import RequestError from "../../components/Common/RequestError.jsx";
-import { fetchRecipeWithInfo } from "../../redux/slices/combinedThunks.js";
+import { fetchRecipeWithInfo } from "../../redux/combinedThunks.js";
 
 const Recipe = () => {
     const dispatch = useDispatch();
@@ -47,9 +47,8 @@ const Recipe = () => {
                             ingredientsData={ingredients}
                             unitsData={units}
                             category={
-                                categories.find(
-                                    (item) => item._id === recipe.recipe.categoryId
-                                ).name
+                                categories.find((item) => item._id === recipe.recipe.categoryId)
+                                    .name
                             }
                             autorizedUserId={autorizedUserId}
                             recipeIsInCollections={recipeIsInCollections}

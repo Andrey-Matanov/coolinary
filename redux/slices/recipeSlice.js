@@ -1,22 +1,17 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
-import configuredAxios from "../../utils/configuredAxios.js"
-import { fetchRecipeWithInfo } from "./combinedThunks.js"
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import configuredAxios from "../../utils/configuredAxios.js";
+import { fetchRecipeWithInfo } from "../combinedThunks.js";
 
 export const FETCH = "recipe/FETCH";
 
 export const fetchRecipe = createAsyncThunk(FETCH, async (id, thunkAPI) => {
-    try {
-        const response = await configuredAxios.get(`/recipes/${id}`);
-        return {
-            ...response.data,
-            commentaries: response.data.recipeCommentaries,
-            recipeCommentaries: undefined,
-        }
-    } catch(err) {
-        return thunkAPI.rejectWithValue([], err);
-    }
-    
-})
+    const response = await configuredAxios.get(`/recipes/${id}`);
+    return {
+        ...response.data,
+        commentaries: response.data.recipeCommentaries,
+        recipeCommentaries: undefined,
+    };
+});
 
 const initialRecipeState = {
     recipe: {},
@@ -64,12 +59,10 @@ const recipeSlice = createSlice({
                 status: "failed",
             };
         },
-    }
-})
+    },
+});
 
 export const {
-    actions: {
-        updateRecipeCommentaries
-    },
+    actions: { updateRecipeCommentaries },
     reducer,
 } = recipeSlice;
