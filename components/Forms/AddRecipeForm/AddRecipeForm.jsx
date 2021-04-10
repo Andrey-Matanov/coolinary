@@ -91,10 +91,6 @@ const AddRecipeFormik = ({
         }
     }, [ingredients, formInitialValues]);
 
-    useEffect(() => {
-        console.log("addRecipeForm rerender");
-    });
-
     const validationSchema = Yup.object().shape({
         name: Yup.string().required("Название не может быть пустым"),
         categoryId: Yup.string().required("Выберите категорию"),

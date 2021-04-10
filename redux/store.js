@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { createWrapper } from "next-redux-wrapper";
 import logger from "redux-logger";
-import { authorizationReducer } from "./reducers/authorizationReducer";
+import { reducer as authorizationReducer } from "./slices/authorizationSlice";
 import { categoriesReducer } from "./reducers/categoriesReducer";
 import { ingredientsReducer } from "./reducers/ingredientsReducer";
 import { reducer as profileReducer } from "./slices/profileSlice";

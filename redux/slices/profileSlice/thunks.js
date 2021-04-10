@@ -17,7 +17,7 @@ export const fetchUserData = createAsyncThunk("profile/fetchUserData", async (id
 export const updateUserInfo = createAsyncThunk(
     "profile/updateUserInfo",
     async (userData, thunkAPI) => {
-        const { userId, newUserInfo } = userData;
+        const { userId, ...newUserInfo } = userData;
 
         await configuredAxios.patch(`/users/${userId}`, newUserInfo);
 
@@ -31,16 +31,3 @@ export const deleteUser = createAsyncThunk("profile/deleteUser", async (userId, 
 
     return;
 });
-
-// export const changeUserName = createAsyncThunk(
-//     "profile/changeUserName",
-//     async (userData, thunkAPI) => {
-//         const { userId, newUserName } = userData;
-
-//         await configuredAxios.patch(`/users/${userId}`, {
-//             name: JSON.stringify(newUserName),
-//         });
-
-//         return newUserName;
-//     }
-// );

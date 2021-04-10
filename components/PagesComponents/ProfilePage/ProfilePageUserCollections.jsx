@@ -5,10 +5,16 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
-import { authorizationUpdateCurrentUserCollections } from "../../../redux/actions/authorizationActions";
+import { authorizationUpdateCurrentUserCollections } from "../../../redux/slices/authorizationSlice/thunks";
 
-const ProfilePageUserCollections = ({ userCollections, currentUserId, dispatch }) => {
+const ProfilePageUserCollections = ({
+    userCollections,
+    profileUserId,
+    currentUserId,
+    dispatch,
+}) => {
     const { recipes, articles } = userCollections;
+    const isUserOwnsThisProfile = profileUserId === currentUserId; // if true then current user owns this profile page
 
     return (
         <>
@@ -48,9 +54,11 @@ const ProfilePageUserCollections = ({ userCollections, currentUserId, dispatch }
                                                     onClick={() =>
                                                         dispatch(
                                                             authorizationUpdateCurrentUserCollections(
-                                                                "remove_recipe",
-                                                                currentUserId,
-                                                                recipe.id
+                                                                {
+                                                                    type: "remove_recipe",
+                                                                    userId: currentUserId,
+                                                                    data: recipe.id,
+                                                                }
                                                             )
                                                         )
                                                     }
@@ -67,7 +75,9 @@ const ProfilePageUserCollections = ({ userCollections, currentUserId, dispatch }
                 ) : (
                     <Box pr={1} minHeight="32px">
                         <Typography variant="body1">
-                            Вы еще не сохранили ни одного рецепта в свою коллекцию
+                            {isUserOwnsThisProfile
+                                ? "Вы еще не сохранили ни одного рецепта в свою коллекцию"
+                                : "Пользователь еще не добавил ни одного рецепта в свою коллекцию"}
                         </Typography>
                     </Box>
                 )}
@@ -78,14 +88,14 @@ const ProfilePageUserCollections = ({ userCollections, currentUserId, dispatch }
                 </Box>
                 {articles?.length ? (
                     <Box pr={1} minHeight="32px">
-                        <Typography variant="body1">
-                            <b>Имя: </b>
-                        </Typography>
+                        <Typography variant="body1">Статьи</Typography>
                     </Box>
                 ) : (
                     <Box pr={1} minHeight="32px">
                         <Typography variant="body1">
-                            Вы еще не сохранили ни одной статьи в свою коллекцию
+                            {isUserOwnsThisProfile
+                                ? "Вы еще не сохранили ни одной статьи в свою коллекцию"
+                                : "Пользователь еще не добавил ни одной статьи в свою коллекцию"}
                         </Typography>
                     </Box>
                 )}

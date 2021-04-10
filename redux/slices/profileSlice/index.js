@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
-import configuredAxios from "../../../utils/configuredAxios";
 import { fetchUserData, updateUserInfo, deleteUser } from "./thunks";
 
 const initialProfileValues = {
@@ -12,6 +11,7 @@ const initialProfileValues = {
         recipes: [],
         articles: [],
     },
+    toastId: null,
 };
 
 const profileSlice = createSlice({
@@ -21,6 +21,12 @@ const profileSlice = createSlice({
         status: null,
     },
     reducers: {
+        updateUserRecipesAfterCreation(state, action) {
+            const newUserRecipe = action.payload;
+
+            state.userRecipes.push(newUserRecipe);
+            toast.success("Новый рецепт был успешно добавлен");
+        },
         updateUserRecipesAfterDelete(state, action) {
             const removedRecipeId = action.payload;
             let updatedRecipes = [...state.userRecipes];
@@ -30,54 +36,32 @@ const profileSlice = createSlice({
 
             return { ...state, userRecipes: updatedRecipes };
         },
-        changeEmailSuccess(state, action) {
-            const newEmail = action.payload;
-
-            state.userEmail = newEmail;
-            toast.success("Вы успешно изменили почту!");
-        },
-        changeEmailFailure(state, action) {
-            toast.error("Произошла ошибка при попытке изменить имя!");
-
-            return state;
-        },
-        deleteUserSuccess(state, action) {
-            toast.success("Ваш профиль был успешно удален!");
-
-            return { ...initialProfileValues, status: null };
-        },
-        deleteUserFailure(state, action) {
-            toast.success("Произошла ошибка при удалении профиля");
-
-            return state;
-        },
         profileUpdateCurrentUserCollections(state, action) {
+            console.log(action.payload);
+
             switch (action.payload.type) {
                 case "add_recipe": {
                     const newRecipe = action.payload.newRecipe;
 
                     state.userCollections.recipes.push(newRecipe);
-                    toast("Рецепт был успешно добавлен в вашу коллекцию рецептов!");
+                    toast.success("Рецепт был успешно добавлен в вашу коллекцию рецептов!");
 
                     break;
                 }
                 case "remove_recipe": {
                     const removedRecipeId = action.payload.removedRecipeId;
-                    const userCollectionsRecipes = state.userCollections.recipes;
-                    const newUserCollectionsRecipes = userCollectionsRecipes.filter(
+                    const newUserCollectionsRecipes = state.userCollections.recipes.filter(
                         (recipe) => recipe.id !== removedRecipeId
                     );
 
-                    toast("Рецепт был успешно удален из вашей коллекции рецептов!");
+                    state.userCollections.recipes = newUserCollectionsRecipes;
+                    toast.success("Рецепт был успешно удален из вашей коллекции рецептов!");
 
-                    return {
-                        ...state,
-                        userCollections: {
-                            recipes: newUserCollectionsRecipes,
-                        },
-                    };
+                    break;
                 }
                 default: {
+                    toast.error("Произошла ошибка!");
+
                     return state;
                 }
             }
@@ -91,7 +75,7 @@ const profileSlice = createSlice({
             };
         },
         [fetchUserData.fulfilled]: (state, action) => {
-            return action.payload; // current profile userdata
+            return { ...action.payload, toastId: null }; // current profile userdata
         },
         [fetchUserData.rejected]: (state, action) => {
             toast.error("Ошибка при попытке загрузить данные пользователя");
@@ -102,16 +86,28 @@ const profileSlice = createSlice({
             };
         },
         [updateUserInfo.pending]: (state, action) => {
-            toast.info("Обновление данных...");
+            state.toastId = toast.info("Обновление данных...", { autoClose: false });
 
             return state;
         },
         [updateUserInfo.fulfilled]: (state, action) => {
-            const newUserInfo = action.payload.newUserInfo;
+            const newUserInfo = action.payload;
 
-            toast.success("Информация о пользователе была успешно изменена!");
+            if (newUserInfo.name) {
+                state.userName = newUserInfo.name;
+                toast.update(state.toastId, {
+                    autoClose: 1500,
+                });
+                toast.success("Имя пользователя было успешно изменено!");
+            }
 
-            return { ...state, ...newUserInfo };
+            if (newUserInfo.email) {
+                state.userEmail = newUserInfo.email;
+                toast.update(state.toastId, {
+                    autoClose: 1500,
+                });
+                toast.success("Имя почтового ящика пользователя было успешно изменено!");
+            }
         },
         [updateUserInfo.rejected]: (state, action) => {
             toast.error("Ошибка при попытке изменить информацию о пользователе!");
@@ -133,44 +129,8 @@ const profileSlice = createSlice({
 
             return state;
         },
-        // [changeUserName.pending]: (state, action) => {
-        //     toast.info("Обновление имени пользователя...");
-
-        //     return state;
-        // },
-        // [changeUserName.fulfilled]: (state, action) => {
-        //     const newUserName = action.payload;
-
-        //     state.userName = newUserName;
-        //     toast.success("Вы успешно изменили имя!");
-        // },
-        // [changeUserName.rejected]: (state, action) => {
-        //     toast.error("Произошла ошибка при попытке изменить имя!");
-
-        //     return state;
-        // },
     },
 });
-
-const {
-    actions: { changeEmailSuccess, changeEmailFailure, deleteUserSuccess, deleteUserFailure },
-} = profileSlice;
-
-export const changeEmail = (userId, newEmail) => async (dispatch) => {
-    try {
-        await configuredAxios.patch(`/users/${userId}`, {
-            email: JSON.stringify(newEmail),
-        });
-
-        dispatch(changeEmailSuccess(newEmail));
-    } catch (error) {
-        console.log(error);
-        dispatch(changeEmailFailure());
-    }
-};
-
-// export const todosStatusSelector = (state) => state.todosReducer.status;
-// export const todosArraySelector = (state) => state.todosReducer.todos;
 
 export const {
     actions: {

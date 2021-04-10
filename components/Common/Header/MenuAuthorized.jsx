@@ -1,4 +1,5 @@
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import Link from "next/link";
 import { makeStyles } from "@material-ui/core/styles";
@@ -8,9 +9,7 @@ import AccountBoxIcon from "@material-ui/icons/AccountBox";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import RecipeIcon from "../../Icons/RecipeIcon";
 import firebaseApp from "../../../utils/firebaseConfig";
-import { useDispatch, useSelector } from "react-redux";
-import { userLogout } from "../../../redux/actions/authorizationActions";
-import Router from "next/router";
+import { userLogout } from "../../../redux/slices/authorizationSlice";
 
 const LinkDiv = styled.a`
     display: flex;
@@ -100,7 +99,6 @@ const Menu = () => {
                 onClick={() => {
                     firebaseApp.auth().signOut();
                     dispatch(userLogout());
-                    Router.push("/");
                 }}
                 className={classes.button}
             >

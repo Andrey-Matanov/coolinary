@@ -8,7 +8,7 @@ import { fetchCategories, FETCH_CATEGORIES } from "./categoriesActions";
 import { fetchRecipes, FETCH_RECIPES } from "./recipesListActions";
 import { FETCH_RECIPE, UPDATE_RECIPE_RATING } from "./recipeActions";
 import { FETCH_UNITS } from "./unitsActions.js";
-import { AUTHORIZATION_UPDATE_CURRENT_USER_MARKS } from "./authorizationActions.js";
+// import { AUTHORIZATION_UPDATE_CURRENT_USER_MARKS } from "./authorizationActions.js";
 
 export const fetchIngredientsAndCategories = () => async (dispatch, getState) => {
     if (!getState().ingredients.length && !getState().recipesObject.recipes.length) {
@@ -139,7 +139,7 @@ export const changeRating = (type, userId, authorId, recipeId, payload) => async
     ) {
         batch(() => {
             dispatch({
-                type: AUTHORIZATION_UPDATE_CURRENT_USER_MARKS,
+                // type: AUTHORIZATION_UPDATE_CURRENT_USER_MARKS,
                 payload: {
                     type: type,
                     newMark: recipeId,

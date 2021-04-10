@@ -20,7 +20,8 @@ const Recipe = () => {
     );
 
     useLayoutEffect(() => {
-        if (id !== null && recipe.recipe?.recipe._id !== id) dispatch(recipeDataIsLoading());
+        if (id !== null && id !== undefined && recipe.recipe?.recipe._id !== id)
+            dispatch(recipeDataIsLoading());
     }, [id]);
 
     useEffect(() => {

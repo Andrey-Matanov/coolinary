@@ -11,9 +11,9 @@ import DifficultyBar from "../../Common/DifficultyBar";
 import ReviewsBlock from "../../Common/Commentaries/ReviewsBlock.jsx";
 import Nutrition from "./Nutrition.jsx";
 import Ingredients from "./Ingredients";
-import { authorizationUpdateCurrentUserCollections } from "../../../redux/actions/authorizationActions.js";
-import { changeRating } from "../../../redux/actions/combinedActions.js"
+import { changeRating } from "../../../redux/actions/combinedActions.js";
 import { useSelector } from "react-redux";
+import { authorizationUpdateCurrentUserCollections } from "../../../redux/slices/authorizationSlice/thunks.js";
 
 const useStyles = makeStyles((theme) => ({
     link: {
@@ -153,20 +153,23 @@ const RecipeStepsList = ({
                             <Box my={3}>
                                 <RatingBar
                                     rating={rating}
-                                    isRated={currentUserId === null || authorId === currentUserId || !!currentUserRated.find(item => item === recipeId)}
-                                    clickFunction={
-                                        (rateValue)=>{
-                                            dispatch(
-                                                changeRating(
-                                                    "rate_recipe",
-                                                    autorizedUserId,
-                                                    authorId,
-                                                    recipeId,
-                                                    rateValue
-                                                )
+                                    isRated={
+                                        currentUserId === null ||
+                                        authorId === currentUserId ||
+                                        !!currentUserRated.find((item) => item === recipeId)
+                                    }
+                                    clickFunction={(rateValue) => {
+                                        dispatch(
+                                            changeRating(
+                                                "rate_recipe",
+                                                autorizedUserId,
+                                                authorId,
+                                                recipeId,
+                                                rateValue
                                             )
-                                        }
-                                    } />
+                                        );
+                                    }}
+                                />
                             </Box>
                         </Box>
                     </Paper>
@@ -209,11 +212,11 @@ const RecipeStepsList = ({
                             fullWidth={true}
                             onClick={() => {
                                 dispatch(
-                                    authorizationUpdateCurrentUserCollections(
-                                        "remove_recipe",
-                                        autorizedUserId,
-                                        recipeId
-                                    )
+                                    authorizationUpdateCurrentUserCollections({
+                                        type: "remove_recipe",
+                                        userId: autorizedUserId,
+                                        data: recipeId,
+                                    })
                                 );
                             }}
                         >
@@ -227,14 +230,14 @@ const RecipeStepsList = ({
                             fullWidth={true}
                             onClick={() => {
                                 dispatch(
-                                    authorizationUpdateCurrentUserCollections(
-                                        "add_recipe",
-                                        autorizedUserId,
-                                        {
+                                    authorizationUpdateCurrentUserCollections({
+                                        type: "add_recipe",
+                                        userId: autorizedUserId,
+                                        data: {
                                             id: recipeId,
                                             name: recipe.name,
-                                        }
-                                    )
+                                        },
+                                    })
                                 );
                             }}
                         >

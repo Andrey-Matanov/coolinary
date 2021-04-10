@@ -110,6 +110,7 @@ export const fetchCategories = () => async (dispatch) => {
 export const addRecipe = (recipe, authorId) => async (dispatch) => {
     const response = await axios.post(`${baseURL}/api/recipes`, { ...recipe, authorId });
     const newRecipeId = response.data.newRecipeId;
+
     dispatch(
         updateUserRecipesAfterCreation({
             id: newRecipeId,

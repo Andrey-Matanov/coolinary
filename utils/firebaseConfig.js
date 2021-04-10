@@ -13,5 +13,7 @@ const config = {
 const firebaseApp = firebase.apps?.length > 0 ? firebase.apps[0] : firebase.initializeApp(config);
 
 export const auth = firebaseApp.auth();
+export const firebaseUpdateEmail = (newEmail) => auth.currentUser.updateEmail(newEmail);
+export const firebaseRemoveCurrentUser = () => auth.currentUser.delete();
 
 export default firebaseApp;
