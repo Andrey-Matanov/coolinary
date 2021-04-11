@@ -47,25 +47,27 @@ const ProfilePageUserCollections = ({
                                                     </Link>
                                                 </Box>
                                             </Grid>
-                                            <Grid item xs={3}>
-                                                <Button
-                                                    variant="contained"
-                                                    size="small"
-                                                    onClick={() =>
-                                                        dispatch(
-                                                            authorizationUpdateCurrentUserCollections(
-                                                                {
-                                                                    type: "remove_recipe",
-                                                                    userId: currentUserId,
-                                                                    data: recipe.id,
-                                                                }
+                                            {isUserOwnsThisProfile ? (
+                                                <Grid item xs={3}>
+                                                    <Button
+                                                        variant="contained"
+                                                        size="small"
+                                                        onClick={() =>
+                                                            dispatch(
+                                                                authorizationUpdateCurrentUserCollections(
+                                                                    {
+                                                                        type: "remove_recipe",
+                                                                        userId: currentUserId,
+                                                                        data: recipe.id,
+                                                                    }
+                                                                )
                                                             )
-                                                        )
-                                                    }
-                                                >
-                                                    Удалить из коллекции
-                                                </Button>
-                                            </Grid>
+                                                        }
+                                                    >
+                                                        Удалить из коллекции
+                                                    </Button>
+                                                </Grid>
+                                            ) : null}
                                         </Grid>
                                     </Paper>
                                 </Box>
