@@ -82,12 +82,6 @@ const recipesListSlice = createSlice({
                 };
             }
         },
-        [fetchRecipes.pending]: (state, action) => {
-            return {
-                ...initialRecipesListState,
-                status: "loading",
-            };
-        },
         [fetchRecipes.rejected]: (state, action) => {
             return {
                 ...initialRecipesListState,
