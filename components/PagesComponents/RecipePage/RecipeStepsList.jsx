@@ -11,7 +11,7 @@ import DifficultyBar from "../../Common/DifficultyBar";
 import ReviewsBlock from "../../Common/Commentaries/ReviewsBlock.jsx";
 import Nutrition from "./Nutrition.jsx";
 import Ingredients from "./Ingredients";
-import { changeRating } from "../../../redux/actions/combinedActions.js";
+import { changeRating } from "../../../redux/combinedThunks.js";
 import { useSelector } from "react-redux";
 import { authorizationUpdateCurrentUserCollections } from "../../../redux/slices/authorizationSlice";
 
@@ -153,20 +153,20 @@ const RecipeStepsList = ({
                             <Box my={3}>
                                 <RatingBar
                                     rating={rating}
-                                    isRated={
+                                    isAlreadyRated={
                                         currentUserId === null ||
                                         authorId === currentUserId ||
                                         !!currentUserRated.find((item) => item === recipeId)
                                     }
                                     clickFunction={(rateValue) => {
                                         dispatch(
-                                            changeRating(
-                                                "rate_recipe",
-                                                autorizedUserId,
+                                            changeRating({
+                                                type: "rate_recipe",
+                                                userId: autorizedUserId,
                                                 authorId,
-                                                recipeId,
-                                                rateValue
-                                            )
+                                                objectId: recipeId,
+                                                payload: rateValue,
+                                            })
                                         );
                                     }}
                                 />

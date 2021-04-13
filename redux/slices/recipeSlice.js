@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import configuredAxios from "../../utils/configuredAxios.js";
-import { fetchRecipeWithInfo } from "../combinedThunks.js";
+import { fetchRecipeWithInfo, changeRating } from "../combinedThunks.js";
 
 export const FETCH = "recipe/FETCH";
 
@@ -58,6 +58,16 @@ const recipeSlice = createSlice({
                 ...initialRecipeState,
                 status: "failed",
             };
+        },
+        [changeRating.fulfilled]: (state, action) => {
+            state.recipe.recipe.rating.average =
+                (state.recipe.recipe.rating.average * state.recipe.recipe.rating.count +
+                    action.payload.newMark) /
+                (state.recipe.recipe.rating.count + 1);
+            state.recipe.recipe.rating.count++;
+        },
+        [changeRating.rejected]: (state, action) => {
+            return state;
         },
     },
 });

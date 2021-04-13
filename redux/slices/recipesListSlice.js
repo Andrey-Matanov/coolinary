@@ -27,6 +27,7 @@ export const addRecipe = createAsyncThunk("recipesList/add", async (userData, th
             name: recipe.name,
         })
     );
+    return;
 });
 
 export const editRecipe = createAsyncThunk("recipesList/edit", async (userData, thunkAPI) => {
@@ -38,6 +39,7 @@ export const editRecipe = createAsyncThunk("recipesList/edit", async (userData, 
 export const deleteRecipe = createAsyncThunk("recipesList/delete", async (recipeId, thunkAPI) => {
     await configuredAxios.delete(`/recipes/${recipeId}`);
     thunkAPI.dispatch(updateUserRecipesAfterDelete(recipeId));
+    return;
 });
 
 const initialRecipesListState = {

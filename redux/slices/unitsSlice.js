@@ -21,27 +21,19 @@ const unitsSlice = createSlice({
             return action.payload;
         },
         [fetchUnits.pending]: (state, action) => {
-            return {
-                ...initialUnitsState,
-            };
+            return initialUnitsState;
         },
         [fetchUnits.rejected]: (state, action) => {
-            return {
-                ...initialUnitsState,
-            };
+            return initialUnitsState;
         },
         [fetchRecipeWithInfo.fulfilled]: (state, action) => {
             return action.payload.units;
         },
         [fetchRecipeWithInfo.pending]: (state, action) => {
-            return {
-                ...initialUnitsState,
-            };
+            return initialUnitsState;
         },
         [fetchRecipeWithInfo.rejected]: (state, action) => {
-            return {
-                ...initialUnitsState,
-            };
+            return initialUnitsState;
         },
     },
 });

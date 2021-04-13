@@ -5,7 +5,7 @@ import { reducer as authorizationReducer } from "./slices/authorizationSlice";
 import { reducer as categoriesReducer } from "./slices/categoriesSlice.js";
 import { reducer as ingredientsReducer } from "./slices/ingredientsSlice.js";
 import { reducer as profileReducer } from "./slices/profileSlice";
-import { ratingReducer } from "./reducers/ratingReducer";
+import { reducer as usersListReducer } from "./slices/userListSlice.js";
 import { reducer as recipeReducer } from "./slices/recipeSlice.js";
 import { reducer as recipesListReducer } from "./slices/recipesListSlice.js";
 import { reducer as unitsReducer } from "./slices/unitsSlice.js";
@@ -17,7 +17,7 @@ const makeStore = () =>
             recipesObject: recipesListReducer,
             categories: categoriesReducer,
             ingredients: ingredientsReducer,
-            rating: ratingReducer,
+            usersList: usersListReducer,
             profile: profileReducer,
             recipe: recipeReducer,
             units: unitsReducer,

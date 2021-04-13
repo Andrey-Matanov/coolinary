@@ -3,6 +3,7 @@ import { toast } from "react-toastify";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import configuredAxios from "../../utils/configuredAxios";
 import { profileUpdateCurrentUserCollections } from "./profileSlice";
+import { changeRating } from "../combinedThunks.js";
 
 export const userLogin = createAsyncThunk("authorization/userLogin", async (email, thunkAPI) => {
     const response = await configuredAxios.get(`/userdata`, {
@@ -105,31 +106,31 @@ const AuthorizationSlice = createSlice({
         status: null,
     },
     reducers: {
-        authorizationUpdateCurrentUserMarks(state, action) {
-            const newMarks = { ...state.userMarks };
+        // authorizationUpdateCurrentUserMarks(state, action) {
+        //     const newMarks = { ...state.userMarks };
 
-            switch (action.payload.type) {
-                case "rate_recipe": {
-                    newMarks.recipes.push(action.payload.newMark);
-                    console.log(newMarks);
-                    return {
-                        ...state,
-                        userMarks: newMarks,
-                    };
-                }
-                case "rate_article": {
-                    newMarks.articles.push(action.payload.newMark);
-                    return {
-                        ...state,
-                        userMarks: newMarks,
-                    };
-                }
-                default: {
-                    toast.error("Произошла ошибка");
-                    return state;
-                }
-            }
-        },
+        //     switch (action.payload.type) {
+        //         case "rate_recipe": {
+        //             newMarks.recipes.push(action.payload.newMark);
+        //             console.log(newMarks);
+        //             return {
+        //                 ...state,
+        //                 userMarks: newMarks,
+        //             };
+        //         }
+        //         case "rate_article": {
+        //             newMarks.articles.push(action.payload.newMark);
+        //             return {
+        //                 ...state,
+        //                 userMarks: newMarks,
+        //             };
+        //         }
+        //         default: {
+        //             toast.error("Произошла ошибка");
+        //             return state;
+        //         }
+        //     }
+        // },
         userLogout(state, action) {
             return { ...initialAuthorizationValues, status: null };
         },
@@ -178,10 +179,29 @@ const AuthorizationSlice = createSlice({
 
             return state;
         },
+        [changeRating.fulfilled]: (state, action) => {
+            switch (action.payload.type) {
+                case "rate_recipe": {
+                    state.userMarks.recipes.push(action.payload.objectId);
+                    break;
+                }
+                case "rate_article": {
+                    state.userMarks.articles.push(action.payload.objectId);
+                    break;
+                }
+                default: {
+                    console.log("Ошибка");
+                    return state;
+                }
+            }
+        },
+        [changeRating.rejected]: (state, action) => {
+            return state;
+        },
     },
 });
 
 export const {
-    actions: { authorizationUpdateCurrentUserMarks, userLogout },
+    actions: { userLogout },
     reducer,
 } = AuthorizationSlice;

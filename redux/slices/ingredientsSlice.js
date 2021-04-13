@@ -20,40 +20,28 @@ const ingredientsSlice = createSlice({
             return action.payload;
         },
         [fetchIngredients.pending]: (state, action) => {
-            return {
-                ...initialIngredientsState,
-            };
+            return initialIngredientsState;
         },
         [fetchIngredients.rejected]: (state, action) => {
-            return {
-                ...initialIngredientsState,
-            };
+            return initialIngredientsState;
         },
         [fetchIngredientsAndCategories.fulfilled]: (state, action) => {
             return action.payload.ingredients;
         },
         [fetchIngredientsAndCategories.pending]: (state, action) => {
-            return {
-                ...initialIngredientsState,
-            };
+            return initialIngredientsState;
         },
         [fetchIngredientsAndCategories.rejected]: (state, action) => {
-            return {
-                ...initialIngredientsState,
-            };
+            return initialIngredientsState;
         },
         [fetchRecipeWithInfo.fulfilled]: (state, action) => {
             return action.payload.ingredients;
         },
         [fetchRecipeWithInfo.pending]: (state, action) => {
-            return {
-                ...initialIngredientsState,
-            };
+            return initialIngredientsState;
         },
         [fetchRecipeWithInfo.rejected]: (state, action) => {
-            return {
-                ...initialIngredientsState,
-            };
+            return initialIngredientsState;
         },
     },
 });

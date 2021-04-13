@@ -24,53 +24,37 @@ const categoriesSlice = createSlice({
             return action.payload;
         },
         [fetchCategories.pending]: (state, action) => {
-            return {
-                ...initialCategoriesState,
-            };
+            return initialCategoriesState;
         },
         [fetchCategories.rejected]: (state, action) => {
-            return {
-                ...initialCategoriesState,
-            };
+            return initialCategoriesState;
         },
         [fetchRecipesAndCategories.fulfilled]: (state, action) => {
             return action.payload.categories;
         },
         [fetchRecipesAndCategories.pending]: (state, action) => {
-            return {
-                ...initialCategoriesState,
-            };
+            return initialCategoriesState;
         },
         [fetchRecipesAndCategories.rejected]: (state, action) => {
-            return {
-                ...initialCategoriesState,
-            };
+            return initialCategoriesState;
         },
         [fetchIngredientsAndCategories.fulfilled]: (state, action) => {
             return action.payload.categories;
         },
         [fetchIngredientsAndCategories.pending]: (state, action) => {
-            return {
-                ...initialCategoriesState,
-            };
+            return initialCategoriesState;
         },
         [fetchIngredientsAndCategories.rejected]: (state, action) => {
-            return {
-                ...initialCategoriesState,
-            };
+            return initialCategoriesState;
         },
         [fetchRecipeWithInfo.fulfilled]: (state, action) => {
             return action.payload.categories;
         },
         [fetchRecipeWithInfo.pending]: (state, action) => {
-            return {
-                ...initialCategoriesState,
-            };
+            return initialCategoriesState;
         },
         [fetchRecipeWithInfo.rejected]: (state, action) => {
-            return {
-                ...initialCategoriesState,
-            };
+            return initialCategoriesState;
         },
     },
 });
