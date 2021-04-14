@@ -5,7 +5,7 @@ import { fetchRecipeWithInfo } from "../combinedThunks.js";
 
 export const FETCH = "units/FETCH";
 
-export const fetchUnits = createAsyncThunk(FETCH, async (thunkAPI) => {
+export const fetchUnits = createAsyncThunk(FETCH, async (payload, thunkAPI) => {
     const response = await configuredAxios.get(`/units`);
     return response.data;
 });
@@ -27,10 +27,7 @@ const unitsSlice = createSlice({
             return initialUnitsState;
         },
         [fetchRecipeWithInfo.fulfilled]: (state, action) => {
-            return action.payload.units;
-        },
-        [fetchRecipeWithInfo.pending]: (state, action) => {
-            return initialUnitsState;
+            if (action.payload) return action.payload.units;
         },
         [fetchRecipeWithInfo.rejected]: (state, action) => {
             return initialUnitsState;

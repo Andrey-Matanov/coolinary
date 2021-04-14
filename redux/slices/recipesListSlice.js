@@ -109,7 +109,7 @@ const recipesListSlice = createSlice({
         },
         [fetchRecipesAndCategories.pending]: (state, action) => {
             return {
-                ...initialRecipesListState,
+                ...state,
                 status: "loading",
             };
         },

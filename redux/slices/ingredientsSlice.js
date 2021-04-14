@@ -4,7 +4,7 @@ import { fetchIngredientsAndCategories, fetchRecipeWithInfo } from "../combinedT
 
 export const FETCH = "ingredients/FETCH";
 
-export const fetchIngredients = createAsyncThunk(FETCH, async (thunkAPI) => {
+export const fetchIngredients = createAsyncThunk(FETCH, async (payload, thunkAPI) => {
     const response = await configuredAxios.get(`/ingredients`);
     return response.data;
 });
@@ -35,10 +35,7 @@ const ingredientsSlice = createSlice({
             return initialIngredientsState;
         },
         [fetchRecipeWithInfo.fulfilled]: (state, action) => {
-            return action.payload.ingredients;
-        },
-        [fetchRecipeWithInfo.pending]: (state, action) => {
-            return initialIngredientsState;
+            if (action.payload) return action.payload.ingredients;
         },
         [fetchRecipeWithInfo.rejected]: (state, action) => {
             return initialIngredientsState;

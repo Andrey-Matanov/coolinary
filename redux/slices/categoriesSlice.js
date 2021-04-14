@@ -8,7 +8,7 @@ import {
 
 export const FETCH = "categories/FETCH";
 
-export const fetchCategories = createAsyncThunk(FETCH, async (thunkAPI) => {
+export const fetchCategories = createAsyncThunk(FETCH, async (payload, thunkAPI) => {
     const response = await configuredAxios.get(`/categories`);
     return response.data;
 });
@@ -32,26 +32,17 @@ const categoriesSlice = createSlice({
         [fetchRecipesAndCategories.fulfilled]: (state, action) => {
             return action.payload.categories;
         },
-        [fetchRecipesAndCategories.pending]: (state, action) => {
-            return initialCategoriesState;
-        },
         [fetchRecipesAndCategories.rejected]: (state, action) => {
             return initialCategoriesState;
         },
         [fetchIngredientsAndCategories.fulfilled]: (state, action) => {
-            return action.payload.categories;
-        },
-        [fetchIngredientsAndCategories.pending]: (state, action) => {
-            return initialCategoriesState;
+            if (action.payload) return action.payload.categories;
         },
         [fetchIngredientsAndCategories.rejected]: (state, action) => {
             return initialCategoriesState;
         },
         [fetchRecipeWithInfo.fulfilled]: (state, action) => {
-            return action.payload.categories;
-        },
-        [fetchRecipeWithInfo.pending]: (state, action) => {
-            return initialCategoriesState;
+            if (action.payload) return action.payload.categories;
         },
         [fetchRecipeWithInfo.rejected]: (state, action) => {
             return initialCategoriesState;

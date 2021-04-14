@@ -8,40 +8,53 @@ export const fetchRecipesAndCategories = createAsyncThunk(
         const recipesResponse = await configuredAxios.get(
             `/recipes/?amount=10&last=${currentLastId}&category=${category}`
         );
-        const categoriesResponse = await configuredAxios.get(`/categories`);
-        return {
-            categories: categoriesResponse.data,
+        const finalPayload = {
             recipes: recipesResponse.data.recipes,
             isLastRecipes: recipesResponse.data.isLastRecipes,
         };
+        if (!thunkAPI.getState().categories.lenght) {
+            const categoriesResponse = await configuredAxios.get(`/categories`);
+            finalPayload.categories = categoriesResponse.data;
+        }
+        return finalPayload;
     }
 );
 
 export const fetchIngredientsAndCategories = createAsyncThunk(
     "combined/fetchIngredientsAndCategories",
-    async (thunkAPI) => {
+    async (payload, thunkAPI) => {
+        const finalPayload = {};
+        if (!thunkAPI.getState().categories.lenght) {
+            const categoriesResponse = await configuredAxios.get(`/categories`);
+            finalPayload.categories = categoriesResponse.data;
+        }
         const ingredientsResponse = await configuredAxios.get(`/ingredients`);
-        const categoriesResponse = await configuredAxios.get(`/categories`);
-        return {
-            ingredients: ingredientsResponse.data,
-            categories: categoriesResponse.data,
-        };
+        finalPayload.ingredients = ingredientsResponse.data;
+        return finalPayload;
     }
 );
 
 export const fetchRecipeWithInfo = createAsyncThunk(
     "combined/fetchRecipeWithInfo",
     async (id, thunkAPI) => {
-        const recipeResponse = await configuredAxios.get(`/recipes/${id}`);
-        const ingredientsResponse = await configuredAxios.get(`/ingredients?recipeId=${id}`);
-        const unitsResponse = await configuredAxios.get(`/units?recipeId=${id}`);
-        const categoriesResponse = await configuredAxios.get(`/categories`);
-        return {
-            recipe: recipeResponse.data,
-            ingredients: ingredientsResponse.data,
-            categories: categoriesResponse.data,
-            units: unitsResponse.data,
-        };
+        console.log(thunkAPI.getState().recipe.recipe?.recipe);
+        if (
+            !thunkAPI.getState().recipe.recipe?.recipe ||
+            thunkAPI.getState().recipe.recipe.recipe._id != id
+        ) {
+            const recipeResponse = await configuredAxios.get(`/recipes/${id}`);
+            const ingredientsResponse = await configuredAxios.get(`/ingredients?recipeId=${id}`);
+            const unitsResponse = await configuredAxios.get(`/units?recipeId=${id}`);
+            const categoriesResponse = await configuredAxios.get(`/categories`);
+            return {
+                recipe: recipeResponse.data,
+                ingredients: ingredientsResponse.data,
+                categories: categoriesResponse.data,
+                units: unitsResponse.data,
+            };
+        } else {
+            return;
+        }
     }
 );
 

@@ -42,14 +42,16 @@ const recipeSlice = createSlice({
             };
         },
         [fetchRecipeWithInfo.fulfilled]: (state, action) => {
-            return {
-                recipe: action.payload.recipe,
-                status: "ok",
-            };
+            if (action.payload)
+                return {
+                    recipe: action.payload.recipe,
+                    status: "ok",
+                };
+            else return { ...state, status: "ok" };
         },
         [fetchRecipeWithInfo.pending]: (state, action) => {
             return {
-                ...initialRecipeState,
+                ...state,
                 status: "loading",
             };
         },
