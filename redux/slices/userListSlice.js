@@ -1,32 +1,24 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import configuredAxios from "../../utils/configuredAxios.js";
 
-export const FETCH = "usersList/FETCH";
-
-export const fetchUsersList = createAsyncThunk(FETCH, async (thunkAPI) => {
+export const fetchUsersList = createAsyncThunk("usersList/FETCH", async (thunkAPI) => {
     const response = await configuredAxios.get(`/users?rating`);
     return response.data;
 });
 
-const initialUsersListState = [];
-
 const usersListSlice = createSlice({
     name: "usersList",
-    initialState: initialUsersListState,
+    initialState: [],
     reducers: {},
     extraReducers: {
         [fetchUsersList.fulfilled]: (state, action) => {
             return action.payload;
         },
         [fetchUsersList.pending]: (state, action) => {
-            return {
-                ...initialUsersListState,
-            };
+            return [];
         },
         [fetchUsersList.rejected]: (state, action) => {
-            return {
-                ...initialUsersListState,
-            };
+            return [];
         },
     },
 });
