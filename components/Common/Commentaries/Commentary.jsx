@@ -12,7 +12,7 @@ import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
 import CancelIcon from "@material-ui/icons/Cancel";
 import { Link as LinkMUI } from "@material-ui/core";
-import { deleteCommentary, editCommentary } from "../../../redux/actions/recipesListActions";
+import { updateRecipeCommentaries } from "../../../redux/slices/recipeSlice.js";
 
 const useStyles = makeStyles((theme) => ({
     link: {
@@ -83,7 +83,13 @@ const Commentary = ({ currentUserId, commentaryId, authorId, authorName, content
                                 if (error !== errors.equal && newContent === content) {
                                     setError(errors.equal);
                                 } else if (error === null) {
-                                    dispatch(editCommentary(commentaryId, newContent));
+                                    dispatch(
+                                        updateRecipeCommentaries({
+                                            type: "edit",
+                                            commentaryId,
+                                            newContent,
+                                        })
+                                    );
                                     setIsCommentaryEditing(false);
                                 }
                             }}
@@ -142,7 +148,9 @@ const Commentary = ({ currentUserId, commentaryId, authorId, authorName, content
                                 color="secondary"
                                 startIcon={<DeleteIcon />}
                                 onClick={() => {
-                                    dispatch(deleteCommentary(commentaryId));
+                                    dispatch(
+                                        updateRecipeCommentaries({ type: "delete", commentaryId })
+                                    );
                                 }}
                             >
                                 Удалить

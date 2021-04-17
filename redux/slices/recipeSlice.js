@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { toast } from "react-toastify";
 import configuredAxios from "../../utils/configuredAxios.js";
 import { fetchRecipeWithInfo, changeRating } from "../combinedThunks.js";
 
@@ -13,6 +14,63 @@ export const fetchRecipe = createAsyncThunk(FETCH, async (id, thunkAPI) => {
     };
 });
 
+export const updateRecipeCommentaries = createAsyncThunk(
+    "recipe/updateCommentaries",
+    async (data, thunkAPI) => {
+        const { type } = data;
+        switch (type) {
+            case "add": {
+                const { recipeId, userId, text } = data;
+                try {
+                    const response = await configuredAxios.post("/commentaries", {
+                        content: text,
+                        targetId: recipeId,
+                        authorId: userId,
+                    });
+                    return {
+                        type: type,
+                        _id: response.data._id,
+                        authorId: userId,
+                        content: text,
+                    };
+                } catch (err) {
+                    thunkAPI.dispatch(commentaryError({ type, err }));
+                }
+            }
+            case "delete": {
+                const { commentaryId } = data;
+                try {
+                    await configuredAxios.delete(`/commentaries/${commentaryId}`);
+                    return {
+                        type: type,
+                        _id: commentaryId,
+                    };
+                } catch (err) {
+                    thunkAPI.dispatch(commentaryError({ type, err }));
+                }
+            }
+            case "edit": {
+                const { commentaryId, newContent } = data;
+                try {
+                    await configuredAxios.patch(`/commentaries/${commentaryId}`, {
+                        content: newContent,
+                    });
+                    return {
+                        type: type,
+                        _id: commentaryId,
+                        content: newContent,
+                    };
+                } catch (err) {
+                    thunkAPI.dispatch(commentaryError({ type, err }));
+                }
+            }
+            default: {
+                thunkAPI.dispatch(commentaryError({ type: "wrong_type", err }));
+            }
+        }
+    }
+);
+
 const initialRecipeState = {
     recipe: {},
     status: "loading",
@@ -21,7 +79,27 @@ const initialRecipeState = {
 const recipeSlice = createSlice({
     name: "recipe",
     initialState: initialRecipeState,
-    reducers: {},
+    reducers: {
+        commentaryError(state, action) {
+            switch (action.type) {
+                case "add": {
+                    toast.success("Ошибка добавления комментария: " + action.err);
+                    break;
+                }
+                case "add": {
+                    toast.success("Ошибка удаления комментария: " + action.err);
+                    break;
+                }
+                case "add": {
+                    toast.success("Ошибка изменения комментария: " + action.err);
+                    break;
+                }
+                default: {
+                    toast.success(`Ошибка комментария: неизвестный тип (${action.err})`);
+                }
+            }
+        },
+    },
     extraReducers: {
         [fetchRecipe.fulfilled]: (state, action) => {
             return {
@@ -71,10 +149,34 @@ const recipeSlice = createSlice({
         [changeRating.rejected]: (state, action) => {
             return state;
         },
+        [updateRecipeCommentaries.fulfilled]: (state, action) => {
+            switch (action.payload.type) {
+                case "add": {
+                    const { _id, authorId, content } = action.payload;
+                    state.recipe.recipeCommentaries.push({ _id, authorId, content });
+                    break;
+                }
+                case "delete": {
+                    state.recipe.recipeCommentaries = state.recipe.recipeCommentaries.filter(
+                        (item) => item._id !== action.payload._id
+                    );
+                    return state;
+                }
+                case "edit": {
+                    const { _id, content } = action.payload;
+                    state.recipe.recipeCommentaries.find(
+                        (item) => item._id === _id
+                    ).content = content;
+                    break;
+                }
+            }
+        },
+        [updateRecipeCommentaries.rejected]: (state, action) => {
+            toast.success("Произошла ошибка комментирования");
+
+            return state;
+        },
     },
 });
 
-export const {
-    actions: { updateRecipeCommentaries },
-    reducer,
-} = recipeSlice;
+export const { reducer } = recipeSlice;

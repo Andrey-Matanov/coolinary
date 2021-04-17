@@ -1,7 +1,7 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useFormik } from "formik";
-import { addCommentary } from "../../redux/actions/recipesListActions.js";
+import { updateRecipeCommentaries } from "../../redux/slices/recipeSlice.js";
 import { Box, Grid, Typography, TextField, Button } from "@material-ui/core";
 
 const AddCommentaryForm = ({ currentUserId, recipeId }) => {
@@ -13,7 +13,14 @@ const AddCommentaryForm = ({ currentUserId, recipeId }) => {
         },
         onSubmit: ({ text }, actions) => {
             console.log(recipeId, currentUserId, userName, text);
-            dispatch(addCommentary(recipeId, currentUserId, userName, text));
+            dispatch(
+                updateRecipeCommentaries({
+                    type: "add",
+                    recipeId,
+                    userId: currentUserId,
+                    text,
+                })
+            );
             actions.resetForm();
         },
     });
