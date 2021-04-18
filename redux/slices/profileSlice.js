@@ -157,7 +157,7 @@ const profileSlice = createSlice({
             return { ...initialProfileValues, status: null };
         },
         [deleteUser.rejected]: (state, action) => {
-            toast.success("Произошла ошибка при удалении профиля");
+            toast.error("Произошла ошибка при удалении профиля");
 
             return state;
         },

@@ -5,7 +5,7 @@ import * as Yup from "yup";
 import firebaseApp from "../utils/firebaseConfig";
 import Register from "../components/PagesComponents/RegisterPage/Register";
 import { AuthContext } from "../providers/Authentication";
-import axios from "axios";
+import configuredAxios from "../utils/configuredAxios.js";
 import { toast } from "react-toastify";
 import LoadingDataComponent from "../components/Common/LoadingDataComponent";
 
@@ -45,9 +45,9 @@ const register = () => {
 
                 await firebaseApp.auth().signOut(); //
 
-                await axios.post("/api/users", {
+                await configuredAxios.post("/users", {
                     name: values.name,
-                    email: values.email,
+                    email: values.email.toLowerCase(),
                 }); // Создание нового пользователя в MongoDB
 
                 router.push("/login"); // Редирект на страницу авторизации

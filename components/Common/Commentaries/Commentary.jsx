@@ -115,9 +115,13 @@ const Commentary = ({ currentUserId, commentaryId, authorId, authorName, content
         <Grid container>
             <Grid item xs={12}>
                 <Box py={1}>
-                    <Link href={`/profile/${authorId}`}>
-                        <LinkMUI className={classes.link}>{authorName}</LinkMUI>
-                    </Link>
+                    {authorName === "DELETED_USER" ? (
+                        <Typography variant="body2">{authorName}</Typography>
+                    ) : (
+                        <Link href={`/profile/${authorId}`}>
+                            <LinkMUI className={classes.link}>{authorName}</LinkMUI>
+                        </Link>
+                    )}
                 </Box>
             </Grid>
             <Grid item xs={12}>

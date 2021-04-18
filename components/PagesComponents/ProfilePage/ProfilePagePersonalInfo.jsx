@@ -8,7 +8,7 @@ import Typography from "@material-ui/core/Typography";
 import { deleteUser, updateUserInfo } from "../../../redux/slices/profileSlice";
 import { userLogout } from "../../../redux/slices/authorizationSlice";
 import { firebaseRemoveCurrentUser, firebaseUpdateEmail } from "../../../utils/firebaseConfig";
-import ConfirmationDialog from "../../Common/Dialogs/ConfirmationDialog";
+import DeleteUserDialog from "../../Common/Dialogs/DeleteUserDialog";
 import ChangePasswordDialog from "../../Common/Dialogs/ChangePasswordDialog";
 import SingleInputDialog from "../../Common/Dialogs/SingleInputDialog";
 
@@ -132,13 +132,7 @@ const ProfilePagePersonalInfo = ({ id, userId, userName, userEmail, router, disp
             {id === userId ? (
                 <>
                     <ChangePasswordDialog userEmail={userEmail} />
-                    <ConfirmationDialog
-                        dialogTitle="Удалить профиль"
-                        dialogContentText="Вы уверены, что хотите свой удалить профиль?"
-                        confirmActionLabel="Да"
-                        cancelActionLabel="Нет"
-                        actionConfirmationHandler={handleDeleteUser}
-                    />
+                    <DeleteUserDialog userEmail={userEmail} handleDeleteUser={handleDeleteUser} />
                 </>
             ) : null}
         </>

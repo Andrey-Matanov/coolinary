@@ -83,19 +83,19 @@ const recipeSlice = createSlice({
         commentaryError(state, action) {
             switch (action.type) {
                 case "add": {
-                    toast.success("Ошибка добавления комментария: " + action.err);
+                    toast.error("Ошибка добавления комментария: " + action.err);
                     break;
                 }
                 case "add": {
-                    toast.success("Ошибка удаления комментария: " + action.err);
+                    toast.error("Ошибка удаления комментария: " + action.err);
                     break;
                 }
                 case "add": {
-                    toast.success("Ошибка изменения комментария: " + action.err);
+                    toast.error("Ошибка изменения комментария: " + action.err);
                     break;
                 }
                 default: {
-                    toast.success(`Ошибка комментария: неизвестный тип (${action.err})`);
+                    toast.error(`Ошибка комментария: неизвестный тип (${action.err})`);
                 }
             }
         },
@@ -145,6 +145,8 @@ const recipeSlice = createSlice({
                     action.payload.newMark) /
                 (state.recipe.recipe.rating.count + 1);
             state.recipe.recipe.rating.count++;
+
+            toast.success("Ваша оценка принята");
         },
         [changeRating.rejected]: (state, action) => {
             return state;
@@ -172,7 +174,7 @@ const recipeSlice = createSlice({
             }
         },
         [updateRecipeCommentaries.rejected]: (state, action) => {
-            toast.success("Произошла ошибка комментирования");
+            toast.error("Произошла ошибка комментирования");
 
             return state;
         },
