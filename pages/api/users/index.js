@@ -5,18 +5,15 @@ const handler = async (req, res) => {
     const { rating } = req.query;
 
     if (req.method === "GET") {
-        const users = await User.find().sort("-rating");
-        // const ratingTable = users.map(user => {
-        //     return({
-        //         id: user._id,
-        //         name: user.name,
-        //         count: user.userRecipes.length,
-        //         avg: user.rating.total,
-        //         summ: user.rating.average,
-        //     })
-        // })
-
-        res.json(users);
+        if (!!rating) {
+            const users = await User.find(undefined, "_id avatar name userRecipes rating").sort(
+                "-rating"
+            );
+            res.json(users);
+        } else {
+            const users = await User.find();
+            res.json(users);
+        }
     } else if (req.method === "POST") {
         const newUser = new User({
             name: req.body.name,
