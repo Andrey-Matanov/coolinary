@@ -77,6 +77,11 @@ const recipe = new mongoose.Schema({
 
 mongoose.models = {};
 
+recipe.index({
+    name: "text",
+    description: "text",
+});
+
 const Recipe = mongoose.model("recipes", recipe);
 
 export default Recipe;

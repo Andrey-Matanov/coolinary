@@ -1,41 +1,94 @@
 import connectDB from "../../../middleware/mongodb";
 import Recipe from "../../../models/recipe";
 import User from "../../../models/user";
+import mongoose from "mongoose";
 
 const handler = async (req, res) => {
     if (req.method === "GET") {
         const categoryId = req.query.categoryId ?? null;
-        const findParameters = {};
-        if (categoryId) {
-            findParameters.categoryId = categoryId;
-        }
+        const search = req.query.search ?? null;
+        let findParameters = [];
 
-        const amount = parseInt(req.query.amount) ?? null
+        const amount = parseInt(req.query.amount) ?? null;
         const last = req.query.last ?? "0";
 
-        if (last != "0") {
-            findParameters._id = {$gt: last}
+        if (last !== "0") {
+            findParameters.push({ _id: { $gt: new mongoose.Types.ObjectId(last) } });
         }
-        
-        const mongoRecipes = await Recipe.find(findParameters).limit(amount);
-        
-        const recipes = JSON.parse(JSON.stringify(mongoRecipes))
 
-        const authorIds = recipes.map(item => item.authorId)
-        const userNames = await User.find({"_id": {$in: authorIds }}, "_id name");
-
-        recipes.forEach(item => {
-            userNames.find(el => "" + el._id === item.authorId) ? (
-                item["authorName"] = userNames.find(el => "" + el._id === item.authorId).name
-            ) : (
-                item["authorName"] = "DELETED_USER"
-            )
+        if (categoryId) {
+            findParameters.push({ categoryId: new mongoose.Types.ObjectId(categoryId) });
         }
-        );
+
+        let mongoRecipes;
+
+        if (search) {
+            mongoRecipes = await Recipe.aggregate([
+                {
+                    $lookup: {
+                        from: "users",
+                        localField: "authorId",
+                        foreignField: "_id",
+                        as: "author",
+                    },
+                },
+                { $unwind: { path: "$author" } },
+
+                {
+                    $lookup: {
+                        from: "ingredients",
+                        localField: "ingredients.id",
+                        foreignField: "_id",
+                        as: "ingredients",
+                    },
+                },
+                {
+                    $addFields: {
+                        ingredients: { $map: { input: "$ingredients", as: "el", in: "$$el.name" } },
+                    },
+                },
+                {
+                    $match: {
+                        $and: [
+                            ...findParameters,
+                            {
+                                $or: [
+                                    { name: { $regex: new RegExp(search) } },
+                                    { description: { $regex: new RegExp(search) } },
+                                    { "author.name": { $regex: new RegExp(search) } },
+                                    { ingredients: { $regex: new RegExp(search) } },
+                                ],
+                            },
+                        ],
+                    },
+                },
+            ]).limit(amount);
+        } else if (categoryId) {
+            mongoRecipes = await Recipe.aggregate([
+                {
+                    $match: {
+                        $and: findParameters,
+                    },
+                },
+            ]).limit(amount);
+        } else {
+            mongoRecipes = await Recipe.find(findParameters[0]).limit(amount);
+        }
+
+        const recipes = JSON.parse(JSON.stringify(mongoRecipes));
+
+        const authorIds = recipes.map((item) => item.authorId);
+        const userNames = await User.find({ _id: { $in: authorIds } }, "_id name");
+
+        recipes.forEach((item) => {
+            userNames.find((el) => "" + el._id === item.authorId)
+                ? (item["authorName"] = userNames.find((el) => "" + el._id === item.authorId).name)
+                : (item["authorName"] = "DELETED_USER");
+        });
 
         res.json({
             recipes: recipes,
-            isLastRecipes: mongoRecipes.length < amount
+            isLastRecipes: mongoRecipes.length < amount,
         });
     } else if (req.method === "POST") {
         const recipeValues = req.body;

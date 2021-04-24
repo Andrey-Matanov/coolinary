@@ -42,6 +42,18 @@ export const deleteRecipe = createAsyncThunk("recipesList/delete", async (recipe
     return;
 });
 
+export const searchRecipes = createAsyncThunk("recipesList/search", async (userData, thunkAPI) => {
+    const { currentLastId, search, categoryId } = userData;
+    const response = await configuredAxios.get(
+        `/recipes?amount=10&last=${currentLastId}&categoryId=${categoryId}&search=${search}`
+    );
+    return {
+        recipes: response.data.recipes,
+        isLastRecipes: response.data.isLastRecipes,
+        categoryId: categoryId,
+    };
+});
+
 const initialRecipesListState = {
     recipes: [],
     currentLastId: 0,
@@ -116,6 +128,41 @@ const recipesListSlice = createSlice({
         [fetchRecipesAndCategories.rejected]: (state, action) => {
             return {
                 ...initialRecipesListState,
+                status: "failed",
+            };
+        },
+        [searchRecipes.fulfilled]: (state, action) => {
+            if (state.status === "search") {
+                return {
+                    recipes: state.recipes.concat(action.payload.recipes),
+                    currentLastId: action.payload.recipes[action.payload.recipes.length - 1]._id,
+                    currentCategory: state.currentCategory,
+                    isLastRecipes: action.payload.isLastRecipes,
+                    status: "search",
+                };
+            } else {
+                return {
+                    recipes: action.payload.recipes,
+                    currentLastId: action.payload.recipes[action.payload.recipes.length - 1]._id,
+                    currentCategory: state.currentCategory,
+                    isLastRecipes: action.payload.isLastRecipes,
+                    status: "search",
+                };
+            }
+        },
+        [searchRecipes.pending]: (state, action) => {
+            if (state.status === "search") {
+                return state;
+            } else {
+                return {
+                    ...state,
+                    status: "loading",
+                };
+            }
+        },
+        [searchRecipes.rejected]: (state, action) => {
+            return {
+                ...state,
                 status: "failed",
             };
         },

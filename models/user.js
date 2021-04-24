@@ -81,13 +81,17 @@ const userSchema = new mongoose.Schema({
     userMarks: {
         type: {
             recipes: [String],
-            articles: [String]
+            articles: [String],
         },
         default: {
             recipes: [],
             articles: [],
-        }
-    }
+        },
+    },
+});
+
+userSchema.index({
+    name: "text",
 });
 
 mongoose.models = {};
