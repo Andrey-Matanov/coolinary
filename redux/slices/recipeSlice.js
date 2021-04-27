@@ -3,9 +3,7 @@ import { toast } from "react-toastify";
 import configuredAxios from "../../utils/configuredAxios.js";
 import { fetchRecipeWithInfo, changeRating } from "../combinedThunks.js";
 
-export const FETCH = "recipe/FETCH";
-
-export const fetchRecipe = createAsyncThunk(FETCH, async (id, thunkAPI) => {
+export const fetchRecipe = createAsyncThunk("recipe/FETCH", async (id, thunkAPI) => {
     const response = await configuredAxios.get(`/recipes/${id}`);
     return {
         ...response.data,
@@ -34,7 +32,7 @@ export const updateRecipeCommentaries = createAsyncThunk(
                         content: text,
                     };
                 } catch (err) {
-                    thunkAPI.dispatch(commentaryError({ type, err }));
+                    return err;
                 }
             }
             case "delete": {
@@ -46,7 +44,7 @@ export const updateRecipeCommentaries = createAsyncThunk(
                         _id: commentaryId,
                     };
                 } catch (err) {
-                    thunkAPI.dispatch(commentaryError({ type, err }));
+                    return err;
                 }
             }
             case "edit": {
@@ -61,11 +59,11 @@ export const updateRecipeCommentaries = createAsyncThunk(
                         content: newContent,
                     };
                 } catch (err) {
-                    thunkAPI.dispatch(commentaryError({ type, err }));
+                    return err;
                 }
             }
             default: {
-                thunkAPI.dispatch(commentaryError({ type: "wrong_type", err }));
+                toast.error(`Ошибка комментария: неизвестный тип`);
             }
         }
     }
@@ -79,27 +77,7 @@ const initialRecipeState = {
 const recipeSlice = createSlice({
     name: "recipe",
     initialState: initialRecipeState,
-    reducers: {
-        commentaryError(state, action) {
-            switch (action.type) {
-                case "add": {
-                    toast.error("Ошибка добавления комментария: " + action.err);
-                    break;
-                }
-                case "add": {
-                    toast.error("Ошибка удаления комментария: " + action.err);
-                    break;
-                }
-                case "add": {
-                    toast.error("Ошибка изменения комментария: " + action.err);
-                    break;
-                }
-                default: {
-                    toast.error(`Ошибка комментария: неизвестный тип (${action.err})`);
-                }
-            }
-        },
-    },
+    reducers: {},
     extraReducers: {
         [fetchRecipe.fulfilled]: (state, action) => {
             return {
@@ -174,8 +152,7 @@ const recipeSlice = createSlice({
             }
         },
         [updateRecipeCommentaries.rejected]: (state, action) => {
-            toast.error("Произошла ошибка комментирования");
-
+            toast.error(`Произошла ошибка комментирования: ${action.err}`);
             return state;
         },
     },
