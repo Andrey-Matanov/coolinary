@@ -4,7 +4,7 @@ import { Link as LinkMUI } from "@material-ui/core";
 import { Box, Paper, Typography, Grid, ListItemAvatar, Avatar } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     link: {
         cursor: "pointer",
         textDecoration: "none",
@@ -19,20 +19,20 @@ const AuthorItem = ({ position, id, name, avatar, recipesCount, rating }) => {
             <Paper elevation={3} square={true}>
                 <Box p={4}>
                     <Grid container direction="row" alignItems="center" spacing={2}>
-                        <Grid item>
+                        <Grid item xs={1}>
                             <Typography variant="h6">№{position}</Typography>
                         </Grid>
-                        <Grid item>
+                        <Grid item xs={2}>
                             <ListItemAvatar>
                                 <Avatar alt={`Avatar ${name}`} src={avatar} />
                             </ListItemAvatar>
                         </Grid>
-                        <Grid item>
+                        <Grid ite xs={3}>
                             <Link href={`/profile/${id}`}>
                                 <LinkMUI className={classes.link}>{name}</LinkMUI>
                             </Link>
                         </Grid>
-                        <Grid item>
+                        <Grid item xs={6}>
                             <Typography variant="body2">
                                 Количество рецептов пользователя: {recipesCount}
                             </Typography>
