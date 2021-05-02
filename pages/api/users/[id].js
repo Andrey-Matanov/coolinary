@@ -6,7 +6,7 @@ const handler = async (req, res) => {
 
     if (req.method === "GET") {
         try {
-            const user = await User.findById(id);
+            const user = await User.findById(id, "_id name email userRecipes collections");
             if (user) {
                 res.json(user);
             } else {
@@ -43,105 +43,53 @@ const handler = async (req, res) => {
 
         switch (type) {
             case "add_recipe": {
-                const userValues = await User.findById(id);
+                const newRecipe = req.body.newRecipe;
+                try {
+                    await User.findByIdAndUpdate(id, {
+                        $push: { "collections.recipes": newRecipe },
+                    });
 
-                if (userValues === null) {
-                    res.status(400).send(`user with id = ${id} was removed or wasn't created yet`);
-                } else {
-                    const newRecipe = req.body.newRecipe;
-                    const userCollectionsRecipes = userValues.collections.recipes;
-
-                    if (userCollectionsRecipes.some((recipe) => recipe.id === newRecipe.id)) {
-                        res.status(400).send("this recipe is already in collections");
-                    } else {
-                        try {
-                            await User.findByIdAndUpdate(id, {
-                                collections: {
-                                    ...userValues.collections,
-                                    recipes: [...userCollectionsRecipes, newRecipe],
-                                },
-                            });
-
-                            res.send("user's recipes collections were successfully updated");
-                        } catch (error) {
-                            console.log(error);
-                            res.status(400).send(error);
-                        }
-                    }
+                    res.send("user's recipes collections were successfully updated");
+                } catch (error) {
+                    console.log(error);
+                    res.status(400).send(error);
                 }
 
                 break;
             }
             case "remove_recipe": {
-                const userValues = await User.findById(id);
+                const removedRecipeId = req.body.removedRecipeId;
+                try {
+                    await User.findByIdAndUpdate(id, {
+                        $pull: { "collections.recipes": removedRecipeId },
+                    });
 
-                if (userValues === null) {
-                    res.status(400).send(`user with id = ${id} was removed or wasn't created yet`);
-                } else {
-                    const removedRecipeId = req.body.removedRecipeId;
-                    const userCollectionsRecipes = userValues.collections.recipes;
-
-                    if (userCollectionsRecipes.some((recipe) => recipe.id === removedRecipeId)) {
-                        try {
-                            await User.findByIdAndUpdate(id, {
-                                collections: {
-                                    ...userValues.collections,
-                                    recipes: [
-                                        ...userCollectionsRecipes.filter(
-                                            (recipe) => recipe.id !== removedRecipeId
-                                        ),
-                                    ],
-                                },
-                            });
-
-                            res.send(
-                                `recipe with id = ${removedRecipeId} was successfully removed`
-                            );
-                        } catch (error) {
-                            console.log(error);
-                            res.status(400).send(error);
-                        }
-                    } else {
-                        res.send(`recipe with id = ${removedRecipeId} is not in collections`);
-                    }
+                    res.send(`recipe with id = ${removedRecipeId} was successfully removed`);
+                } catch (error) {
+                    console.log(error);
+                    res.status(400).send(error);
                 }
 
                 break;
             }
 
             case "rate_recipe": {
-                const userValues = await User.findById(id);
-
-                if (userValues === null) {
-                    res.status(400).send(`user with id = ${id} was removed or wasn't created yet`);
-                } else {
-                    const newMark = req.body.newMark;
-                    const userMarksRecipes = userValues.userMarks.recipes
-
-                    if (userMarksRecipes.some((recipe) => recipe.id === newMark)) {
-                        res.status(400).send("this recipe is already marked");
-                    } else {
-                        try {
-                            await User.findByIdAndUpdate(id, {
-                                userMarks: {
-                                    ...userValues.userMarks,
-                                    recipes: [...userMarksRecipes, newMark],
-                                },
-                            });
-
-                            res.send("user's marks were successfully updated");
-                        } catch (error) {
-                            console.log(error);
-                            res.status(400).send(error);
-                        }
-                    }
+                const newMark = req.body.newMark;
+                try {
+                    await User.findByIdAndUpdate(id, {
+                        $push: { "userMarks.recipes": newMark },
+                    });
+                    res.send("user's marks were successfully updated");
+                } catch (error) {
+                    console.log(error);
+                    res.status(400).send(error);
                 }
 
                 break;
             }
 
             case "update_user_rating": {
-                const userValues = await User.findById(id);
+                const userValues = await User.findById(id, "rating");
                 if (userValues === null) {
                     res.status(400).send(`user with id = ${id} was removed or wasn't created yet`);
                 } else {
@@ -154,7 +102,7 @@ const handler = async (req, res) => {
                                     average: newMark,
                                 },
                             });
-    
+
                             res.send("user's marks were successfully updated");
                         } catch (error) {
                             console.log(error);
@@ -165,10 +113,12 @@ const handler = async (req, res) => {
                             await User.findByIdAndUpdate(id, {
                                 rating: {
                                     total: userValues.rating.total + newMark,
-                                    average: (userValues.rating.total + newMark)/(userValues.rating.total/userValues.rating.average),
+                                    average:
+                                        (userValues.rating.total + newMark) /
+                                        (userValues.rating.total / userValues.rating.average),
                                 },
                             });
-    
+
                             res.send("user's marks were successfully updated");
                         } catch (error) {
                             console.log(error);

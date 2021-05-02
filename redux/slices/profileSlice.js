@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import configuredAxios from "../../utils/configuredAxios";
 
-export const fetchUserData = createAsyncThunk("profile/fetchUserData", async (id, thunkAPI) => {
+export const fetchUserData = createAsyncThunk("profile/fetchUserData", async (id) => {
     const response = await configuredAxios.get(`/users/${id}`);
 
     return {
@@ -16,18 +16,15 @@ export const fetchUserData = createAsyncThunk("profile/fetchUserData", async (id
     };
 });
 
-export const updateUserInfo = createAsyncThunk(
-    "profile/updateUserInfo",
-    async (userData, thunkAPI) => {
-        const { userId, ...newUserInfo } = userData;
+export const updateUserInfo = createAsyncThunk("profile/updateUserInfo", async (userData) => {
+    const { userId, ...newUserInfo } = userData;
 
-        await configuredAxios.patch(`/users/${userId}`, newUserInfo);
+    await configuredAxios.patch(`/users/${userId}`, newUserInfo);
 
-        return newUserInfo;
-    }
-);
+    return newUserInfo;
+});
 
-export const deleteUser = createAsyncThunk("profile/deleteUser", async (userId, thunkAPI) => {
+export const deleteUser = createAsyncThunk("profile/deleteUser", async (userId) => {
     await configuredAxios.delete(`/recipes?authorId=${userId}`);
     await configuredAxios.delete(`/users/${userId}`);
 
@@ -100,7 +97,7 @@ const profileSlice = createSlice({
         },
     },
     extraReducers: {
-        [fetchUserData.pending]: (state, action) => {
+        [fetchUserData.pending]: () => {
             return {
                 ...initialProfileValues,
                 status: "loading",
@@ -109,7 +106,7 @@ const profileSlice = createSlice({
         [fetchUserData.fulfilled]: (state, action) => {
             return { ...action.payload, toastId: null }; // current profile userdata
         },
-        [fetchUserData.rejected]: (state, action) => {
+        [fetchUserData.rejected]: () => {
             toast.error("Ошибка при попытке загрузить данные пользователя");
 
             return {
@@ -117,7 +114,7 @@ const profileSlice = createSlice({
                 status: "failed",
             };
         },
-        [updateUserInfo.pending]: (state, action) => {
+        [updateUserInfo.pending]: (state) => {
             state.toastId = toast.info("Обновление данных...", { autoClose: false });
 
             return state;
@@ -141,22 +138,22 @@ const profileSlice = createSlice({
                 toast.success("Имя почтового ящика пользователя было успешно изменено!");
             }
         },
-        [updateUserInfo.rejected]: (state, action) => {
+        [updateUserInfo.rejected]: (state) => {
             toast.error("Ошибка при попытке изменить информацию о пользователе!");
 
             return state;
         },
-        [deleteUser.pending]: (state, action) => {
+        [deleteUser.pending]: (state) => {
             toast.info("Удаление вашего профиля...");
 
             return state;
         },
-        [deleteUser.fulfilled]: (state, action) => {
+        [deleteUser.fulfilled]: () => {
             toast.success("Ваш профиль был успешно удален!");
 
             return { ...initialProfileValues, status: null };
         },
-        [deleteUser.rejected]: (state, action) => {
+        [deleteUser.rejected]: (state) => {
             toast.error("Произошла ошибка при удалении профиля");
 
             return state;
