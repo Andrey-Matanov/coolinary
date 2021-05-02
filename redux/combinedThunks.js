@@ -1,5 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import configuredAxios from "../utils/configuredAxios";
+import { toast } from "react-toastify";
 
 export const fetchRecipesAndCategories = createAsyncThunk(
     "combined/fetchRecipesAndCategories",
@@ -58,45 +59,41 @@ export const fetchRecipeWithInfo = createAsyncThunk(
     }
 );
 
-export const changeRating = createAsyncThunk(
-    "combined/changeRating",
-    async (userData, thunkAPI) => {
-        const { type, userId, authorId, objectId, payload } = userData;
-        const newMarkUserResponse = await configuredAxios.put(`/users/${userId}`, {
-            type: type,
-            newMark: objectId,
-        });
-        let newMarkObjectResponse;
-        switch (type) {
-            case "rate_recipe":
-                newMarkObjectResponse = await configuredAxios.put(`/recipes/${objectId}`, {
-                    type: type,
-                    newMark: payload,
-                });
-                break;
-            case "rate_article":
-                // article code
-                break;
-            default:
-                toast.error("Произошла ошибка");
-                return state;
-        }
-
-        const newMarkAuthorResponse = await configuredAxios.put(`/users/${authorId}`, {
-            type: "update_user_rating",
-            newMark: payload,
-        });
-
-        if (
-            newMarkUserResponse.status === 200 &&
-            newMarkObjectResponse.status === 200 &&
-            newMarkAuthorResponse.status === 200
-        ) {
-            return {
+export const changeRating = createAsyncThunk("combined/changeRating", async (userData) => {
+    const { type, userId, authorId, objectId, payload } = userData;
+    const newMarkUserResponse = await configuredAxios.put(`/users/${userId}`, {
+        type: type,
+        newMark: objectId,
+    });
+    let newMarkObjectResponse;
+    switch (type) {
+        case "rate_recipe":
+            newMarkObjectResponse = await configuredAxios.put(`/recipes/${objectId}`, {
                 type: type,
-                objectId: objectId,
                 newMark: payload,
-            };
-        }
+            });
+            break;
+        case "rate_article":
+            // article code
+            break;
+        default:
+            toast.error("Произошла ошибка");
     }
-);
+
+    const newMarkAuthorResponse = await configuredAxios.put(`/users/${authorId}`, {
+        type: "update_user_rating",
+        newMark: payload,
+    });
+
+    if (
+        newMarkUserResponse.status === 200 &&
+        newMarkObjectResponse.status === 200 &&
+        newMarkAuthorResponse.status === 200
+    ) {
+        return {
+            type: type,
+            objectId: objectId,
+            newMark: payload,
+        };
+    }
+});

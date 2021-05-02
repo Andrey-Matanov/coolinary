@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { Container, Box, CircularProgress } from "@material-ui/core";
@@ -10,7 +10,7 @@ const Recipe = () => {
     const dispatch = useDispatch();
     const router = useRouter();
     const { id } = router.query;
-    const { status, recipe } = useSelector((state) => state.recipe);
+    const { status, recipe, recipeCommentaries } = useSelector((state) => state.recipe);
     const ingredients = useSelector((state) => state.ingredients);
     const units = useSelector((state) => state.units);
     const categories = useSelector((state) => state.categories);
@@ -42,13 +42,12 @@ const Recipe = () => {
                     <Container maxWidth="md">
                         <RecipeStepsList
                             recipeId={id}
-                            recipe={recipe.recipe}
-                            commentaries={recipe.recipeCommentaries}
+                            recipe={recipe}
+                            commentaries={recipeCommentaries}
                             ingredientsData={ingredients}
                             unitsData={units}
                             category={
-                                categories.find((item) => item._id === recipe.recipe.categoryId)
-                                    .name
+                                categories.find((item) => item._id === recipe.categoryId).name
                             }
                             autorizedUserId={autorizedUserId}
                             recipeIsInCollections={recipeIsInCollections}

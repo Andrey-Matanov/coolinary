@@ -11,31 +11,30 @@ const handler = async (req, res) => {
             const mongoRecipe = await Recipe.findById(id);
 
             if (mongoRecipe) {
-                
-                const recipe = JSON.parse(JSON.stringify(mongoRecipe))
+                const recipe = JSON.parse(JSON.stringify(mongoRecipe));
 
                 const recipeAuthor = await User.findById(recipe.authorId, "name");
                 recipe["authorName"] = recipeAuthor.name;
 
-                const mongoRecipeCommentaries = await Commentary.find({
-                    targetId: id,
-                },
-                "content targetId authorId"
+                const mongoRecipeCommentaries = await Commentary.find(
+                    {
+                        targetId: id,
+                    },
+                    "content targetId authorId"
                 );
 
-                const recipeCommentaries = JSON.parse(JSON.stringify(mongoRecipeCommentaries))
+                const recipeCommentaries = JSON.parse(JSON.stringify(mongoRecipeCommentaries));
 
-                const authorIds = recipeCommentaries.map(item => item.authorId)
-                const userNames = await User.find({"_id": {$in: authorIds }}, "_id name");
+                const authorIds = recipeCommentaries.map((item) => item.authorId);
+                const userNames = await User.find({ _id: { $in: authorIds } }, "_id name");
 
-                recipeCommentaries.forEach(item => {
-                    userNames.find(el => "" + el._id === item.authorId) ? (
-                        item["authorName"] = userNames.find(el => "" + el._id === item.authorId).name
-                    ) : (
-                        item["authorName"] = "DELETED_USER"
-                    )
-                }
-                );
+                recipeCommentaries.forEach((item) => {
+                    userNames.find((el) => "" + el._id === item.authorId)
+                        ? (item["authorName"] = userNames.find(
+                              (el) => "" + el._id === item.authorId
+                          ).name)
+                        : (item["authorName"] = "DELETED_USER");
+                });
 
                 res.send({
                     recipe,
@@ -84,7 +83,9 @@ const handler = async (req, res) => {
                 await Recipe.findByIdAndUpdate(id, {
                     rating: {
                         ...recipeValues.rating,
-                        average: (recipeValues.rating.average*recipeValues.rating.count + newMark)/(recipeValues.rating.count + 1),
+                        average:
+                            (recipeValues.rating.average * recipeValues.rating.count + newMark) /
+                            (recipeValues.rating.count + 1),
                         count: recipeValues.rating.count + 1,
                     },
                 });

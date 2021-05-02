@@ -2,9 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { connect, useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-import { fetchIngredientsAndCategories } from "../../redux/combinedThunks.js";
-import { fetchRecipe } from "../../redux/slices/recipeSlice.js";
-import { fetchUnits } from "../../redux/slices/unitsSlice.js";
+import { fetchRecipeWithInfo } from "../../redux/combinedThunks.js";
 import LoadingDataComponent from "../../components/Common/LoadingDataComponent";
 import AddRecipeForm from "../../components/Forms/AddRecipeForm/AddRecipeForm";
 import { AuthContext } from "../../providers/Authentication";
@@ -13,7 +11,7 @@ const Wrapper = styled.div`
     padding: 20px;
 `;
 
-const EditRecipe = ({ ingredients, categories, units, userId }) => {
+const EditRecipe = ({ ingredients, categories, units }) => {
     const { isUserLoggedIn } = useContext(AuthContext);
     const router = useRouter();
 
@@ -26,15 +24,7 @@ const EditRecipe = ({ ingredients, categories, units, userId }) => {
     const currentUserId = useSelector((state) => state.authorization.userId);
 
     useEffect(() => {
-        dispatch(fetchRecipe(id));
-
-        if (!units.length) {
-            dispatch(fetchUnits());
-        }
-
-        if (!ingredients.length && !categories.length) {
-            dispatch(fetchIngredientsAndCategories());
-        }
+        dispatch(fetchRecipeWithInfo(id));
     }, []);
 
     const recipeStatus = useSelector((state) => state.recipe.status);
@@ -57,6 +47,7 @@ const EditRecipe = ({ ingredients, categories, units, userId }) => {
 
     useEffect(() => {
         if (
+            recipeInfo._id === id &&
             categories.length > 0 &&
             ingredients.length > 0 &&
             recipeStatus === "ok" &&

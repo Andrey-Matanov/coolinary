@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import configuredAxios from "../../utils/configuredAxios.js";
 import { fetchRecipeWithInfo, changeRating } from "../combinedThunks.js";
 
-export const fetchRecipe = createAsyncThunk("recipe/FETCH", async (id, thunkAPI) => {
+export const fetchRecipe = createAsyncThunk("recipe/FETCH", async (id) => {
     const response = await configuredAxios.get(`/recipes/${id}`);
     return {
         ...response.data,
@@ -14,7 +14,7 @@ export const fetchRecipe = createAsyncThunk("recipe/FETCH", async (id, thunkAPI)
 
 export const updateRecipeCommentaries = createAsyncThunk(
     "recipe/updateCommentaries",
-    async (data, thunkAPI) => {
+    async (data) => {
         const { type } = data;
         switch (type) {
             case "add": {
@@ -85,33 +85,35 @@ const recipeSlice = createSlice({
                 status: "ok",
             };
         },
-        [fetchRecipe.pending]: (state, action) => {
+        [fetchRecipe.pending]: () => {
             return {
                 ...initialRecipeState,
                 status: "loading",
             };
         },
-        [fetchRecipe.rejected]: (state, action) => {
+        [fetchRecipe.rejected]: () => {
             return {
                 ...initialRecipeState,
                 status: "failed",
             };
         },
         [fetchRecipeWithInfo.fulfilled]: (state, action) => {
+            console.log(action.payload.recipe);
             if (action.payload)
                 return {
-                    recipe: action.payload.recipe,
+                    recipe: action.payload.recipe.recipe,
+                    recipeCommentaries: action.payload.recipe.recipeCommentaries,
                     status: "ok",
                 };
             else return { ...state, status: "ok" };
         },
-        [fetchRecipeWithInfo.pending]: (state, action) => {
+        [fetchRecipeWithInfo.pending]: (state) => {
             return {
                 ...state,
                 status: "loading",
             };
         },
-        [fetchRecipeWithInfo.rejected]: (state, action) => {
+        [fetchRecipeWithInfo.rejected]: () => {
             return {
                 ...initialRecipeState,
                 status: "failed",
@@ -126,7 +128,7 @@ const recipeSlice = createSlice({
 
             toast.success("Ваша оценка принята");
         },
-        [changeRating.rejected]: (state, action) => {
+        [changeRating.rejected]: (state) => {
             return state;
         },
         [updateRecipeCommentaries.fulfilled]: (state, action) => {
