@@ -17,6 +17,9 @@ const Profile = () => {
         profileUserId,
         userName,
         userEmail,
+        avatar,
+        userBorn,
+        userFrom,
         userRecipes,
         userCollections,
         status,
@@ -47,6 +50,9 @@ const Profile = () => {
                                 userId={userId}
                                 userName={userName}
                                 userEmail={userEmail}
+                                avatar={avatar}
+                                userBorn={new Date(userBorn)}
+                                userFrom={userFrom}
                                 router={router}
                                 dispatch={dispatch}
                             />

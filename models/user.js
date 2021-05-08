@@ -18,6 +18,14 @@ const userSchema = new mongoose.Schema({
         default:
             "https://thumbs.dreamstime.com/z/default-avatar-placeholder-profile-icon-male-eps-file-easy-to-edit-default-avatar-placeholder-profile-icon-male-139556753.jpg",
     },
+    userBorn: {
+        type: Date,
+        default: new Date("1990-01-01T00:00:00"),
+    },
+    userFrom: {
+        type: String,
+        default: "Earth",
+    },
     userRecipes: {
         type: [
             {

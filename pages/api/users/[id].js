@@ -6,7 +6,10 @@ const handler = async (req, res) => {
 
     if (req.method === "GET") {
         try {
-            const user = await User.findById(id, "_id name email userRecipes collections");
+            const user = await User.findById(
+                id,
+                "_id name email avatar userBorn userFrom userRecipes collections"
+            );
             if (user) {
                 res.json(user);
             } else {

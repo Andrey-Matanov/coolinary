@@ -1,7 +1,5 @@
 import React from "react";
 import { toast } from "react-toastify";
-import { makeStyles } from "@material-ui/core";
-import Avatar from "@material-ui/core/Avatar";
 import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
@@ -11,29 +9,30 @@ import { firebaseRemoveCurrentUser, firebaseUpdateEmail } from "../../../utils/f
 import DeleteUserDialog from "../../Common/Dialogs/DeleteUserDialog";
 import ChangePasswordDialog from "../../Common/Dialogs/ChangePasswordDialog";
 import SingleInputDialog from "../../Common/Dialogs/SingleInputDialog";
+import DateDialog from "../../Common/Dialogs/DateDialog.jsx";
+import AvatarElement from "../../PagesComponents/ProfilePage/AvatarElement.jsx";
+import Head from "next/head";
 
-const useStyles = makeStyles((theme) => {
-    return {
-        avatar: {
-            width: "50px",
-            height: "50px",
-        },
-    };
-});
-
-const ProfilePagePersonalInfo = ({ id, userId, userName, userEmail, router, dispatch }) => {
-    const classes = useStyles();
-
-    const applyEditName = (newNameValue) => {
+const ProfilePagePersonalInfo = ({
+    id,
+    userId,
+    userName,
+    userEmail,
+    avatar,
+    userBorn,
+    userFrom,
+    router,
+    dispatch,
+}) => {
+    const applyEditValue = (valueName, newValue) => {
         dispatch(
             updateUserInfo({
                 userId,
-                name: newNameValue,
+                [valueName]: newValue,
             })
         );
     };
-
-    const applyEditEmail = (newEmailValue) => {
+    const applyEditEmail = (valueName, newEmailValue) => {
         firebaseUpdateEmail(newEmailValue)
             .then(() =>
                 dispatch(
@@ -61,15 +60,34 @@ const ProfilePagePersonalInfo = ({ id, userId, userName, userEmail, router, disp
             });
     };
 
+    const setAvatar = (avatar) => {
+        dispatch(
+            updateUserInfo({
+                userId,
+                avatar: avatar,
+            })
+        );
+    };
+
     return (
         <>
+            <Head>
+                <script
+                    src="https://widget.cloudinary.com/v2.0/global/all.js"
+                    type="text/javascript"
+                ></script>
+            </Head>
             <Grid item xs={12}>
                 <Box pt={3} pb={1}>
                     <Typography variant="h4">Личная информация</Typography>
                 </Box>
             </Grid>
             <Grid item xs={12}>
-                <Avatar alt={userName} className={classes.avatar}></Avatar>
+                {id === userId ? (
+                    <AvatarElement image={avatar} setAvatar={setAvatar} />
+                ) : (
+                    <AvatarElement image={avatar} setAvatar={null} />
+                )}
             </Grid>
             <Grid item container alignItems="center" xs={12}>
                 <Grid item>
@@ -93,11 +111,12 @@ const ProfilePagePersonalInfo = ({ id, userId, userName, userEmail, router, disp
                             placeholder="Введите новое имя"
                             confirmActionLabel="Изменить"
                             cancelActionLabel="Отмена"
-                            actionConfirmationHandler={applyEditName}
+                            propertyName="name"
+                            actionConfirmationHandler={applyEditValue}
                         />
                     ) : null}
                 </Grid>
-                <Grid item container alignItems="center" xs={12}>
+                <Grid item container>
                     {id === userId ? (
                         <Grid item container>
                             <Grid item>
@@ -126,6 +145,64 @@ const ProfilePagePersonalInfo = ({ id, userId, userName, userEmail, router, disp
                                 </Box>
                             </Grid>
                         </Grid>
+                    ) : null}
+                </Grid>
+                <Grid item container>
+                    <Grid item>
+                        <Box pr={1} minHeight="32px" lineHeight="32px">
+                            <Typography variant="body1">
+                                <b>Дата рождения: </b>
+                            </Typography>
+                        </Box>
+                    </Grid>
+                    <Grid item>
+                        <Box pr={1}>
+                            <Typography variant="body1">
+                                {`${userBorn.getDate()}/${
+                                    userBorn.getMonth() + 1
+                                }/${userBorn.getYear()}`}
+                            </Typography>
+                        </Box>
+                    </Grid>
+                    {id === userId ? (
+                        <Grid item>
+                            <Box pr={1}>
+                                <DateDialog
+                                    initialValue={userBorn}
+                                    dialogTitle="Изменить дату рождения"
+                                    confirmActionLabel="Изменить"
+                                    cancelActionLabel="Отмена"
+                                    propertyName="userBorn"
+                                    actionConfirmationHandler={applyEditValue}
+                                />
+                            </Box>
+                        </Grid>
+                    ) : null}
+                </Grid>
+                <Grid item>
+                    <Box pr={1} minHeight="32px">
+                        <Typography variant="body1">
+                            <b>Город: </b>
+                        </Typography>
+                    </Box>
+                </Grid>
+                <Grid item container xs={8}>
+                    <Grid item>
+                        <Box pr={1} minHeight="32px" lineHeight="32px">
+                            <Typography variant="body1">{userFrom} </Typography>
+                        </Box>
+                    </Grid>
+                    {id === userId ? (
+                        <SingleInputDialog
+                            initialValue={userFrom}
+                            dialogTitle="Изменить город"
+                            inputType="text"
+                            placeholder="Введите новый город"
+                            confirmActionLabel="Изменить"
+                            cancelActionLabel="Отмена"
+                            propertyName="userFrom"
+                            actionConfirmationHandler={applyEditValue}
+                        />
                     ) : null}
                 </Grid>
             </Grid>

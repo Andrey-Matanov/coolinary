@@ -3,7 +3,6 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import firebaseApp from "../../utils/firebaseConfig.js";
 import firebase from "firebase";
-import { deleteUser } from "../../redux/slices/profileSlice.js";
 
 import { Box, Paper, TextField, Button, Typography } from "@material-ui/core";
 

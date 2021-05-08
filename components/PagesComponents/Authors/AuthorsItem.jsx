@@ -1,8 +1,9 @@
 import React from "react";
 import Link from "next/link";
 import { Link as LinkMUI } from "@material-ui/core";
-import { Box, Paper, Typography, Grid, ListItemAvatar, Avatar } from "@material-ui/core";
+import { Box, Paper, Typography, Grid, ListItemAvatar } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import AvatarElement from "../../PagesComponents/ProfilePage/AvatarElement.jsx";
 
 const useStyles = makeStyles(() => ({
     link: {
@@ -24,7 +25,7 @@ const AuthorItem = ({ position, id, name, avatar, recipesCount, rating }) => {
                         </Grid>
                         <Grid item xs={2}>
                             <ListItemAvatar>
-                                <Avatar alt={`Avatar ${name}`} src={avatar} />
+                                <AvatarElement image={avatar} setAvatar={null} />
                             </ListItemAvatar>
                         </Grid>
                         <Grid ite xs={3}>

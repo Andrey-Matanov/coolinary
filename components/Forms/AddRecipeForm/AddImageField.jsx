@@ -12,6 +12,10 @@ const AddImageField = ({ image, fieldName, setFieldValue }) => {
             cloudName: "coolinary",
             tags: [tag],
             uploadPreset: "coolinary_images",
+            multiple: false,
+            cropping: true,
+            croppingAspectRatio: 1,
+            language: "ru",
         };
 
         openUploadWidget(uploadOptions, (error, photos) => {

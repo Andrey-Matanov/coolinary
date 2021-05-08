@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUsersList } from "../redux/slices/userListSlice";
+import Head from "next/head";
 
 import LoadingDataComponent from "../components/Common/LoadingDataComponent.jsx";
 import RequestError from "../components/Common/RequestError.jsx";
@@ -30,6 +31,12 @@ const Authors = () => {
 
     return (
         <Container maxWidth="lg">
+            <Head>
+                <script
+                    src="https://widget.cloudinary.com/v2.0/global/all.js"
+                    type="text/javascript"
+                ></script>
+            </Head>
             <Box mt={2}>
                 <Typography variant="h5">Рейтинг авторов</Typography>
             </Box>

@@ -11,6 +11,9 @@ export const fetchUserData = createAsyncThunk("profile/fetchUserData", async (id
         profileUserId: id,
         userName: response.data.name,
         userEmail: response.data.email,
+        avatar: response.data.avatar,
+        userBorn: response.data.userBorn,
+        userFrom: response.data.userFrom,
         userRecipes: response.data.userRecipes,
         userCollections: response.data.collections,
     };
@@ -35,6 +38,9 @@ const initialProfileValues = {
     profileUserId: null,
     userName: null,
     userEmail: null,
+    avatar: "",
+    userBorn: null,
+    userFrom: "",
     userRecipes: [],
     userCollections: {
         recipes: [],
@@ -136,6 +142,30 @@ const profileSlice = createSlice({
                     autoClose: 1500,
                 });
                 toast.success("Имя почтового ящика пользователя было успешно изменено!");
+            }
+
+            if (newUserInfo.avatar) {
+                state.avatar = newUserInfo.avatar;
+                toast.update(state.toastId, {
+                    autoClose: 1500,
+                });
+                toast.success("Аватар был успешно изменён!");
+            }
+
+            if (newUserInfo.userBorn) {
+                state.userBorn = newUserInfo.userBorn;
+                toast.update(state.toastId, {
+                    autoClose: 1500,
+                });
+                toast.success("Дата рождения была успешно изменена!");
+            }
+
+            if (newUserInfo.userFrom) {
+                state.userFrom = newUserInfo.userFrom;
+                toast.update(state.toastId, {
+                    autoClose: 1500,
+                });
+                toast.success("Город был успешно изменён!");
             }
         },
         [updateUserInfo.rejected]: (state) => {
